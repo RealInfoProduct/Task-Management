@@ -1,0 +1,35 @@
+<div class="sidebar-full-content">
+    <div class="staticSidePart">
+        <div class="logo">
+            <img src="../../../../assets/logo.png" alt="">
+        </div>
+        <ul class="nav-icon-content" >
+            <li  class="nav-list-icon"  *ngFor="let item of menuIconList; let i=index">
+                <div title="{{item.name}}" class="icon" routerLink="{{item.url}}" [ngClass]="{'icon-active' : i === iconActiveIndex}" (click)="iconActive(i,item.name)">
+                    <!-- <img src="{{item.icon}}" alt=""> -->
+                    <i class="{{item.icon}} icon-content"></i>
+                </div>
+            </li>
+        </ul>    
+    </div>
+    
+    <div class="sidenav-content">
+        <div class="logo-name">
+            <img src="../../../../assets/logo_name.png" alt="">
+            <!-- <img src="../../../../assets/menubarIcon/icons8-company-64.png" alt=""> -->
+        </div>
+        <div class="submenuContent">
+            <ul class="nav-list">
+                <li class="nav-list-item" routerLinkActive="active" *ngFor="let item of subMenuList; let i=index">
+                    <div class="subMenuHeader" routerLink="{{item.url}}" (click)="logout(item)">
+                        <i></i>
+                        <label title="{{item.name}}" class="ellipsis">{{item.name}}</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+

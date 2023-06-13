@@ -1,0 +1,13 @@
+<div class="setting"  clickOutside (clickOutside)="clickedOutside()">
+    <div class="button_setting" [ngClass]="{'show_button': isOpenSetting}">
+        <button pButton type="button" (click)="isOpenSetting ? isOpenSetting = false : isOpenSetting = true" iconPos="left"><i class="ri-settings-2-line"></i></button>
+    </div>
+    <div class="setting_item_list"  [ngClass]="{'show_setting_list': isOpenSetting }">
+            <div class="header">
+                <h4>{{'SETTING.SETTING_PAGE' | translate}}</h4>
+                <i class="pi pi-times" (click)="isOpenSetting=false"></i>
+            </div>
+    </div>
+</div>
+
+<p-toast></p-toast>

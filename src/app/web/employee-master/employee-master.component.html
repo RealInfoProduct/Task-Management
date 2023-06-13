@@ -1,0 +1,168 @@
+<div class="container-fluid order_list">
+    <div class="card prime-table">
+        <div class="table-header">
+            <span>All Employee Table</span>
+            <div class="add_admin_button">
+                <button type="button" (click)="addEmployee()" class="btn btn-secondary" data-bs-toggle="modal"
+                    data-bs-target="#EmployeeModal">
+                    Add New Employee
+                </button>
+            </div>
+        </div>
+        <div class="row m-0 table-body">
+            <p-table [value]="employeeList" [paginator]="false" [rows]="10" [showCurrentPageReport]="true"
+                [scrollable]="true" scrollDirection="both" responsiveLayout="scroll" [style]="{'margin-top': '8px'}"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowsPerPageOptions]="[10,25,50]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 10%;">Sr</th>
+                        <th style="width: 20%;">Employee Name</th>
+                        <th style="width: 20%;">Employee Mobile</th>
+                        <th style="width: 20%;">Employee Email</th>
+                        <th style="width: 20%;">Employee UserName</th>
+                        <th style="width: 20%;">Employee Password</th>
+                        <th style="width: 20%;">Employee Role</th>
+                        <th style="width: 20%;">Employee Technology</th>
+                        <th style="width: 20%;">Employee Status</th>
+                        <th style="width: 20%;">Employee Project</th>
+                        <th style="width: 20%;">Employee Project Role</th>
+                        <th style="width: 20%;">Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-i="rowIndex">
+                    <tr>
+                        <td style="width: 10%;">{{i+1}}</td>
+                        <td style="width: 20%;">{{item.emaployeeName}}</td>
+                        <td style="width: 20%;">{{item.emaployeeMobile}}</td>
+                        <td style="width: 20%;">{{item.emaployeeEmail}}</td>
+                        <td style="width: 20%;">{{item.emaployeeUserName}}</td>
+                        <td style="width: 20%;">{{item.emaployeePassword}}</td>
+                        <td style="width: 20%;">{{item.selectEmployeeRoleEle}}</td>
+                        <td style="width: 20%;">{{item.selectEmployeeTechnologyEle}}</td>
+                        <td style="width: 20%;">{{item.selectEmployeeStatusEle}}</td>
+                        <td style="width: 20%;">{{item.selectProjectEle}}</td>
+                        <td style="width: 20%;">{{item.selectProjectRoleEle}}</td>
+                        <td style="width: 20%;">
+                            <div class="button_icon_edit" data-bs-toggle="modal" data-bs-target="#EmployeeModal"
+                                (click)="editEmployee(item)">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </div>
+                            <div class="button_icon_delete" (click)="deleteEmployee(item)">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr class="record">
+                        <td colspan="12" class="p-text-center p-p-3">No Recode Found</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<!-- Modal EmployeeModal -->
+<div class="modal fade" id="EmployeeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel" *ngIf="!isEdit">Add Employee</h5>
+                <h5 class="modal-title" id="staticBackdropLabel" *ngIf="isEdit">Edit Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <!-- ... add code ..  -->
+                <form [formGroup]="emaployeeForm">
+                <div class="row m-2">
+                    <div class="col-6">
+                        <div class="form-group m-2">
+                            <label for="text">Employee Name</label>
+                            <input type="text" class="form-control" placeholder="Enter Employee Name" formControlName="emaployeeName">
+                        </div>
+                        <div class="form-group m-2">
+                            <label for="text">Employee Mobile</label>
+                            <input type="text" class="form-control" placeholder="Enter Employee Mobile" formControlName="emaployeeMobile">
+                        </div>
+                        <div class="form-group m-2">
+                            <label for="text">Employee Email</label>
+                            <input type="text" class="form-control" placeholder="Enter Employee Email" formControlName="emaployeeEmail">
+                        </div>
+                        <div class="form-group m-2">
+                            <label for="text">Employee UserName</label>
+                            <input type="text" class="form-control" placeholder="Enter Employee UserName" formControlName="emaployeeUserName">
+                        </div>
+                        <div class="form-group m-2">
+                            <label for="text">Employee Password</label>
+                            <input type="text" class="form-control" placeholder="Enter Employee Password" formControlName="emaployeePassword">
+                        </div>
+                       
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group m-2">
+                            <div class="title_Name">
+                                <label for="text">Select Employee Role</label>
+                            </div>
+                            <div class="dropdwon">
+                                    <p-dropdown [options]="roleList" placeholder="Select a Role" optionLabel="roleName" formControlName="selectEmployeeRole"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="form-group m-2">
+                            <div class="title_Name">
+                                <label for="text">Select Employee Technology</label>
+                            </div>
+                            <div class="dropdwon">
+                                <p-multiSelect [options]="technologyList" placeholder="Select a Technology" formControlName="selectEmployeeTechnology"
+                                    optionLabel="technologyName"></p-multiSelect>
+                            </div>
+                        </div>
+                        <div class="form-group m-2">
+                            <div class="title_Name">
+                                <label for="text">Select Employee Status</label>
+                            </div>
+                            <div class="dropdwon">
+                                    <p-dropdown [options]="statusList" placeholder="Select a Status" optionLabel="status" formControlName="selectEmployeeStatus" ></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="form-group m-2">
+                            <div class="title_Name">
+                                <label for="text">Select Project</label>
+                            </div>
+                            <div class="dropdwon">
+                                <p-multiSelect [options]="projectList" placeholder="Select a Project" formControlName="selectProject"
+                                    optionLabel="projectName"></p-multiSelect>
+                            </div>
+                        </div>
+                        <div class="form-group m-2">
+                            <div class="title_Name">
+                                <label for="text">Select Project Role</label>
+                            </div>
+                            <div class="dropdwon">
+                            <p-dropdown [options]="projectRoleList" placeholder="Select a Project Role" optionLabel="ProjectRoleName" formControlName="selectProjectRole" ></p-dropdown>
+                            </div>
+                        </div>
+                      
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <ng-container *ngIf="!isEdit">
+                        <button data-bs-dismiss="modal" aria-label="Close" type="submit" (click)="submit()"
+                            class="btn btn-secondary submit">Submit</button>
+                    </ng-container>
+                    <ng-container *ngIf="isEdit">
+                        <button data-bs-dismiss="modal" aria-label="Close" type="submit" (click)="submit()"
+                            class="btn btn-secondary submit">Update</button>
+                    </ng-container>
+                </div>
+                <!-- ... add code ..  -->
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation"></p-confirmDialog>
+<app-spinner *ngIf="isLoading"></app-spinner>

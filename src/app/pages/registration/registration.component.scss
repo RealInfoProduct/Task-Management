@@ -1,0 +1,215 @@
+@import '../../../../src/scss/_common.scss';
+
+
+
+.background {
+    background-image: linear-gradient(to right, #1b8fcd70, #25a0e2ab), url(../../../../src/assets/loginicon/background_image.jpg);
+    background-position: center;
+    background-size: cover;
+    height: 417px;
+
+    .snowfall {
+        background: linear-gradient(to right, #1b8fcd33, #1b8fcd33), url(../../../../src/assets/T0mBFg2.png);
+        background-size: 350px 200px;
+        height: 400px;
+        width: 100%;
+        position: absolute;
+        animation: snowfall linear infinite;
+        animation-duration: 9s;
+    }
+
+    @keyframes snowfall {
+        0% {
+            background-position: 0 0;
+        }
+
+        20% {
+            background-position: 20px 20px;
+        }
+
+        40% {
+            background-position: 40px 40px;
+        }
+
+        60% {
+            background-position: 60px 60px;
+        }
+
+        80% {
+            background-position: 80px 80px;
+        }
+
+        100% {
+            background-position: 100px 100px;
+        }
+    }
+
+    .design {
+        height: 36%;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        top: 270px;
+        bottom: 0;
+
+        .background_design_1 {
+            background: white;
+            width: 47%;
+            clip-path: polygon(0% 0%, 100% 100%, 100% 100%, 0% 100%, 0% 0%);
+        }
+
+        .background_design_2 {
+            background: white;
+            width: 47%;
+            clip-path: polygon(0% 100%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+        }
+    }
+
+    .container {
+        max-width: 40%;
+    
+        .row {
+            border-radius: 10px;
+
+            .card {
+                border: none;
+                box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px;
+
+
+                .card-body {
+                    padding: 20px 10px;
+
+                    .register_button {
+
+                        h4 {
+                            font-size: 17px;
+                            margin-top: 0;
+                            margin-bottom: 0.5rem;
+                            font-weight: 600;
+                            line-height: 1.2;
+                            color: #36a7e4;
+                        }
+
+                        span {
+                            font-size: 13px;
+                            margin-top: 0;
+                            margin-bottom: 1rem;
+                            color: #878a99;
+                        }
+                    }
+
+                    .form-content {
+                        padding: 0px 20px 0px 20px;
+
+                        label {
+                            font-size: 16px;
+                            color: black;
+                            left: 10px;
+                            float: left;
+                        }
+
+                        .form-content_item {
+                            position: relative;
+
+                            i {
+                                font-size: 22px;
+                            }
+
+                            label {
+                                color: #878a99;
+                            }
+
+                            .password {
+                                position: relative;
+
+                                .icon {
+                                    position: absolute;
+                                    top: 32px;
+                                    right: -11px;
+                                    margin-right: 20px;
+                                    color: #808080;
+                                    font-size: 23px;
+
+                                    i {
+                                        font-size: 20px;
+                                    }
+                                }
+
+                                .hide {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+
+                    .form-check {
+                        float: left;
+                        padding: 8px 43px;
+
+                        .form-check-label {
+                            color: #878a99;
+                        }
+                    }
+
+                    .login_button {
+                        padding: 0px 20px 0px 20px;
+
+                        button {
+                            @include button;
+                            width: 50%;
+                        }
+                    }
+
+                    .or_login {
+                        margin-top: 15px;
+                        color: #36a7e4;
+                        font-size: 15px;
+                    }
+
+                    .images {
+                        margin-top: 8px;
+                        text-align: center;
+
+                        img {
+                            height: 36px;
+                            margin: 9px;
+                        }
+                    }
+                }
+
+            }
+
+            .footer {
+                margin-top: 3%;
+
+                label {
+                    color: #36a7e4;
+                    font-weight: 500;
+                    padding-left: 5px;
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+
+    @media only screen and (max-width: 400px) {
+        .container {
+            max-width: 90%;
+        }
+      }
+}
+
+span{
+            // font-size: 120px;
+            font-weight: 500;
+    }
+    h1{
+            font-size: 100px;
+            text-align: center;
+            color: red;
+    }
+
+    
+    .hide {
+        display: none;
+    }

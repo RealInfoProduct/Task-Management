@@ -1,0 +1,158 @@
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap-extended.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/colors.min.css">
+<link rel="stylesheet" type="text/css" href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/css/bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+<div class="grey-bg container-fluid" style="height: auto;">
+  <section id="minimal-statistics">
+    <div class="row">
+      <div class="col-6 mt-3 mb-1">
+        <h4 class="text">Task Management Admin Panel</h4>
+        <p>All Company List</p>
+      </div>
+      <div class="col-6 mt-3 mb-1">
+        <div class="button" style="float: right;">
+          <button routerLink="/login">LogOut</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-sm-6 col-12"> 
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="ri-community-line warning font-large-2 float-left"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h3>{{totalCompany}}</h3>
+                  <span>Total Company</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="ri-checkbox-circle-line success font-large-2 float-left"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h3>{{totalCompanyActive}}</h3>
+                  <span>Total active Company</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-sm-6 col-12">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-body">
+              <div class="media d-flex">
+                <div class="align-self-center">
+                  <i class="ri-close-circle-line error font-large-2 float-left"></i>
+                </div>
+                <div class="media-body text-right">
+                  <h3>{{totalCompanyInactive}}</h3>
+                  <span>Total Inactive Company</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </section>
+
+  <div class="card">
+    <p-table [value]="companyList"  [scrollable]="true" scrollHeight="370px" >
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width: 10%;">Sr</th>
+              <th style="width: 20%;">Company Profile</th>
+              <th style="width: 15%;">Company Name</th>
+              <th style="width: 15%;">Email</th>
+              <th style="width: 10%;">Mobile No.</th>
+              <th style="width: 10%;">Status</th>
+              <th style="width: 10%;">End Date</th>
+              <th style="width: 10%;">Action</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+          <tr> 
+              <td style="width: 10%;">{{rowIndex + 1}}</td>
+              <td style="width: 20%;"><img src="{{item.companyLogo}}" alt="" style="height: 30px;"></td>
+              <td style="width: 15%;">{{item.companyName}}</td>
+              <td style="width: 15%;">{{item.email}}</td>
+              <td style="width: 10%;">{{item.mobileNumber}}</td>
+              <td style="width: 10%;">{{item.status}}</td>
+              <td style="width: 10%;">{{item.endDate | date:"dd-MM-yyyy"}}</td>
+              <td style="width: 10%;">
+                <div data-bs-toggle="modal" class="button_icon_edit" data-bs-target="#AdminPanel" (click)="editUserData(item)">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+</div>
+
+
+      <!-- Modal AdminPanel -->
+      <div class="modal fade" id="AdminPanel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Edit Technology</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body p-0">
+                  <!-- ... add code ..  -->
+                  <div class="row m-2">
+                    <div class="col-6">
+                      <div class="inputSwitch">
+                        <div class="itemlabel">
+                            <label>Status</label>
+                        </div>
+                        <div class="toggle-off-on">
+                            <p-inputSwitch [(ngModel)]="editUserItem" (onChange)="recodeStausChange($event)"></p-inputSwitch>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="inputSwitch">
+                          <div class="itemlabel">
+                              <label>Expaeri Date</label>
+                          </div>
+                          <div class="toggle-off-on">
+                              <p-calendar [(ngModel)]="date" [showIcon]="true"></p-calendar>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                      <div class="modal-footer">                        
+                              <ng-container>
+                                  <button data-bs-dismiss="modal" aria-label="Close"  
+                                      type="submit" (click)="submit()" class="btn submit">Submit</button>
+                              </ng-container>
+                      </div>
+                  <!-- ... add code ..  -->
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <app-spinner *ngIf="!isLoading"></app-spinner>

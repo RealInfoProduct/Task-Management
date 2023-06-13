@@ -1,0 +1,116 @@
+.side-nav-button{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    padding: 0px 20px;
+    // border-right: 1px solid #d9d9e2;
+    max-width: 70px;
+    
+    img{
+        height: 30px;
+        width: 30px;
+    }
+}
+
+.shaddow{
+    // box-shadow: -2px 0px 3px -1px rgb(15 34 58 / 12%);
+    border-left:none
+}
+
+.header-content{
+    display:flex ;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-right{
+        display: flex;
+        align-items: center;
+
+        .maximize{
+            padding-right: 20px;
+            margin-top: 10px;
+            color: #737685;
+        }
+        .language{
+            padding-right: 20px;
+            margin-top: 10px;
+            color: #737685;
+
+        }
+    }
+
+    .header-left{
+        display: flex;
+        align-items: center;
+    }
+
+    .language_icon{
+        cursor: pointer;
+        display: flex;
+        i{
+            font-size: 37px;
+        }
+
+        .dropdown-item:active{
+            background-color:#e9ecef;
+            color:#212529 ;
+        }
+    }
+    .logout_language_content{
+        // display: flex;
+        color: #3b4d6391;;
+    }
+    .profile{
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        background: #f3f3f9;
+        margin-right: 30px;
+        img{
+            width: 20%;
+            border-radius: 50%;
+            padding: 4%;
+        }
+        .logout_text{
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+    
+            .name_text{
+                font-weight: 500;
+                font-size: 15px
+            }
+            .orther_text{
+                font-size: 12px;
+            }
+        }
+    }
+}
+.dropdown-menu{
+    margin: 5px !important;
+    box-shadow: #0003 0 8px 16px;
+    border-radius: 5px;
+}
+
+.form{
+    position: relative;
+}
+.form .fa-search{
+    position: absolute;
+    top: 11px;
+    left: 13px;
+    color: #9ca3af;
+}
+.form-input{
+    border: none;
+    height: 38px;
+    padding-left: 40px;
+    padding-right: 30px;
+    background-color: #f3f3f9;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+
+
+

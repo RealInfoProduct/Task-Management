@@ -1,0 +1,61 @@
+
+@import '../../../../src/scss/_common.scss';
+
+.add_admin_button{ 
+    display: flex;  
+    justify-content: flex-end;
+    button{
+        @include button;
+    }
+}
+.add_button{
+    button{
+        @include button;
+        float: right;
+        margin-right: 7px !important;
+    }
+}
+.modal-header{
+    background: linear-gradient(118deg, #0062d105, #0062d10a);
+}
+.modal-body{
+    background: linear-gradient(118deg, #0062d105, #0062d10a);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    align-items: center;
+
+    span {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+}
+.errorMsg {
+    margin-top: -5px;
+    margin-left: 10px;
+    color: red;
+}
+.modal-dialog {
+    max-width: none;
+    width: 50%;
+}
+
+.table-body{
+    ::ng-deep .p-datatable-wrapper {
+       min-height: calc(100vh - 175px);
+     }
+}
+::ng-deep .p-multiselect {
+    width: 100%;
+}
+::ng-deep .p-multiselect .p-multiselect-label  {
+    padding: 7px;
+}
+::ng-deep .p-dropdown {
+    width: 100%;
+}

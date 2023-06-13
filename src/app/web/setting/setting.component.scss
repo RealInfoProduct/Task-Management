@@ -1,0 +1,122 @@
+@import '../../../../src/scss/_common.scss';
+
+.setting {
+    height: 100%;
+    align-items: center;
+    bottom: 20px;
+    display: flex;
+    position: fixed;
+    z-index: 100;
+    right: 0;
+
+    .button_setting {
+        position: fixed;
+        right: 0px;
+        border-radius: 1px;
+        width: 42px;
+        transition: all .6s ease-in-out ;  
+
+        button {
+            background: $background-color;
+            padding: 13px 13px 11px 15px;
+            i {
+                font-size: 22px;
+            }
+        }
+
+        button:focus i {
+            animation: rotate 2s infinite 0s;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        &.show_button {
+            width: 393px;
+            transition: all .6s ease-in-out;   
+        }
+    }
+
+        .setting_item_list {
+          position: fixed;
+          right: 0px;
+          background-color: $primary-color;
+          // box-shadow: $box-shadow-1;
+          box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+          width: 350px;
+          height: 100vh;
+          overflow-y: auto;
+          top: 0;
+          bottom: 0;
+          border-radius: 1px;
+          transform: translateX(350px);
+          transition: all .6s ease-in-out;
+    
+          &.show_setting_list {
+            transform: translateX(0);
+            transition: all .6s ease-in-out;
+    
+          }
+    
+          .header {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            background-color: #fff;
+            z-index: 99;
+            border-bottom: 2.5px solid $fourtyeight-color;
+    
+            i {
+              font-size: 20px;
+              margin: 10px;
+            }
+          }
+    
+          h4 {
+            text-align: center;
+            margin-left: 20px;
+            letter-spacing: 0.7px;
+          }
+        }
+}
+
+
+.image-upload{
+   padding: 20px;
+   margin-bottom: 40px;
+
+    label{
+        font-size: 23px;
+        margin-bottom: 12px;
+        font-family: serif;
+        color: $fourtynine-color;
+    }
+
+    .toggle-off-on{
+        display: flex;
+        align-items: start;
+
+        span{
+            margin-left: 10px;
+            font-size: 18px;
+        }
+    }
+}
+::ng-deep .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider  {
+  background: linear-gradient(118deg, $second-color, $first-color) !important;
+}
+
+:host ::ng-deep .p-button:focus {
+  box-shadow: none;
+} 
+
+  

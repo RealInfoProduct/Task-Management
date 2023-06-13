@@ -1,0 +1,97 @@
+<div class="wrapper" dragula="COLUMNS" [(dragulaModel)]="groups">
+  <div class="project">
+  <div class="project-info"><h1>Task Management</h1><div class="project-participants"><button class="project-participants__add">Add Participant</button></div></div>
+  <div class="justify-content-center">
+    <p-avatarGroup styleClass="mb-3">
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" size="large" shape="circle"></p-avatar>
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" size="large" shape="circle"></p-avatar>
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" size="large" shape="circle"></p-avatar>
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" size="large" shape="circle"></p-avatar>
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/xuxuefeng.png" size="large" shape="circle"></p-avatar>
+        <p-avatar label="+2" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar>
+    </p-avatarGroup>
+</div>
+    <div class="project-tasks">
+      <div class="project-column" *ngFor="let group of groups">
+        <div class='project-column-heading' [ngStyle]="taskBorder(group?.name)">
+          <h2 class='project-column-heading__title'>{{group?.name}}</h2><button class='project-column-heading__options'><i class="ri-more-fill"></i></button>
+        </div>
+
+        <div dragula="ITEMS" [(dragulaModel)]="group.items">
+          <ng-container *ngIf="group.items.length > 0; else elseBlock">
+            <div *ngFor="let item of group.items">
+              <div class="task">
+                <div class="task__tags"><span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span><button
+                    class="task__options"><i class="ri-more-fill"></i></button></div>
+                    <label><b>{{item?.taskTitle}}</b></label>
+                <p style="margin-top: 8px;">{{item?.desc}}</p>
+                <div class="task__stats"><span>
+                    <time><i class="fas fa-flag"></i>{{item?.date}}</time></span>
+                  <p-avatarGroup>
+                    <p-avatar size="small" shape="circle">{{item?.avatarName}}</p-avatar>
+                    <!-- <p-avatar label="+2" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar> -->
+                </p-avatarGroup>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #elseBlock>
+            <div class="emptyCard"></div>
+          </ng-template>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <aside class='task-details'>
+    <div class='tag-progress'>
+      <h2>Task Progress</h2>
+      <div class='tag-progress'>
+        <p>Task Ready<span>3/10</span></p>
+        <progress class="progress progress--taskReady" max="10" value="3"> 3 </progress>
+      </div>
+      <div class='tag-progress'>
+        <p>In Progress<span>6/10</span></p>
+        <progress class="progress progress--design" max="10" value="6"> 6 </progress>
+      </div>
+      <div class='tag-progress'>
+        <p>Testing <span>3/8</span></p>
+        <progress class="progress progress--copyright" max="8" value="3"> 3 </progress>
+      </div>
+      <div class='tag-progress'>
+        <p>Done <span>2/7</span></p>
+        <progress class="progress progress--illustration" max="7" value="2"> 2 </progress>
+      </div>
+    </div>
+    <div class='task-activity'>
+      <h2>Recent Activity</h2>
+      <ul>
+        <li>
+          <span class='task-icon task-icon--attachment'><i class="fas fa-paperclip"></i></span>
+          <b>Andrea </b>uploaded 3 documents
+          <time datetime="2021-11-24T20:00:00">Aug 10</time>
+        </li>
+          <li>
+              <span class='task-icon task-icon--comment'><i class="fas fa-comment"></i></span>
+          <b>Karen </b> left a comment
+          <time datetime="2021-11-24T20:00:00">Aug 10</time>
+        </li>
+         <li>
+             <span class='task-icon task-icon--edit'><i class="fas fa-pencil-alt"></i></span>
+          <b>Karen </b>uploaded 3 documents
+          <time datetime="2021-11-24T20:00:00">Aug 11</time>
+        </li>
+          <li>
+              <span class='task-icon task-icon--attachment'><i class="fas fa-paperclip"></i></span>
+          <b>Andrea </b>uploaded 3 documents
+          <time datetime="2021-11-24T20:00:00">Aug 11</time>
+        </li>
+         <li>
+             <span class='task-icon task-icon--comment'><i class="fas fa-comment"></i></span>
+          <b>Karen </b> left a comment
+          <time datetime="2021-11-24T20:00:00">Aug 12</time>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</div>

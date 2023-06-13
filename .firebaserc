@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "task-management-a3193"
+  },
+  "targets": {
+    "task-management-a3193": {
+      "hosting": {
+        "tr": [
+          "task-tracking"
+        ]
+      }
+    }
+  }
+}

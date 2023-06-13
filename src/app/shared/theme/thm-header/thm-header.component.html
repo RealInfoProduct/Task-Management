@@ -1,0 +1,48 @@
+<div class="container-fluid g-0">
+    <div class="header-content">
+        <div class="header-left">
+            <div class="side-nav-button" [ngClass]="{'shaddow' : !menuStatus}" (click)="singleClicked()">
+                <img *ngIf="!menuStatus" src="../../../../assets/menubarIcon/menuIconOpen.svg" alt="">
+                <img *ngIf="menuStatus" src="../../../../assets/menubarIcon/menuIconClose.svg" alt="">
+            </div>
+            <div class="form">
+                <i class="fa fa-search"></i>
+                <input type="text" class="form-control form-input" placeholder="{{'HEADER.Search_placeholder' | translate}}">
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="maximize" (click)="fullScreenMode($event)">
+                <i *ngIf="!fullScreen" title="full" class="ri-fullscreen-fill ri-xl"></i>
+                <i *ngIf="fullScreen" title="off" class="ri-fullscreen-exit-line ri-xl"></i>
+            </div>
+            <!-- <div class="language">
+                <i class="ri-global-line ri-xl" id="navbarDropdownMenuLink"
+                data-bs-toggle="dropdown" aria-hidden="true" alt=""></i>
+                <div class="language_icon">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+                        (click)="languageChange($event.target)">
+                        <a class="dropdown-item" value="en">{{'HEADER.English' | translate}}</a>
+                        <a class="dropdown-item" value="gu">{{'HEADER.Gujarati' | translate}}</a>
+                    </div>
+                </div>
+            </div> -->
+            <div class="logout_language_content">   
+                <div class="profile" id="navbarproDropdownMenuLink" data-bs-toggle="dropdown"> 
+                <ul class="dropdown-menu" aria-labelledby="navbarproDropdownMenuLink">
+                    <li><a class="dropdown-item">{{'HEADER.Dashboard' | translate}}</a></li>
+                    <li><a class="dropdown-item">{{'HEADER.View_Profile' | translate}}</a></li>
+                    <li><a class="dropdown-item" >{{'HEADER.Change_Password' | translate}}</a></li>
+                    <li><a class="dropdown-item">{{'HEADER.Logout' | translate}}</a></li>
+                </ul>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUQlw2FJiWn_OmJ7YmnBtVLBDKZQUF1EU0WGgZgDCldlYuJFCOcai2QQkRyOjt-4cS7XY&usqp=CAU" alt="">
+                    <div class="logout_text">
+                        <span class="name_text">{{companyAndEmployeeName}}</span>
+                        <span class="orther_text">{{companyAndEmployeeEmail}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-spinner *ngIf="isLoading"></app-spinner>

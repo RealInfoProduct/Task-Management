@@ -1,0 +1,53 @@
+@import '../scss/_variable.scss';
+
+
+
+@mixin button {
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: #fff;
+    letter-spacing: .6px;
+    border-radius: 6px;
+    border: none;
+    background: linear-gradient(118deg, #0062d1d1, rgb(0 125 254 / 53%));
+    transition: all .2s ease-in-out;
+    &:hover {
+        box-shadow: 0 0 5px 1px #0062d1d1;
+    }
+}
+
+/////////////////////// all font-family mixin ////////////////////////
+
+@mixin font-family {
+    font-family: 'Montserrat Alternates', sans-serif;
+
+}
+
+    
+/////////////////////// all font-weight mixin ////////////////////////
+
+@mixin fontweight-unset {
+    font-weight: unset;
+}
+
+@mixin fontweight-400 {
+    font-weight: 400;
+}
+
+@mixin fontweight-500 {
+    font-weight: 500;
+}
+
+@mixin fontweight-600 {
+    font-weight: 600;
+}
+
+@mixin fontweight-700 {
+    font-weight: 700;
+}
+
+@mixin fontweight-800 {
+    font-weight: 800;
+}

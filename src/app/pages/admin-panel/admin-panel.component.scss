@@ -1,0 +1,23 @@
+
+@import '../../../../src/scss/_common.scss';
+
+
+
+.modal-header{
+    background: linear-gradient(118deg, #0062d105, #0062d10a);
+}
+.modal-body{
+    background: linear-gradient(118deg, #0062d105, #0062d10a);
+}
+.modal-dialog {
+    max-width: none;
+    width: 50%;
+}
+.submit{
+  @include button
+}
+.button{
+  button{
+    @include button
+  }
+}

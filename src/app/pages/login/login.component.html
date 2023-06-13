@@ -1,0 +1,49 @@
+<section class="background">  
+  <div class="snowfall"></div>
+    <div class="design">
+      <div class="background_design_1"></div>
+      <div class="background_design_2"></div>
+    </div>
+    <div class="text-center">
+      <div class="container">
+        <div class="row gx-lg-5">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <form [formGroup]="loginForm">
+                  <div class="register_button">
+                    <h4>Welcome Back !</h4>
+                    <span>Sign in to continue to Pmt.</span>
+                  </div>
+                  <div class="form-content">
+                    <div class="form-content_item mt-3">
+                      <label class="form-label">Email</label>
+                      <input type="text" class="form-control" formControlName="email" placeholder="Enter Email..">
+                    </div>
+                    <div class="form-content_item mt-3">
+                        <div class="password">
+                            <label class="form-label">Password</label>
+                            <input  [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" placeholder="Enter Password..">
+                            <div class="icon">
+                                <i class="fa fa-eye" (click)="showPassword = !showPassword" [class.hide]="showPassword"></i>
+                                <i class="fa fa-eye-slash " (click)="showPassword = !showPassword" [class.hide]="!showPassword"></i>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="login_button mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" (click)="submit()">Sing in</button>
+                  </div>  
+                </form>
+              </div>
+            </div>
+            <div class="footer">  
+              <span>Don't have an account ?</span><label routerLink="/registration">Signup</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <app-spinner *ngIf="isLoading"></app-spinner>

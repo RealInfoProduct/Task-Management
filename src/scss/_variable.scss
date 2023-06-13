@@ -1,0 +1,78 @@
+
+/////////////////////// box shadow ////////////////////////
+
+// $box-shadow: 0 4px 24px 0 rgb(34 41 47 / 10%);
+$box-shadow: 0 4px 10px 0 rgb(34 41 47 / 13%);
+$background-color: linear-gradient(118deg, #0062d1d1, rgb(0 125 254 / 53%));
+
+
+/////////////////////// all color variable ////////////////////////
+
+$primary-color: #fff;
+$secondary-color: #000000;
+// $first-color: rgba(115, 103, 240, 0.7);
+$first-color: none;
+$second-color: #7367f0;
+$third-color: #e7e7e7;
+$fourth-color: #808080;
+$fifth-color: #65686a17;
+$sixth-color: red;
+$seventh-color: #6e6b7b;
+$eighth-color: #6e6b7b50;
+$nineth-color: #000000c7;
+$tenth-color: #3753a3;
+$eleven-color: #215455;
+$twelve-color: #9a4451;
+$thrteen-color: #d5d5d5;
+$fourteen-color: #0000008c;
+$fifteen-color: #5c5c5c;
+$sixteen-color: #0d1e33;
+$seventeen-color: #3f6fae;
+$eighteen-color: #0000001f;
+$ninteen-color: #f3e8e7;
+$twenty-color: #1f2f4033;
+$twentyone-color: #f4f4f4;
+$twentytow-color: #17A2B8;
+$twentytthree-color: #6f42c1;
+$twentytfour-color: #1CAF9A;
+$twentyfive-color: linear-gradient(-20deg, #9b1b1be0 0%, #0e0e10c2 100%);
+$twentytsix-color: linear-gradient(-20deg, #76592bd9 0%, #437672 100%);
+$twentyseven-color: linear-gradient(-20deg, #2b6a76ed 0%, #704376f0 100%);
+$twentyeight-color: linear-gradient(to top, #830ba3de 0%, #ba3c50c2 100%);
+$twentynine-color: linear-gradient(-20deg, #199984ad 0%, #9c5563f2 100%);
+$thirty-color: linear-gradient(to top, #5e3a93 0%, #c9578c 100%);
+$thirtyone-color: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+$thirtytow-color: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);
+$thirtythree-color: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+$thirtyfour-color: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%);
+$thirtyfive-color: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);
+$thirtysix-color: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+$thirtyseven-color:#3300ff;
+$thirtyeight-color:#39dc86;
+$thirtynine-color:#ffab01;
+$fourty-color: linear-gradient(118deg, #fff6e5, #fff6e5);
+$fourthone-color : #fe5948;
+$fourthtwo-color : linear-gradient(118deg, #f5e7e5, #f5e7e5);
+$fourtythree-color : linear-gradient(118deg, #ebfbf3, #ebfbf3);
+$fourtyfour-color :#7168d6e6;
+$fourtyfive-color :#b6e1e4;
+$fourtysix-color :rgb(241, 151, 151);
+$fourtyseven-color:#dee2e6;
+$fourtyeight-color:#80808080;
+$fourtynine-color:#50575e;
+$fifty-color:#344459;
+$fiftyOne-color:#1caf9a;
+$fiftyTwo-color:purple;
+$fiftyThree-color:rgba(115, 103, 240, 0.7);
+$btn-bg-color: linear-gradient(118deg, #0062d1d1, rgb(0 125 254 / 53%));
+$btn-bg-color-two: linear-gradient(118deg, #000000d1, rgb(128 0 128));
+$btn-bg-color-three: linear-gradient(118deg, #085f53, rgb(64 183 166));
+$btn-bg-color-four: linear-gradient(118deg,#344459,rgba(59,77,99,.84));
+$background-color: var(--main-color,$btn-bg-color);
+
+/////////////////////// box shadow ////////////////////////
+
+$box-shadow: 0 4px 24px 0 rgb(34 41 47 / 10%);
+$box-shadow-1: 0 0 9px hsl(0deg 0% 75% / 36%);
+$login_box-shadow: 0 0.46875rem 2.1875rem rgb(4 9 20 / 3%), 0 0.9375rem 1.40625rem rgb(4 9 20 / 3%), 0 0.25rem 0.53125rem rgb(4 9 20 / 5%), 0 0.125rem 0.1875rem rgb(4 9 20 / 3%);
+$report_box-shadow:rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
