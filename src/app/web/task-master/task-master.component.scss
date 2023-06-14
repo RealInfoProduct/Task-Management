@@ -15,8 +15,7 @@
     --purple:#7784ee;
   }
   *{
-    margin:0;
-    padding:0;
+ 
     box-sizing:border-box;
     font-family: 'Poppins', sans-serif;
     
@@ -450,4 +449,30 @@
   align-items: center;
   display: flex;
   justify-content: center;
+}
+.modal-dialog {
+  max-width: none;
+  width: 50%;
+}
+::ng-deep .p-multiselect {
+  width: 100%;
+}
+::ng-deep .p-multiselect .p-multiselect-label  {
+  padding: 7px;
+}
+::ng-deep .p-dropdown {
+  width: 100%;
+}
+
+
+.removeEmptyCard {
+  opacity: 0;
+  height: 0px;
+  padding: 0;
+  margin: 0;
+  // display: none;
+}
+
+.icon-padding {
+  padding-right: 5px;
 }

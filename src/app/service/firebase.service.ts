@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, deleteDoc, doc, Firestore } from '@angular/fire/firestore';
 import { updateDoc } from 'firebase/firestore';
-import { companyList, EmaployeeList, ProjectList, ProjectRoleList, TechnologyList } from '../interface/AuthResponse';
+import { companyList, EmaployeeList, ProjectList, ProjectRoleList, TaskList, TechnologyList } from '../interface/AuthResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -100,7 +100,7 @@ export class FirebaseService {
     return updateDoc(dataRef, EmaployeeList)
   }
 
-  // TechnologyList
+  // ProjectRoleList
 
   addProjectRoleList(data: ProjectRoleList) {
     data.id = doc(collection(this.fService, 'id')).id
@@ -120,6 +120,28 @@ export class FirebaseService {
   updateProjectRoleList(data: ProjectRoleList, ProjectRoleList: any) {
     let dataRef = doc(this.fService, `ProjectRoleList/${data}`);
     return updateDoc(dataRef, ProjectRoleList)
+  }
+  
+  // TaskList
+
+  addTaskList(data: TaskList) {
+    data.id = doc(collection(this.fService, 'id')).id
+    return addDoc(collection(this.fService, 'TaskList'), data)
+  }
+
+  getTaskList() {
+    let dataRef = collection(this.fService, `TaskList`)
+    return collectionData(dataRef, { idField: 'id' })
+  }
+
+  deleteTaskList(data: TaskList) {
+    let docRef = doc(collection(this.fService, `TaskList`), data.id);
+    return deleteDoc(docRef)
+  }
+
+  updateTaskList(data: TaskList, TaskList: any) {
+    let dataRef = doc(this.fService, `TaskList/${data}`);
+    return updateDoc(dataRef, TaskList)
   }
   
 }

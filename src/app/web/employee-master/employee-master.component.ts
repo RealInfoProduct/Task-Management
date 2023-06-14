@@ -81,9 +81,9 @@ export class EmployeeMasterComponent implements OnInit {
       emaployeeEmail: this.emaployeeForm.value.emaployeeEmail,
       emaployeeUserName: this.emaployeeForm.value.emaployeeUserName,
       emaployeePassword: this.emaployeeForm.value.emaployeePassword,
-      selectEmployeeRole: this.emaployeeForm.value.selectEmployeeRole,
+      selectEmployeeRole: this.emaployeeForm.value.selectEmployeeRole.roleName,
       selectEmployeeTechnology: this.emaployeeForm.value.selectEmployeeTechnology,
-      selectEmployeeStatus: this.emaployeeForm.value.selectEmployeeStatus,
+      selectEmployeeStatus: this.emaployeeForm.value.selectEmployeeStatus.status,
       selectProject: this.emaployeeForm.value.selectProject,
       selectProjectRole: this.emaployeeForm.value.selectProjectRole,
     }
@@ -172,8 +172,6 @@ export class EmployeeMasterComponent implements OnInit {
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
       this.employeeList = res
       this.employeeList.forEach((element: any) => {
-        element['selectEmployeeRoleEle'] = element.selectEmployeeRole.roleName
-        element['selectEmployeeStatusEle'] = element.selectEmployeeStatus.status
         element['selectProjectRoleEle'] = element.selectProjectRole.ProjectRoleName
         element['selectEmployeeTechnologyEle'] = element.selectEmployeeTechnology.map((id: any) => id.technologyName).join(", ")
         element['selectProjectEle'] = element.selectProject.map((id: any) => id.projectName).join(", ")

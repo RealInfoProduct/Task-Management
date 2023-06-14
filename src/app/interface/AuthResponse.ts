@@ -61,3 +61,14 @@ export interface EmaployeeList{
     selectProject:any
     selectProjectRole:any
 }
+
+export interface TaskList {
+    id: string
+    taskDesc :any
+    employeeList :any
+    taskTitle :any
+    taskType :any
+    taskStatus :any
+    taskProjectId : any;
+    taskDate :any
+}

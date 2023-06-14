@@ -1,6 +1,7 @@
 <div class="wrapper" dragula="COLUMNS" [(dragulaModel)]="groups">
   <div class="project">
-  <div class="project-info"><h1>Task Management</h1><div class="project-participants"><button class="project-participants__add">Add Participant</button></div></div>
+  <div class="project-info"><h1>Task Management</h1><div class="project-participants"><button class="project-participants__add" data-bs-toggle="modal"
+    data-bs-target="#TaskModal">Add Participant</button></div></div>
   <div class="justify-content-center">
     <p-avatarGroup styleClass="mb-3">
         <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" size="large" shape="circle"></p-avatar>
@@ -20,13 +21,13 @@
         <div dragula="ITEMS" [(dragulaModel)]="group.items">
           <ng-container *ngIf="group.items.length > 0; else elseBlock">
             <div *ngFor="let item of group.items">
-              <div class="task">
+              <div [ngClass]="item?.taskDesc ? 'task' : 'removeEmptyCard'">
                 <div class="task__tags"><span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span><button
                     class="task__options"><i class="ri-more-fill"></i></button></div>
                     <label><b>{{item?.taskTitle}}</b></label>
-                <p style="margin-top: 8px;">{{item?.desc}}</p>
+                <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
-                    <time><i class="fas fa-flag"></i>{{item?.date}}</time></span>
+                    <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
                   <p-avatarGroup>
                     <p-avatar size="small" shape="circle">{{item?.avatarName}}</p-avatar>
                     <!-- <p-avatar label="+2" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar> -->
@@ -94,4 +95,81 @@
       </ul>
     </div>
   </aside>
+</div>
+
+   <!-- Modal TaskModal -->
+   <div class="modal fade" id="TaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+   aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h5 class="modal-title" id="staticBackdropLabel" *ngIf="!isEdit">Add Task</h5>
+               <h5 class="modal-title" id="staticBackdropLabel" *ngIf="isEdit">Edit Task</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body p-0">
+               <!-- ... add code ..  -->
+               <form [formGroup]="taskForm">
+                 <div class="row m-2">
+                   <div class="col-6">
+                     <div class="form-group m-2">
+                       <label for="text">Task Name</label>
+                       <input type="text" class="form-control" placeholder="Enter Task Name" formControlName="taskName">
+                     </div>
+                     <div class="form-group m-2">
+                       <label for="text">Task Description</label>
+                       <textarea name="Task Description" class="form-control" id="" cols="30" rows="7" formControlName="taskDescription"></textarea>
+                     </div>
+                   </div>
+                   <div class="col-6">
+                     <div class="form-group m-2">
+                       <div class="title_Name">
+                         <label for="text">Task Type</label>
+                       </div>
+                       <div class="dropdwon">
+                         <p-dropdown placeholder="Select Task Type"  [options]="taskTypeList" optionLabel="taskName" formControlName="taskType"></p-dropdown>
+                       </div>
+                     </div>
+                     <div class="form-group m-2">
+                       <div class="title_Name">
+                         <label for="text">Task Project</label>
+                       </div>
+                       <div class="dropdwon">
+                         <p-dropdown [options]="projectList" (onChange)="selectProject($event)" placeholder="Select Task Project" optionLabel="projectName" formControlName="taskProject"></p-dropdown>
+                       </div>
+                     </div>
+                     <div class="form-group m-2">
+                       <div class="title_Name">
+                         <label for="text">Task Employee</label>
+                       </div>
+                       <div class="dropdwon">
+                         <p-multiSelect [options]="employeeList" placeholder="Select Task Employee" formControlName="taskEmployee"
+                         optionLabel="emaployeeName"></p-multiSelect>
+                       </div>
+                     </div>
+                     <div class="form-group m-2">
+                       <div class="title_Name">
+                         <label for="text">Task Date</label>
+                       </div>
+                       <div class="dropdwon">
+                         <p-calendar [style]="{'width':'100%'}" [showIcon]="true" formControlName="taskDate"></p-calendar>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </form>
+                   <div class="modal-footer">                        
+                           <ng-container *ngIf="!isEdit">
+                               <button data-bs-dismiss="modal" aria-label="Close"  
+                                   type="submit" (click)="submit()" class="btn btn-secondary submit">Submit</button>
+                           </ng-container>
+                           <ng-container *ngIf="isEdit">
+                               <button data-bs-dismiss="modal" aria-label="Close"
+                                   type="submit" (click)="submit()" class="btn btn-secondary submit">Update</button>
+                           </ng-container>
+                   </div>
+               <!-- ... add code ..  -->
+           </div>
+       </div>
+   </div>
 </div>
