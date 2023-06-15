@@ -28,9 +28,9 @@
                 <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
                     <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
-                  <p-avatarGroup>
-                    <p-avatar size="small" shape="circle">{{item?.avatarName}}</p-avatar>
-                    <!-- <p-avatar label="+2" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar> -->
+                  <p-avatarGroup *ngFor="let data of item?.avatarName">
+                    <p-avatar size="small" shape="circle">{{data}}</p-avatar>
+                    <!-- <p-avatar [label]="data" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar> -->
                 </p-avatarGroup>
                 </div>
               </div>
@@ -45,6 +45,16 @@
     </div>
   </div>
   <aside class='task-details'>
+    <div class="form">
+      <i class="ri-search-line icon"></i>
+      <input type="text" (keyup)="applyFilter($event)" class="form-control form-input" placeholder="{{'HEADER.Search_placeholder' | translate}}">
+  </div>
+    <div class="form-group mt-2">
+      <div class="title_Name">
+        <label for="text">Select Project</label>
+      </div>
+        <p-dropdown [options]="projectList" [(ngModel)]="selectProjectItem" (onChange)="selectProjectFilter($event)" placeholder="Select Task Project" optionLabel="projectName"></p-dropdown>
+    </div>
     <div class='tag-progress'>
       <h2>Task Progress</h2>
       <div class='tag-progress'>
