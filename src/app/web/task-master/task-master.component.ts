@@ -122,11 +122,11 @@ export class TaskMasterComponent implements OnInit {
   getAllProjectList() {
     this.isLoading = true
     this.firebaseService.getProjectList().subscribe((res: any) => {
-      this.projectList = res
+      this.projectList = res;
       setTimeout(() => {
         this.selectProjectItem =  this.projectList[0]
       }, 150);
-      this.isLoading = false
+      this.isLoading = false;
     })
   }
 
