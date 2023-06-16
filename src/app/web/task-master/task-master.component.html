@@ -1,17 +1,14 @@
 <div class="wrapper" dragula="COLUMNS" [(dragulaModel)]="groups">
   <div class="project">
-  <div class="project-info"><h1>Task Management</h1><div class="project-participants"><button class="project-participants__add" data-bs-toggle="modal"
+  <div class="project-info"><h1>{{getProjectName}}</h1><div class="project-participants"><button class="project-participants__add" data-bs-toggle="modal"
     data-bs-target="#TaskModal">Add Participant</button></div></div>
-  <div class="justify-content-center">
-    <p-avatarGroup styleClass="mb-3">
-        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" size="large" shape="circle"></p-avatar>
-        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" size="large" shape="circle"></p-avatar>
-        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" size="large" shape="circle"></p-avatar>
-        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" size="large" shape="circle"></p-avatar>
-        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/xuxuefeng.png" size="large" shape="circle"></p-avatar>
-        <p-avatar label="+2" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar>
-    </p-avatarGroup>
-</div>
+    <div class="justify-content-center">
+      <p-avatarGroup styleClass="mb-3">
+          <ng-container *ngFor="let data of employeeAvtars">
+            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
+          </ng-container>
+      </p-avatarGroup>
+    </div>
     <div class="project-tasks">
       <div class="project-column" *ngFor="let group of groups">
         <div class='project-column-heading' [ngStyle]="taskBorder(group?.name)">
@@ -28,10 +25,11 @@
                 <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
                     <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
-                  <p-avatarGroup *ngFor="let data of item?.avatarName">
-                    <p-avatar size="small" shape="circle">{{data}}</p-avatar>
-                    <!-- <p-avatar [label]="data" shape="circle" size="large" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar> -->
-                </p-avatarGroup>
+                    <p-avatarGroup styleClass="mb-3">
+                      <ng-container *ngFor="let data of item?.avatarName">
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
+                      </ng-container>
+                    </p-avatarGroup>
                 </div>
               </div>
             </div>
@@ -45,10 +43,10 @@
     </div>
   </div>
   <aside class='task-details'>
-    <div class="form">
+    <!-- <div class="form">
       <i class="ri-search-line icon"></i>
       <input type="text" (keyup)="applyFilter($event)" class="form-control form-input" placeholder="{{'HEADER.Search_placeholder' | translate}}">
-  </div>
+  </div> -->
     <div class="form-group mt-2">
       <div class="title_Name">
         <label for="text">Select Project</label>
@@ -74,7 +72,7 @@
         <progress class="progress progress--illustration" [max]="taskListLength" [value]="taskListDoneLength"></progress>
       </div>
     </div>
-    <div class='task-activity'>
+    <!-- <div class='task-activity'>
       <h2>Recent Activity</h2>
       <ul>
         <li>
@@ -103,7 +101,7 @@
           <time datetime="2021-11-24T20:00:00">Aug 12</time>
         </li>
       </ul>
-    </div>
+    </div> -->
   </aside>
 </div>
 

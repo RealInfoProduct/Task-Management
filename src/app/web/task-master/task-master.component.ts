@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DragulaService } from 'ng2-dragula';
 import { FirebaseService } from 'src/app/service/firebase.service';
@@ -22,6 +22,8 @@ export class TaskMasterComponent implements OnInit {
   taskTesting :any = []
   taskDone :any = []
   filterInfluencerList:any = []
+  employeeAvtars :any = []
+  projectWiseEmployees :any = []
   public groups:Array<any> = [
     // {
     //   name: 'Task Ready',
@@ -56,7 +58,7 @@ export class TaskMasterComponent implements OnInit {
     {taskName:"UI Designer"},
   ]
   projectList: any
-  employeeList: any
+  employeeList: any;
   projectId: any
   employeeProjectList: any = []
   taskList :any;
@@ -66,20 +68,25 @@ export class TaskMasterComponent implements OnInit {
   isSelectProjectFilter :boolean = false
   mainArry:any = []
   keyValue:any
-  taskListLength :any
-  taskListTaskReadyLength :any
-  taskListInProgressLength :any
-  taskListTestingLength :any
-  taskListDoneLength :any
+  taskListLength :number = 0
+  taskListTaskReadyLength :number = 0
+  taskListInProgressLength :number = 0
+  taskListTestingLength :number = 0
+  taskListDoneLength :number = 0
+  getProjectName :any
 
 
   constructor( private _ds : DragulaService, 
     private formbuilder :FormBuilder,
     private firebaseService:FirebaseService,
-    private messageService :MessageService) { 
+    private messageService :MessageService,
+    private cdr : ChangeDetectorRef) { 
   }
 
    ngOnInit(): void {
+
+    const name = 'MS';
+    const randomColor = this.generateColor(name);
     const existingGroup = this._ds.find('COLUMNS');
     if (!existingGroup) {
       this._ds.createGroup("COLUMNS", {
@@ -94,7 +101,7 @@ export class TaskMasterComponent implements OnInit {
       const payload: TaskList = {
         id: args.item.id,
         taskDesc : args.item.taskDesc,
-        employeeList : args.item.employeeList,
+        employeeId : args.item.employeeId,
         taskTitle :args.item.taskTitle,
         taskType : args.item.taskType,
         taskStatus : data[0].taskStatus,
@@ -104,6 +111,7 @@ export class TaskMasterComponent implements OnInit {
 
       this.firebaseService.updateTaskList(args.item.id,payload).then(res => {
         this.isUpdate = true;
+        // this.cdr.detectChanges()
         setTimeout(() => {
          this.applyFilter(this.keyValue);  
         }, 100);
@@ -118,11 +126,29 @@ export class TaskMasterComponent implements OnInit {
     });
     
     this.buildForm()
-    this.getAllProjectList()
+    this.getAllProjectList();
+    this.getAllEmployeeList();
 
-    if(!this.isUpdate){
-      this.getAllTaskList()
+    setTimeout(() => {
+      if(!this.isUpdate){
+        this.getAllTaskList()
+      }
+    }, 2000);
+  }
+
+  generateColor(name: string): string {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
+  
+    const r = Math.floor((Math.sin(hash++) * 255));
+    const g = Math.floor((Math.sin(hash++) * 255));
+    const b = Math.floor((Math.sin(hash++) * 255));
+  
+    const color = `rgb(${r}, ${g}, ${b})`;
+  
+    return color;
   }
 
   getAllProjectList() {
@@ -131,6 +157,8 @@ export class TaskMasterComponent implements OnInit {
       this.projectList = res;
       setTimeout(() => {
         this.selectProjectItem =  this.projectList[0]
+        this.getEmployeesByProject(this.projectList[0].id)
+        this.getAllTaskList()
       }, 150);
       this.isLoading = false;
     })
@@ -148,7 +176,7 @@ export class TaskMasterComponent implements OnInit {
             }
         })
       });
-      this.employeeList = this.employeeProjectList          
+      this.employeeList = this.employeeProjectList
       this.isLoading = false
     })
   }
@@ -156,8 +184,7 @@ export class TaskMasterComponent implements OnInit {
   getAllTaskList() {
     this.isLoading = true
     let itemsIds
-    this.firebaseService.getTaskList().subscribe((res: any) => {    
-      // this.taskList = res;
+    this.firebaseService.getTaskList().subscribe((res: any) => {
       if(!this.isSelectProjectFilter){
         this.groups = [
           {
@@ -214,16 +241,17 @@ export class TaskMasterComponent implements OnInit {
           }
         ];
         this.taskList = res.filter((id:any) => id.taskProjectId === this.selectProjectId);
-      }      
+      }    
+      
       this.taskList.forEach((ele:any) => {
         let index = this.groups.findIndex(id => id.name === ele.taskStatus);
         itemsIds = this.groups[index].items.map((id:any) => id.id);
         if(index > -1 && !itemsIds.includes(ele.id)){
           this.groups[index]?.items.push(ele);
-          const employeeName = ele.employeeList.map((element:any) => {
-              return element.emaployeeName
-          });
-          ele['employeeName'] = employeeName
+          const data = ele.employeeId.map((element:any) => {
+             return this.projectWiseEmployees?.find((id:any) => id.id === element).emaployeeName
+          })
+          ele['employeeName'] = data
         }
       })
       this.groups.forEach(ele => {
@@ -239,6 +267,7 @@ export class TaskMasterComponent implements OnInit {
           }
         })
       })
+
       this.taskListLength = this.taskList.length
       this.taskListTaskReadyLength  = this.taskList.filter((id:any) => id.taskStatus === "Task Ready").length
       this.taskListInProgressLength  = this.taskList.filter((id:any) => id.taskStatus === "In Progress").length
@@ -312,11 +341,10 @@ export class TaskMasterComponent implements OnInit {
   }
 
   submit() {
-
     const payload: TaskList = {
       id:'',
       taskDesc : this.taskForm.value.taskDescription,
-      employeeList : this.taskForm.value.taskEmployee,
+      employeeId : this.taskForm.value.taskEmployee.map((id:any) => id.id),
       taskTitle :this.taskForm.value.taskName,
       taskType : this.taskForm.value.taskType.taskName,
       taskProjectId: this.taskForm.value.taskProject.id,
@@ -341,104 +369,129 @@ export class TaskMasterComponent implements OnInit {
     this.selectProjectId = event.value.id
     this.isSelectProjectFilter = true 
     this.getAllTaskList()
+    this.getEmployeesByProject(this.selectProjectId) 
   }
 
   applyFilter(filterValue: any) {
-    if(filterValue?.target?.value){
-      this.keyValue = filterValue.target.value
-    }else{
-      this.keyValue = filterValue
-    }
-    this.mainArry = this.taskList
+    // if(filterValue?.target?.value || filterValue?.target?.value == ''){
+    //   this.keyValue = filterValue.target.value
+    // }else{
+    //   this.keyValue = filterValue
+    // }
+    // this.mainArry = this.taskList
 
-    this.filterInfluencerList = []
-    this.filterInfluencerList = this.mainArry.filter((element: any) => {
-      return Object.keys(element).some((key) => {
-        if (element[key] !== null)
-          return element[key].toString().toLowerCase().includes(this.keyValue.toLowerCase());
-      });
-    });
-    let itemsIds
-    if(!this.isSelectProjectFilter){
-      this.groups = [
-        {
-          name: 'Task Ready',
-          items: [
-            {taskStatus: "Task Ready"}
-          ]
-        },
-        {
-          name: 'In Progress',
-          items: [
-            {taskStatus: "In Progress"}
-          ]
-        },
-        {
-          name: 'Testing',
-          items: [
-            {taskStatus: "Testing"}
-          ]
-        },
-        {
-          name: 'Done',
-          items: [
-            {taskStatus: "Done"}
-          ]
-        }
-      ];
-      this.filterInfluencerList = this.filterInfluencerList.filter((id:any) => id.taskProjectId === this.projectList[0].id);
-    } else {
-      this.groups = [
-        {
-          name: 'Task Ready',
-          items: [
-            {taskStatus: "Task Ready"}
-          ]
-        },
-        {
-          name: 'In Progress',
-          items: [
-            {taskStatus: "In Progress"}
-          ]
-        },
-        {
-          name: 'Testing',
-          items: [
-            {taskStatus: "Testing"}
-          ]
-        },
-        {
-          name: 'Done',
-          items: [
-            {taskStatus: "Done"}
-          ]
-        }
-      ];
-      this.filterInfluencerList = this.filterInfluencerList.filter((id:any) => id.taskProjectId === this.selectProjectId);
-    }      
-    this.filterInfluencerList.forEach((ele:any) => {
-      let index = this.groups.findIndex(id => id.name === ele.taskStatus);
-      itemsIds = this.groups[index].items.map((id:any) => id.id);
-      if(index > -1 && !itemsIds.includes(ele.id)){
-        this.groups[index]?.items.push(ele);
-        const employeeName = ele.employeeList.map((element:any) => {
-            return element.emaployeeName
-        });
-        ele['employeeName'] = employeeName
-      }
-    })
-    this.groups.forEach(ele => {
-      ele.items?.forEach((element:any) => {
-        if(JSON.stringify(element) != '{}' && element?.employeeName?.length > 0 ) {
-          element.avatarName = []
-           element?.employeeName.forEach((ele:any)=>{
-              const data = ele.split(' ').map((ele:any) => ele?.charAt(0));
-              if(data != undefined) {
-                element.avatarName.push([]?.concat(...data).join().replace(',','')) 
-              }
+    // this.filterInfluencerList = []
+    // this.filterInfluencerList = this.mainArry.filter((element: any) => {
+    //   return Object.keys(element).some((key) => {
+    //     if (element[key] != null && key !== 'id' && key !=='taskProjectId')
+    //       return element[key].toString().toLowerCase().includes(this.keyValue.toLowerCase());
+    //   });
+    // });
+    // let itemsIds
+    // if(!this.isSelectProjectFilter){
+    //   this.groups = [
+    //     {
+    //       name: 'Task Ready',
+    //       items: [
+    //         {taskStatus: "Task Ready"}
+    //       ]
+    //     },
+    //     {
+    //       name: 'In Progress',
+    //       items: [
+    //         {taskStatus: "In Progress"}
+    //       ]
+    //     },
+    //     {
+    //       name: 'Testing',
+    //       items: [
+    //         {taskStatus: "Testing"}
+    //       ]
+    //     },
+    //     {
+    //       name: 'Done',
+    //       items: [
+    //         {taskStatus: "Done"}
+    //       ]
+    //     }
+    //   ];
+    //   this.filterInfluencerList = this.filterInfluencerList.filter((id:any) => id.taskProjectId === this.projectList[0].id);
+    // } else {
+    //   this.groups = [
+    //     {
+    //       name: 'Task Ready',
+    //       items: [
+    //         {taskStatus: "Task Ready"}
+    //       ]
+    //     },
+    //     {
+    //       name: 'In Progress',
+    //       items: [
+    //         {taskStatus: "In Progress"}
+    //       ]
+    //     },
+    //     {
+    //       name: 'Testing',
+    //       items: [
+    //         {taskStatus: "Testing"}
+    //       ]
+    //     },
+    //     {
+    //       name: 'Done',
+    //       items: [
+    //         {taskStatus: "Done"}
+    //       ]
+    //     }
+    //   ];
+    //   this.filterInfluencerList = this.filterInfluencerList.filter((id:any) => id.taskProjectId === this.selectProjectId);
+    // }      
+    // this.filterInfluencerList.forEach((ele:any) => {
+    //   let index = this.groups.findIndex(id => id.name === ele.taskStatus);
+    //   itemsIds = this.groups[index].items.map((id:any) => id.id);
+    //   if(index > -1 && !itemsIds.includes(ele.id)){
+    //     this.groups[index]?.items.push(ele);
+    //     const employeeName = ele.employeeList.map((element:any) => {
+    //         return element.emaployeeName
+    //     });
+    //     ele['employeeName'] = employeeName
+    //   }
+    // })
+    // this.groups.forEach(ele => {
+    //   ele.items?.forEach((element:any) => {
+    //     if(JSON.stringify(element) != '{}' && element?.employeeName?.length > 0 ) {
+    //       element.avatarName = []
+    //        element?.employeeName.forEach((ele:any)=>{
+    //           const data = ele.split(' ').map((ele:any) => ele?.charAt(0));
+    //           if(data != undefined) {
+    //             element.avatarName.push([]?.concat(...data).join().replace(',','')) 
+    //           }
+    //       })
+    //     }
+    //   })
+    // })
+  }
+
+  getEmployeesByProject(projectId : any) {
+    this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+      if (res) {
+        this.isLoading = true
+        const employees : any  = []
+        res.forEach((element:any) => {
+          element.selectProject.forEach((ele:any) => {
+            if(ele.id === projectId) {
+              employees.push(element)
+            }
           })
+        });
+        this.projectWiseEmployees = employees;
+        if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
+          const employeeAvatar = this.projectWiseEmployees.map((id : any ) => id.emaployeeName.split(' ').map((ele : any) => ele?.charAt(0))).map((childEle : any) => childEle.join(''))
+          this.employeeAvtars = employeeAvatar
         }
-      })
+      }
+      this.getProjectName = this.projectList.find((id:any) => id.id === projectId).projectName    
+      this.isLoading = false
     })
+      
   }
 }
