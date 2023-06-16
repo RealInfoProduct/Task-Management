@@ -74,6 +74,7 @@ export class TaskMasterComponent implements OnInit {
   taskListTestingLength :number = 0
   taskListDoneLength :number = 0
   getProjectName :any
+  employeeListArr :any
 
 
   constructor( private _ds : DragulaService, 
@@ -167,6 +168,7 @@ export class TaskMasterComponent implements OnInit {
   getAllEmployeeList() {
     this.isLoading = true
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+      this.employeeListArr = res 
       this.employeeList = res 
       this.employeeProjectList = []
       res.forEach((element:any) => {
@@ -249,7 +251,7 @@ export class TaskMasterComponent implements OnInit {
         if(index > -1 && !itemsIds.includes(ele.id)){
           this.groups[index]?.items.push(ele);
           const data = ele.employeeId.map((element:any) => {
-             return this.projectWiseEmployees?.find((id:any) => id.id === element).emaployeeName
+             return this.employeeListArr?.find((id:any) => id.id === element).emaployeeName
           })
           ele['employeeName'] = data
         }
