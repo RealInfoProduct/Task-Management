@@ -1,11 +1,11 @@
 <div class="wrapper" dragula="COLUMNS" [(dragulaModel)]="groups">
   <div class="project">
   <div class="project-info"><h1>{{getProjectName}}</h1><div class="project-participants"><button class="project-participants__add" data-bs-toggle="modal"
-    data-bs-target="#TaskModal">Add Participant</button></div></div>
+    data-bs-target="#TaskModal" (click)="addTask()">Add Participant</button></div></div>
     <div class="justify-content-center">
       <p-avatarGroup styleClass="mb-3">
-          <ng-container *ngFor="let data of employeeAvtars; let i = index">
-            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data)}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+          <ng-container *ngFor="let data of employeeAvtars">
+            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
           </ng-container>
       </p-avatarGroup>
     </div>
@@ -19,15 +19,24 @@
           <ng-container *ngIf="group.items.length > 0; else elseBlock">
             <div *ngFor="let item of group.items">
               <div [ngClass]="item?.taskDesc ? 'task' : 'removeEmptyCard'">
-                <div class="task__tags"><span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span><button
-                    class="task__options"><i class="ri-more-fill"></i></button></div>
+                <div class="task__tags"><span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span>
+                  <div class="dropdown">
+                    <button class="task__options" id="dropdownMenuButton1" data-bs-toggle="dropdown" >
+                      <i class="ri-more-fill"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li (click)="editData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
+                      <li (click)="deleteData(item)"><a class="dropdown-item"><i class="ri-delete-bin-line"></i>Delete</a></li>
+                    </ul>
+                  </div>
+                </div>
                     <label><b>{{item?.taskTitle}}</b></label>
                 <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
                     <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
-                    <p-avatarGroup>
+                    <p-avatarGroup styleClass="mb-3">
                       <ng-container *ngFor="let data of item?.avatarName">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data?.toUpperCase()}}</p-avatar>
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
                       </ng-container>
                     </p-avatarGroup>
                 </div>
@@ -180,4 +189,5 @@
            </div>
        </div>
    </div>
-</div>
+  </div>
+  <p-confirmDialog header="Confirmation" ></p-confirmDialog>

@@ -513,3 +513,21 @@
   border: 3px solid #dfdfdf;
   border-radius: 50%;
 }
+
+.task__options:focus-visible{
+  outline: none;
+}
+
+.dropdown-menu{
+  box-shadow: rgba(99, 99, 99, 0.3) 0px 2px 8px 0px;
+  border-color: rgba(162, 179, 207, 0.2) !important;
+  cursor: auto;
+  
+  .dropdown-item{
+    align-items: center;
+    display: flex;
+  }
+  i{
+    padding-right: 10px;
+  }
+}

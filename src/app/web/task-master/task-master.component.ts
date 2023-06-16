@@ -4,7 +4,7 @@ import { DragulaService } from 'ng2-dragula';
 import { FirebaseService } from 'src/app/service/firebase.service';
 import * as moment from 'moment';
 import { TaskList } from 'src/app/interface/AuthResponse';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { msgType } from 'src/assets/constant/message';
 
 @Component({
@@ -50,13 +50,16 @@ export class TaskMasterComponent implements OnInit {
   taskListDoneLength :number = 0
   getProjectName :any
   employeeListArr :any
+  taskEditId:any
+  taskStatus:any
 
 
   constructor( private _ds : DragulaService, 
     private formbuilder :FormBuilder,
     private firebaseService:FirebaseService,
     private messageService :MessageService,
-    private cdr : ChangeDetectorRef) { 
+    private cdr : ChangeDetectorRef ,
+    private confirmationService : ConfirmationService) { 
   }
 
    ngOnInit(): void {
@@ -256,8 +259,8 @@ export class TaskMasterComponent implements OnInit {
     })    
   }
 
-  selectProject(event:any){
-    this.projectId = event.value.id
+  selectProject(event:any, id?: any){
+    this.projectId = event.value ? event.value.id : id
     this.getAllEmployeeList()
  }
 
@@ -321,27 +324,40 @@ export class TaskMasterComponent implements OnInit {
 
   submit() {
     const payload: TaskList = {
-      id:'',
+      id: this.taskEditId ? this.taskEditId : "",
       taskDesc : this.taskForm.value.taskDescription,
       employeeId : this.taskForm.value.taskEmployee.map((id:any) => id.id),
       taskTitle :this.taskForm.value.taskName,
       taskType : this.taskForm.value.taskType.taskName,
       taskProjectId: this.taskForm.value.taskProject.id,
-      taskStatus : "Task Ready",
+      taskStatus : this.taskEditId? this.taskStatus : "Task Ready",
       taskDate : moment(this.taskForm.value.taskDate).format("YYYY-MM-DD")
     }
-
+    debugger
     this.isLoading = true
-    this.firebaseService.addTaskList(payload).then(res => {
-      this.messageService.add({
-        severity: msgType.success,
-        summary:'Sucess' ,
-        detail: 'Data Add Successfully..',
-        life: 1500,
-      });
-      this.getAllTaskList()
-      this.isLoading = false
-    })
+    if(!this.taskEditId){
+      this.firebaseService.addTaskList(payload).then(res => {
+        this.messageService.add({
+          severity: msgType.success,
+          summary:'Sucess' ,
+          detail: 'Data Add Successfully..',
+          life: 1500,
+        });
+        this.getAllTaskList()
+        this.isLoading = false
+      })
+    } else {
+      this.firebaseService.updateTaskList(this.taskEditId ,payload).then(res => {
+        this.messageService.add({
+          severity: msgType.success,
+          summary:'Sucess' ,
+          detail: 'Data UpDate Successfully..',
+          life: 1500,
+        });
+        this.getAllTaskList()
+        this.isLoading = false
+      })
+    }
   }
   
   selectProjectFilter(event:any) {
@@ -515,6 +531,64 @@ export class TaskMasterComponent implements OnInit {
       let index = this.groups.findIndex(id => id.name == ele.taskStatus)
       this.groups[index].items.push(ele)
     })
+  }
 
+  addTask(){
+    this.taskForm.reset()
+  }
+
+  editData(data :any){
+    this.isEdit = true
+    this.taskEditId = data.id
+    this.taskStatus = data.taskStatus
+    this.taskForm.controls['taskName'].setValue(data.taskTitle)
+    this.taskForm.controls['taskDescription'].setValue(data.taskDesc)
+    const taskTypeList  = this.taskTypeList.find((id:any) => id.taskName === data.taskType)
+    this.taskForm.controls['taskType'].setValue(taskTypeList)
+    const projectList = this.projectList.find((id:any) => id.id === data.taskProjectId)
+    this.selectProject('', projectList.id)
+    this.taskForm.controls['taskProject'].setValue(projectList)
+    const recordId = data.employeeId.map((id:any) => id);
+    let employeeListArr:any = []
+    this.projectWiseEmployees.forEach((ele:any) => {
+      if(recordId.find((id:any) => id == ele.id)) {
+        employeeListArr.push(ele)
+      }
+    })
+    this.taskForm.controls['taskEmployee'].setValue(employeeListArr)
+    this.taskForm.controls['taskDate'].setValue(new Date(data.taskDate));
+  }
+
+  deleteData(data: any) {
+    this.isLoading = true
+    const payload: TaskList = {
+      id: data.id,
+      taskDesc: data.taskDesc,
+      employeeId: data.employeeId,
+      taskTitle: data.taskTitle,
+      taskType: data.taskType,
+      taskStatus: data.taskStatus,
+      taskProjectId: data.taskProjectId,
+      taskDate: data.taskDate
+    }
+
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record ?',
+      header: 'Delete Priority',
+      accept: async () => {
+        this.isLoading = true
+        this.firebaseService.deleteTaskList(payload).then((res: any) => {
+          this.messageService.add({
+            severity: msgType.success,
+            summary: 'Sucess',
+            detail: 'Data Delete Successfully..',
+            life: 1500,
+          });
+        })
+        this.isLoading = false
+      }
+    })
+
+   
   }
 }
