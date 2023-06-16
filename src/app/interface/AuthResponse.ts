@@ -65,7 +65,7 @@ export interface EmaployeeList{
 export interface TaskList {
     id: string
     taskDesc :any
-    employeeList :any
+    employeeId :any
     taskTitle :any
     taskType :any
     taskStatus :any

@@ -31,6 +31,10 @@ export class EmployeeMasterComponent implements OnInit {
     {
       roleName: 'backend',
 
+    },
+    {
+      roleName: 'full stack',
+
     }
   ]
 
