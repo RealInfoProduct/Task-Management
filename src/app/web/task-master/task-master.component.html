@@ -58,20 +58,20 @@
     <div class='tag-progress'>
       <h2>Task Progress</h2>
       <div class='tag-progress'>
-        <p>Task Ready<span>3/10</span></p>
-        <progress class="progress progress--taskReady" max="10" value="3"> 3 </progress>
+        <p>Task Ready<span>{{taskListTaskReadyLength}}/{{taskListLength}}</span></p>
+        <progress class="progress progress--taskReady" [max]="taskListLength" [value]="taskListTaskReadyLength"></progress>
       </div>
       <div class='tag-progress'>
-        <p>In Progress<span>6/10</span></p>
-        <progress class="progress progress--design" max="10" value="6"> 6 </progress>
+        <p>In Progress<span>{{taskListInProgressLength}}/{{taskListLength}}</span></p>
+        <progress class="progress progress--design" [max]="taskListLength" [value]="taskListInProgressLength"></progress>
       </div>
       <div class='tag-progress'>
-        <p>Testing <span>3/8</span></p>
-        <progress class="progress progress--copyright" max="8" value="3"> 3 </progress>
+        <p>Testing <span>{{taskListTestingLength}}/{{taskListLength}}</span></p>
+        <progress class="progress progress--copyright" [max]="taskListLength" [value]="taskListTestingLength"></progress>
       </div>
       <div class='tag-progress'>
-        <p>Done <span>2/7</span></p>
-        <progress class="progress progress--illustration" max="7" value="2"> 2 </progress>
+        <p>Done <span>{{taskListDoneLength}}/{{taskListLength}}</span></p>
+        <progress class="progress progress--illustration" [max]="taskListLength" [value]="taskListDoneLength"></progress>
       </div>
     </div>
     <div class='task-activity'>

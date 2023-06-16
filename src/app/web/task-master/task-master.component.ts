@@ -66,6 +66,12 @@ export class TaskMasterComponent implements OnInit {
   isSelectProjectFilter :boolean = false
   mainArry:any = []
   keyValue:any
+  taskListLength :any
+  taskListTaskReadyLength :any
+  taskListInProgressLength :any
+  taskListTestingLength :any
+  taskListDoneLength :any
+
 
   constructor( private _ds : DragulaService, 
     private formbuilder :FormBuilder,
@@ -233,6 +239,11 @@ export class TaskMasterComponent implements OnInit {
           }
         })
       })
+      this.taskListLength = this.taskList.length
+      this.taskListTaskReadyLength  = this.taskList.filter((id:any) => id.taskStatus === "Task Ready").length
+      this.taskListInProgressLength  = this.taskList.filter((id:any) => id.taskStatus === "In Progress").length
+      this.taskListTestingLength  = this.taskList.filter((id:any) => id.taskStatus === "Testing").length
+      this.taskListDoneLength  = this.taskList.filter((id:any) => id.taskStatus === "Done").length
       this.isLoading = false
     })    
   }
