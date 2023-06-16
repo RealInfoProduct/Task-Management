@@ -4,8 +4,8 @@
     data-bs-target="#TaskModal">Add Participant</button></div></div>
     <div class="justify-content-center">
       <p-avatarGroup styleClass="mb-3">
-          <ng-container *ngFor="let data of employeeAvtars">
-            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
+          <ng-container *ngFor="let data of employeeAvtars; let i = index">
+            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data)}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
           </ng-container>
       </p-avatarGroup>
     </div>
@@ -25,9 +25,9 @@
                 <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
                     <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
-                    <p-avatarGroup styleClass="mb-3">
+                    <p-avatarGroup>
                       <ng-container *ngFor="let data of item?.avatarName">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data?.toUpperCase()}}</p-avatar>
                       </ng-container>
                     </p-avatarGroup>
                 </div>

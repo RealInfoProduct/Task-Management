@@ -23,34 +23,9 @@ export class TaskMasterComponent implements OnInit {
   taskDone :any = []
   filterInfluencerList:any = []
   employeeAvtars :any = []
-  projectWiseEmployees :any = []
-  public groups:Array<any> = [
-    // {
-    //   name: 'Task Ready',
-    //   items: [
-    //     {taskStatus: "Task Ready"}
-    //   ]
-    // },
-    // {
-    //   name: 'In Progress',
-    //   items: [
-    //     {taskStatus: "In Progress"}
-    //   ]
-    // },
-    // {
-    //   name: 'Testing',
-    //   items: [
-    //     {taskStatus: "Testing"}
-    //   ]
-    // },
-    // {
-    //   name: 'Done',
-    //   items: [
-    //     {taskStatus: "Done"}
-    //   ]
-    // }
-  ];
-
+  projectWiseEmployees :any = [];
+  selectedIndex:any;
+  public groups:Array<any> = [];
   taskTypeList :any = [
     {taskName:"Backend"},
     {taskName:"Frontend"},
@@ -142,26 +117,28 @@ export class TaskMasterComponent implements OnInit {
     for (let i = 0; i < name.length; i++) {
       hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
+
+    const minLightness = 80;
+    const maxLightness = 90;
   
-    const r = Math.floor((Math.sin(hash++) * 255));
-    const g = Math.floor((Math.sin(hash++) * 255));
-    const b = Math.floor((Math.sin(hash++) * 255));
+    const hue = Math.floor(Math.sin(hash++) * 360);
+    const saturation = Math.floor(Math.sin(hash++) * 101);
+    const lightness = Math.floor(Math.sin(hash++) * (maxLightness - minLightness + 1) + minLightness);
   
-    const color = `rgb(${r}, ${g}, ${b})`;
-  
+    const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     return color;
   }
 
   getAllProjectList() {
     this.isLoading = true
     this.firebaseService.getProjectList().subscribe((res: any) => {
-      this.projectList = res
+      this.projectList = res;
       setTimeout(() => {
         this.selectProjectItem =  this.projectList[0]
         this.getEmployeesByProject(this.projectList[0].id)
         this.getAllTaskList()
       }, 150);
-      this.isLoading = false
+      this.isLoading = false;
     })
   }
 
@@ -368,6 +345,7 @@ export class TaskMasterComponent implements OnInit {
   }
   
   selectProjectFilter(event:any) {
+    this.selectedIndex = null
     this.selectProjectId = event.value.id
     this.isSelectProjectFilter = true 
     this.getAllTaskList()
@@ -495,5 +473,48 @@ export class TaskMasterComponent implements OnInit {
       this.isLoading = false
     })
       
+  }
+
+  onAvatarChange(data:any,index:number){
+    this.selectedIndex = index;
+    let value:any = []
+    this.taskList.forEach((ele:any) =>  {
+      if(ele.avatarName.find((id:any) => id == data)){
+         value.push(ele);
+      }
+    });
+
+    this.groups = [
+      {
+        name: 'Task Ready',
+        items: [
+          {taskStatus: "Task Ready"}
+        ]
+      },
+      {
+        name: 'In Progress',
+        items: [
+          {taskStatus: "In Progress"}
+        ]
+      },
+      {
+        name: 'Testing',
+        items: [
+          {taskStatus: "Testing"}
+        ]
+      },
+      {
+        name: 'Done',
+        items: [
+          {taskStatus: "Done"}
+        ]
+      }
+    ];
+
+    value.forEach((ele:any) => {
+      let index = this.groups.findIndex(id => id.name == ele.taskStatus)
+      this.groups[index].items.push(ele)
+    })
+
   }
 }
