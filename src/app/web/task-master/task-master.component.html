@@ -5,7 +5,7 @@
     <div class="justify-content-center">
       <p-avatarGroup styleClass="mb-3">
           <ng-container *ngFor="let data of employeeAvtars; let i = index">
-            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data)}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
           </ng-container>
       </p-avatarGroup>
     </div>
