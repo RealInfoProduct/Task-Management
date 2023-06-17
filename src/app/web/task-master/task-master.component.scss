@@ -41,8 +41,8 @@
     font-weight: 600;
   }
   .project {
-    padding:0rem 2rem;
-    max-width:80%;
+    padding:0rem 5px;
+    max-width:75%;
     width:100%;
     display:inline-block;
     
@@ -214,7 +214,7 @@
   border:3px dashed var(--light-grey)!important;
   }
   .task-details {
-    width:20%;
+    width:25%;
     border-left:1px solid #d9e0e9;
     display:inline-block;
     height:100vh;
@@ -530,4 +530,11 @@
   i{
     padding-right: 10px;
   }
+}
+
+.modal-header{
+  background: linear-gradient(118deg, #0062d105, #0062d10a);
+}
+.modal-body{
+  background: linear-gradient(118deg, #0062d105, #0062d10a);
 }
