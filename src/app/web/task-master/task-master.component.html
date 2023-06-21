@@ -25,7 +25,7 @@
                       <i class="ri-more-fill"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
+                      <li (click)="viewData(item)"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
                       <li (click)="editData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
                       <li (click)="deleteData(item)"><a class="dropdown-item"><i class="ri-delete-bin-line"></i>Delete</a></li>
                     </ul>
@@ -242,27 +242,27 @@
         <div class="row">
           <div class="col-md-8">
             <div class="tasknumber mb-4">
-              <span class="show-taskNumber mb-4"><img src="../../../assets/task-img/Critical.png" width="10%"
-                  style="padding-right: 10px;" alt="">Pr-2</span>
+              <span class="show-taskNumber mb-4"><img [src]="taskViewList?.taskPriority.img" width="10%"
+                  style="padding-right: 10px;" alt="">{{taskViewList?.taskNumber}}</span>
             </div>
             <div class="taskname mb-3">
-              <h4>Project Management System</h4>
+              <h4>{{taskViewList?.taskTitle}}</h4>
             </div>
             <div class="taskdoc">
-              <span>How to specify minimum &maximum number of</span>
+              <span>{{taskViewList?.taskTitle}}</span>
             </div>
           </div>
           <div class="col-md-4">
             <div class='task-view-card'>
               <h4>Status</h4>
-              <span class="mt-2">Task Ready</span>
+              <span class="mt-2">{{taskViewList?.taskStatus}}</span>
             </div>
             <div class='task-view-card'>
               <h4>Assignee</h4>
               <span style="display: flex;">
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
-                      <ng-container *ngFor="let data of employeeAvtars; let i = index">
+                      <ng-container *ngFor="let data of taskViewList?.avatarName; let i = index">
                         <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
@@ -274,8 +274,8 @@
               <span style="display: flex;">
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
-                      <ng-container *ngFor="let data of employeeAvtars; let i = index">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+                      <ng-container >
+                        <p-avatar size="small" shape="circle">RI</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
                 </div>
@@ -283,12 +283,12 @@
             </div>
             <div class='task-view-card'>
               <h4>Time Taking</h4>
-              <span>30-Jun-2023</span>
+              <span>{{taskViewList?.taskEndDate}}</span>
             </div>
             <div class='task-view-card'>
               <h4>Priority</h4>
-              <span class="show-taskNumber"><img src="../../../assets/task-img/Critical.png" width="15%"
-                  style="padding-right: 10px;" alt="">Critical</span>
+              <span class="show-taskNumber"><img [src]="taskViewList?.taskPriority.img" width="15%"
+                  style="padding-right: 10px;" alt="">{{taskViewList?.taskPriority.name}}</span>
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ export class TaskMasterComponent implements OnInit {
   taskEditId: any
   taskStatus: any
   projectNameTaskNumber:any
-
+  taskViewList :any
   priority = [
     { name: 'Blocker', img: '../../../assets/task-img/Blocker.png' },
     { name: 'Critical', img: '../../../assets/task-img/Critical.png' },
@@ -631,5 +631,10 @@ selectedPriority :any
     })
 
 
+  }
+
+  viewData(data:any) {
+    console.log(data);
+      this.taskViewList = data
   }
 }
