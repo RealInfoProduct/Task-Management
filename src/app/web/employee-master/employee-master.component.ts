@@ -48,6 +48,8 @@ export class EmployeeMasterComponent implements OnInit {
 
     }
   ]
+  userName :any
+  isError: boolean = false
 
   constructor(private firebaseService: FirebaseService,
     private formbuilder: FormBuilder,
@@ -208,4 +210,16 @@ export class EmployeeMasterComponent implements OnInit {
     })
   }
 
+  userNameChange(event:any) {
+    if(event?.length > 7){
+     const data =  this.employeeList.find((id:any) => id.emaployeeUserName == event)     
+      if(data){
+        this.isError = true
+      }
+      else {
+        this.isError = false
+      }
+
+    }
+  }
 }

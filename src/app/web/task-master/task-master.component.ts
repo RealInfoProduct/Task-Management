@@ -103,6 +103,7 @@ selectedPriority :any
         taskEndDate : args.item.taskEndDate,
         taskPriority : args.item.taskPriority,
       }
+      console.log(payload);
       
       this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
         this.isUpdate = true;
@@ -238,9 +239,9 @@ selectedPriority :any
 
       if(this.taskList.length > 0){ 
           const data = this.getProjectName?.split(' ')[0].split('');
-            const findnumber = this.taskList.map((id:any) => id.taskNumber)
+          const findnumber = this.taskList.map((id:any) => id.taskNumber).sort()
           const lastIndex = findnumber.length - 1;
-          const lastElement = Number(this.taskList[lastIndex].taskNumber.split("-")[1]);
+          const lastElement = Number(findnumber[lastIndex].split("-")[1]);
           findnumber.forEach((ele :any) => {
             const element = Number(ele.split("-")[1])+ 1
             if(lastElement < element ) {
@@ -252,7 +253,7 @@ selectedPriority :any
           const data = this.getProjectName?.split(' ')[0].split('');
           this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + 1
         }
-
+        
 
       this.taskList.forEach((ele: any) => {
         let index = this.groups.findIndex(id => id.name === ele.taskStatus);
@@ -634,7 +635,7 @@ selectedPriority :any
   }
 
   viewData(data:any) {
-    console.log(data);
+
       this.taskViewList = data
   }
 }

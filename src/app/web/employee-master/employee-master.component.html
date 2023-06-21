@@ -92,7 +92,10 @@
                         </div>
                         <div class="form-group m-2">
                             <label for="text">Employee UserName</label>
-                            <input type="text" class="form-control" placeholder="Enter Employee UserName" formControlName="emaployeeUserName">
+                            <input type="text" class="form-control" placeholder="Enter Employee UserName" formControlName="emaployeeUserName" [(ngModel)]="userName" (ngModelChange)="userNameChange($event)">
+                            <div *ngIf="isError">
+                                <span class="required">UserName Already Exists</span>
+                            </div>
                         </div>
                         <div class="form-group m-2">
                             <label for="text">Employee Password</label>
