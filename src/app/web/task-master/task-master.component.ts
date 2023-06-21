@@ -102,9 +102,7 @@ selectedPriority :any
         taskNumber: args.item.taskNumber,
         taskEndDate : args.item.taskEndDate,
         taskPriority : args.item.taskPriority,
-      }
-      console.log(payload);
-      
+      }      
       this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
         this.isUpdate = true;
         // this.cdr.detectChanges()

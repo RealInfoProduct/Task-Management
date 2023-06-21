@@ -5,7 +5,7 @@
     <div class="justify-content-center">
       <p-avatarGroup styleClass="mb-3">
           <ng-container *ngFor="let data of employeeAvtars; let i = index">
-            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
           </ng-container>
       </p-avatarGroup>
     </div>
@@ -195,7 +195,7 @@
                         <p-dropdown [options]="priority" formControlName="taskPriority" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Task priority">
                           <ng-template pTemplate="selectedItem">
                               <div class="flex align-items-center gap-2" *ngIf="taskForm?.value?.taskPriority?.name">
-                                  <img [src]="taskForm?.value?.taskPriority?.img"  style="width: 18px"/>
+                                  <img [src]="taskForm?.value.taskPriority?.img"  style="width: 18px"/>
                                   <div>{{ taskForm?.value?.taskPriority?.name }}</div>
                               </div>
                           </ng-template>
