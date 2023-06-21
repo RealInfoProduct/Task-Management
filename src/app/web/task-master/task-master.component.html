@@ -34,7 +34,7 @@
                 <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
                     <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
-                    <p-avatarGroup styleClass="mb-3">
+                    <p-avatarGroup>
                       <ng-container *ngFor="let data of item?.avatarName">
                         <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
                       </ng-container>
