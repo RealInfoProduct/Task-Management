@@ -19,26 +19,32 @@
           <ng-container *ngIf="group.items.length > 0; else elseBlock">
             <div *ngFor="let item of group.items">
               <div [ngClass]="item?.taskDesc ? 'task' : 'removeEmptyCard'">
-                <div class="task__tags"><span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span>
+                <div class="task__tags"><span class="show-taskNumber"><img [src]="item?.taskPriority?.img" width="15%" style="padding-right: 10px;" alt="">{{item.taskNumber}}</span>
                   <div class="dropdown">
                     <button class="task__options" id="dropdownMenuButton1" data-bs-toggle="dropdown" >
                       <i class="ri-more-fill"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
                       <li (click)="editData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
                       <li (click)="deleteData(item)"><a class="dropdown-item"><i class="ri-delete-bin-line"></i>Delete</a></li>
                     </ul>
                   </div>
                 </div>
-                    <label><b>{{item?.taskTitle}}</b></label>
-                <p style="margin-top: 8px;">{{item?.taskDesc}}</p>
+                    <label class="taskTitle"><b>{{item?.taskTitle}}</b></label>
+                <p style="margin-top: 8px;" class="taskDesc">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
-                    <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time></span>
+                    <!-- <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time> -->
+                    <span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span>
+                  </span>
                     <p-avatarGroup styleClass="mb-3">
                       <ng-container *ngFor="let data of item?.avatarName">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data}}</p-avatar>
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data?.toUpperCase()}}</p-avatar>
                       </ng-container>
                     </p-avatarGroup>
+                </div>
+                <div class="endDate">
+                  <span>End Date {{item.taskEndDate === 'Invalid date' ? '---' : item.taskEndDate}}</span>
                 </div>
               </div>
             </div>
@@ -134,45 +140,77 @@
                        <input type="text" class="form-control" placeholder="Enter Task Name" formControlName="taskName">
                      </div>
                      <div class="form-group m-2">
-                       <label for="text">Task Description</label>
-                       <textarea name="Task Description" class="form-control" id="" cols="30" rows="7" formControlName="taskDescription"></textarea>
+                       <label for="text">Description</label>
+                       <textarea name="Description" class="form-control" rows="8" formControlName="taskDescription"></textarea>
                      </div>
                    </div>
                    <div class="col-6">
                      <div class="form-group m-2">
                        <div class="title_Name">
-                         <label for="text">Task Type</label>
+                         <label for="text">Type</label>
                        </div>
                        <div class="dropdwon">
-                         <p-dropdown placeholder="Select Task Type"  [options]="taskTypeList" optionLabel="taskName" formControlName="taskType"></p-dropdown>
+                         <p-dropdown placeholder="Select Type"  [options]="taskTypeList" optionLabel="taskName" formControlName="taskType"></p-dropdown>
                        </div>
                      </div>
                      <div class="form-group m-2">
                        <div class="title_Name">
-                         <label for="text">Task Project</label>
+                         <label for="text">Project</label>
                        </div>
                        <div class="dropdwon">
-                         <p-dropdown [options]="projectList" (onChange)="selectProject($event)" placeholder="Select Task Project" optionLabel="projectName" formControlName="taskProject"></p-dropdown>
+                         <p-dropdown [options]="projectList" (onChange)="selectProject($event)" placeholder="Select Project" optionLabel="projectName" formControlName="taskProject"></p-dropdown>
                        </div>
                      </div>
                      <div class="form-group m-2">
                        <div class="title_Name">
-                         <label for="text">Task Employee</label>
+                         <label for="text">Assignee</label>
                        </div>
                        <div class="dropdwon">
-                         <p-multiSelect [options]="employeeList" placeholder="Select Task Employee" formControlName="taskEmployee"
+                         <p-multiSelect [options]="employeeList" placeholder="Select Employee" formControlName="taskEmployee"
                          optionLabel="emaployeeName"></p-multiSelect>
                        </div>
                      </div>
                      <div class="form-group m-2">
                        <div class="title_Name">
-                         <label for="text">Task Date</label>
+                         <label for="text">Start Date</label>
                        </div>
                        <div class="dropdwon">
                          <p-calendar [style]="{'width':'100%'}" [showIcon]="true" formControlName="taskDate"></p-calendar>
                        </div>
                      </div>
-                   </div>
+                     <div class="form-group m-2">
+                       <div class="title_Name">
+                         <label for="text">End Date</label>
+                       </div>
+                       <div class="dropdwon">
+                         <p-calendar [style]="{'width':'100%'}" [showIcon]="true" formControlName="taskEndDate"></p-calendar>
+                       </div>
+                     </div>
+
+                     <div class="form-group m-2">
+                       <div class="title_Name">
+                         <label for="text">Select Priority</label>
+                       </div>
+                       <div class="dropdwon">
+                        <p-dropdown [options]="priority" formControlName="taskPriority" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Task priority">
+                          <ng-template pTemplate="selectedItem">
+                              <div class="flex align-items-center gap-2" *ngIf="taskForm?.value?.taskPriority?.name">
+                                  <img [src]="taskForm?.value?.taskPriority?.img"  style="width: 18px"/>
+                                  <div>{{ taskForm?.value?.taskPriority?.name }}</div>
+                              </div>
+                          </ng-template>
+                          <ng-template let-priority pTemplate="item" class="p-0">
+                              <div class="flex align-items-center gap-2">
+                                  <img [src]="priority.img" style="width: 18px"/>
+                                  <div>{{ priority.name }}</div>
+                              </div>
+                          </ng-template>
+                      </p-dropdown>
+                       </div>
+                     </div>
+                    
+                     
+                  </div>
                  </div>
                </form>
                    <div class="modal-footer">                        
@@ -190,4 +228,76 @@
        </div>
    </div>
   </div>
+
+<!-- Modal -->
+<div class="modal fade" id="viewTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Task View</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="tasknumber mb-4">
+              <span class="show-taskNumber mb-4"><img src="../../../assets/task-img/Critical.png" width="10%"
+                  style="padding-right: 10px;" alt="">Pr-2</span>
+            </div>
+            <div class="taskname mb-3">
+              <h4>Project Management System</h4>
+            </div>
+            <div class="taskdoc">
+              <span>How to specify minimum &maximum number of</span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class='task-view-card'>
+              <h4>Status</h4>
+              <span class="mt-2">Task Ready</span>
+            </div>
+            <div class='task-view-card'>
+              <h4>Assignee</h4>
+              <span style="display: flex;">
+                <div class="justify-content-center">
+                  <p-avatarGroup styleClass="mb-0">
+                      <ng-container *ngFor="let data of employeeAvtars; let i = index">
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+                      </ng-container>
+                  </p-avatarGroup>
+                </div>
+              </span>
+            </div>
+            <div class='task-view-card'>
+              <h4>Reporter</h4>
+              <span style="display: flex;">
+                <div class="justify-content-center">
+                  <p-avatarGroup styleClass="mb-0">
+                      <ng-container *ngFor="let data of employeeAvtars; let i = index">
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+                      </ng-container>
+                  </p-avatarGroup>
+                </div>
+              </span>
+            </div>
+            <div class='task-view-card'>
+              <h4>Time Taking</h4>
+              <span>30-Jun-2023</span>
+            </div>
+            <div class='task-view-card'>
+              <h4>Priority</h4>
+              <span class="show-taskNumber"><img src="../../../assets/task-img/Critical.png" width="15%"
+                  style="padding-right: 10px;" alt="">Critical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div> -->
+    </div>
+  </div>
+</div>
   <p-confirmDialog header="Confirmation" ></p-confirmDialog>

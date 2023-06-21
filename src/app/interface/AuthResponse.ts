@@ -71,4 +71,7 @@ export interface TaskList {
     taskStatus :any
     taskProjectId : any;
     taskDate :any
+    taskEndDate :any
+    taskPriority :any
+    taskNumber:any
 }

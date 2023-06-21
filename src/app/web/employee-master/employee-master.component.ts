@@ -140,12 +140,25 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   deleteEmployee(item: any) {
+    const payload: EmaployeeList = {
+      id: item.id,
+      emaployeeName: item.emaployeeName,
+      emaployeeMobile: item.emaployeeMobile,
+      emaployeeEmail: item.emaployeeEmail,
+      emaployeeUserName: item.emaployeeUserName,
+      emaployeePassword: item.emaployeePassword,
+      selectEmployeeRole: item.selectEmployeeRole,
+      selectEmployeeTechnology: item.selectEmployeeRole,
+      selectEmployeeStatus: item.selectEmployeeStatus,
+      selectProject: item.selectProject,
+      selectProjectRole: item.selectProjectRoleEle,
+    }    
     this.confirmationService.confirm({
       message: 'Do you want to delete this record ?',
       header: 'Delete Priority',
       accept: async () => {
         this.isLoading = true
-        this.firebaseService.deleteProjectList(item).then(res => {
+        this.firebaseService.deleteEmaployeeList(payload).then(res => {
           this.messageService.add({
             severity: msgType.success,
             summary: 'Sucess',
