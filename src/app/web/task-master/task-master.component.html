@@ -19,7 +19,7 @@
           <ng-container *ngIf="group.items.length > 0; else elseBlock">
             <div *ngFor="let item of group.items">
               <div [ngClass]="item?.taskDesc ? 'task' : 'removeEmptyCard'">
-                <div class="task__tags"><span class="show-taskNumber"><img [src]="item?.taskPriority?.img" width="15%" style="padding-right: 10px;" alt="">{{item.taskNumber}}</span>
+                <div class="task__tags"><span class="show-taskNumber"><img [src]="item?.taskPriority?.img" width="10%" style="padding-right: 10px;" alt="">{{item.taskNumber}}</span>
                   <div class="dropdown">
                     <button class="task__options" id="dropdownMenuButton1" data-bs-toggle="dropdown" >
                       <i class="ri-more-fill"></i>
