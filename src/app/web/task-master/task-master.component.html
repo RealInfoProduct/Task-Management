@@ -239,20 +239,21 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="row">
+        <div class="row modal-des">
           <div class="col-md-8">
-            <div class="tasknumber mb-4">
-              <span class="show-taskNumber mb-4"><img [src]="taskViewList?.taskPriority.img" width="10%"
+            <div class="tasknumber mb-2">
+              <span class="show-taskNumber mb-4"><img [src]="taskViewList?.taskPriority.img" width="5%"
                   style="padding-right: 10px;" alt="">{{taskViewList?.taskNumber}}</span>
             </div>
             <div class="taskname mb-3">
               <h4>{{taskViewList?.taskTitle}}</h4>
             </div>
+            <hr>
             <div class="taskdoc">
               <span>{{taskViewList?.taskTitle}}</span>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 left-side">
             <div class='task-view-card'>
               <h4>Status</h4>
               <span class="mt-2">{{taskViewList?.taskStatus}}</span>
@@ -287,7 +288,7 @@
             </div>
             <div class='task-view-card'>
               <h4>Priority</h4>
-              <span class="show-taskNumber"><img [src]="taskViewList?.taskPriority.img" width="15%"
+              <span class="show-taskNumber"><img [src]="taskViewList?.taskPriority.img" width="10%"
                   style="padding-right: 10px;" alt="">{{taskViewList?.taskPriority.name}}</span>
             </div>
           </div>

@@ -545,8 +545,19 @@
   padding: 0;
 }
 .show-taskNumber{
-  font-size: 12px;
-    font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.4px;
+}
+
+.taskdoc span {
+  font-size: 14px;
+  letter-spacing: 0.4px;
+}
+
+.taskname h4 {
+  font-size: 20px;
+  letter-spacing: 0.2px;
+  font-weight: 600;
 }
 
 ::ng-deep .p-dropdown .p-dropdown-label {
@@ -589,6 +600,19 @@
 .task-view-card{
   padding: 5% 0;
     h4{
-     font-size: 18px;
+     font-size: 14px;
+     font-weight: 600;
     }
+    span {
+      font-size: 15px;
+      letter-spacing: 0.2px;
+    }
+}
+
+.modal-des {
+  margin: 0;
+  .left-side {
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+    background: #fff;
+  }
 }
