@@ -131,7 +131,8 @@
     }
     
     p {
-      font-size:15px;
+      font-size:12px;
+      letter-spacing: 0.4px;
       margin:1.2rem 0;
     }
     &__tag {
@@ -169,7 +170,7 @@
       justify-content:space-between;
       margin-bottom: 10px;
       border-bottom: 1px solid #ddd;
-      padding-bottom: 10px;
+      padding-bottom: 5px;
     }
     
     &__options {
@@ -586,6 +587,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
 }
 .taskDesc{
   display: -webkit-box;
