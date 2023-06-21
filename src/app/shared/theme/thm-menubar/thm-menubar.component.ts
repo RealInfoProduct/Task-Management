@@ -1,4 +1,5 @@
 import { Component, OnInit,Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { CommonService } from 'src/app/service/common.service';
 
@@ -186,7 +187,7 @@ export class ThmMenubarComponent implements OnInit {
   iconActiveIndex:number = 0
   isStatus : boolean  = true
   employeeId :any
-  constructor( private service: CommonService ,private translate: TranslateService) {}
+  constructor( private service: CommonService ,private router: Router) {}
   
   ngOnInit(): void {
         this.service.iconActiveIconIndex$.subscribe((res) =>{
@@ -249,13 +250,14 @@ export class ThmMenubarComponent implements OnInit {
       this.service.setValue(menuStatus)
       this.isStatus = false
     }else{  
-      this.service.setValue({status:true})
+      this.service.setValue({status:false})
     }
   }
 
   logout(item:any){
     if(item.name === "Logout"){
       localStorage.clear()
+      this.router.navigate(['/login'])
     }
   }
 
