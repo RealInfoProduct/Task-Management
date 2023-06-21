@@ -220,6 +220,8 @@ export class EmployeeMasterComponent implements OnInit {
         this.isError = false
       }
 
+    } else {
+      this.isError = false
     }
   }
 }
