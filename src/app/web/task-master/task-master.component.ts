@@ -230,6 +230,8 @@ selectedPriority :any
         this.taskList = res.filter((id: any) => id.taskProjectId === this.selectProjectId);
       }
       if(this.taskList.length > 0){ 
+        console.log(this.getProjectName ,"getProjectName=========");
+        
           const data = this.getProjectName?.split(' ')[0].split('');
           const findnumber = this.taskList.map((id:any) => id.taskNumber).sort()
           const lastIndex = findnumber.length - 1;
@@ -393,7 +395,8 @@ selectedPriority :any
           this.employeeAvtars = []
         }
       }
-      this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName      
+      this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName
+      this.getAllTaskList() 
       this.isLoading = false
     })
   }
