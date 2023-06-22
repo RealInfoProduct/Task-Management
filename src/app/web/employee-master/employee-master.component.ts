@@ -92,6 +92,7 @@ export class EmployeeMasterComponent implements OnInit {
       selectEmployeeStatus: this.emaployeeForm.value.selectEmployeeStatus.status,
       selectProject: this.emaployeeForm.value.selectProject,
       selectProjectRole: this.emaployeeForm.value.selectProjectRole,
+      avatarName :  this.emaployeeForm.value.emaployeeName.split(' ')[0].charAt(0).toUpperCase() + this.emaployeeForm.value.emaployeeName.split(' ')[1].charAt(0).toUpperCase()
     }
 
     if (!this.employeeId) {
@@ -154,6 +155,7 @@ export class EmployeeMasterComponent implements OnInit {
       selectEmployeeStatus: item.selectEmployeeStatus,
       selectProject: item.selectProject,
       selectProjectRole: item.selectProjectRoleEle,
+      avatarName : item.avatarName
     }    
     this.confirmationService.confirm({
       message: 'Do you want to delete this record ?',
@@ -211,7 +213,7 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   userNameChange(event:any) {
-    if(event?.length > 7){
+    if(event?.length > 7 && !this.employeeId){
      const data =  this.employeeList.find((id:any) => id.emaployeeUserName == event)     
       if(data){
         this.isError = true

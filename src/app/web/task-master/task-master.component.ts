@@ -386,6 +386,12 @@ selectedPriority :any
           })
         });
         this.projectWiseEmployees = employees;
+        
+        if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
+          this.employeeAvtars = this.projectWiseEmployees
+        } else {
+          this.employeeAvtars = []
+        }
       }
       this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName      
       this.isLoading = false
@@ -497,7 +503,6 @@ selectedPriority :any
       this.taskViewList = data;
   }
 
-
   apiSuccessMsg(msgType:any, flag:any , message:any){
     this.messageService.add({
       severity: msgType,
@@ -506,4 +511,5 @@ selectedPriority :any
       life: 1500,
     });
   }
+
 }
