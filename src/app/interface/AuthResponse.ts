@@ -60,6 +60,7 @@ export interface EmaployeeList{
     selectEmployeeStatus:any
     selectProject:any
     selectProjectRole:any
+    avatarName:any
 }
 
 export interface TaskList {

@@ -514,8 +514,10 @@ selectedPriority :any
         });
         this.projectWiseEmployees = employees;
         if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
-          const employeeAvatar = this.projectWiseEmployees.map((id: any) => id.emaployeeName.split(' ').map((ele: any) => ele?.charAt(0))).map((childEle: any) => childEle.join(''))
+          const employeeAvatar = this.projectWiseEmployees.map((id: any) => id.avatarName)
           this.employeeAvtars = employeeAvatar
+        } else {
+          this.employeeAvtars = []
         }
       }
       this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName      
@@ -633,7 +635,6 @@ selectedPriority :any
   }
 
   viewData(data:any) {
-
       this.taskViewList = data
   }
 }
