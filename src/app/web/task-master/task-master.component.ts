@@ -24,7 +24,7 @@ export class TaskMasterComponent implements OnInit {
   filterInfluencerList: any = []
   employeeAvtars: any = []
   projectWiseEmployees: any = [];
-  selectedIndex: any;
+  selectedIndex: any = 'index';
   public groups: Array<any> = [];
   taskTypeList: any = [
     { taskName: "Backend" },
@@ -230,8 +230,6 @@ selectedPriority :any
         this.taskList = res.filter((id: any) => id.taskProjectId === this.selectProjectId);
       }
       if(this.taskList.length > 0){ 
-        console.log(this.getProjectName ,"getProjectName=========");
-        
           const data = this.getProjectName?.split(' ')[0].split('');
           const findnumber = this.taskList.map((id:any) => id.taskNumber).sort()
           const lastIndex = findnumber.length - 1;
@@ -368,7 +366,7 @@ selectedPriority :any
   }
 
   selectProjectFilter(event: any) {
-    this.selectedIndex = null
+    this.selectedIndex = 'index'
     this.selectProjectId = event.value.id
     this.isSelectProjectFilter = true
     this.getAllTaskList()
@@ -401,12 +399,15 @@ selectedPriority :any
     })
   }
 
-  onAvatarChange(data: any, index: number) {
+  onAvatarChange(data: any, index: any) {
     this.selectedIndex = index;
     let value: any = []
+
     this.taskList.forEach((ele: any) => {
       if (ele.employeeId.find((id: any) => id == data)) {
         value.push(ele);
+      } else if(data == "ALL") {
+        value = this.taskList;
       }
     });
 
