@@ -4,8 +4,9 @@
     data-bs-target="#TaskModal" (click)="addTask()">Add Participant</button></div></div>
     <div class="justify-content-center">
       <p-avatarGroup styleClass="mb-3">
-          <ng-container *ngFor="let data of employeeAvtars; let i = index">
-            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+          <ng-container *ngFor="let data of employeeListArr; let i = index">
+            <!-- <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar> -->
+            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data.avatarName), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data?.id,i)">{{data?.avatarName?.toUpperCase()}}</p-avatar>
           </ng-container>
       </p-avatarGroup>
     </div>
@@ -38,8 +39,8 @@
                     <span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span>
                   </span>
                     <p-avatarGroup styleClass="mb-3">
-                      <ng-container *ngFor="let data of item?.avatarName">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}">{{data?.toUpperCase()}}</p-avatar>
+                      <ng-container *ngFor="let data of item?.employeeName">
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data?.toUpperCase())}">{{data}}</p-avatar>
                       </ng-container>
                     </p-avatarGroup>
                 </div>
@@ -58,10 +59,7 @@
     </div>
   </div>
   <aside class='task-details'>
-    <!-- <div class="form">
-      <i class="ri-search-line icon"></i>
-      <input type="text" (keyup)="applyFilter($event)" class="form-control form-input" placeholder="{{'HEADER.Search_placeholder' | translate}}">
-  </div> -->
+ 
     <div class="form-group mt-2">
       <div class="title_Name">
         <label for="text">Select Project</label>
@@ -263,8 +261,8 @@
               <span style="display: flex;">
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
-                      <ng-container *ngFor="let data of taskViewList?.avatarName; let i = index">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar>
+                      <ng-container *ngFor="let data of taskViewList?.employeeName let i = index">
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(createAvatarName(data))}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{createAvatarName(data)}}</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
                 </div>

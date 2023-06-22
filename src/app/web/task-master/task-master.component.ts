@@ -76,7 +76,6 @@ selectedPriority :any
   }
 
   ngOnInit(): void {
-
     const name = 'MS';
     const randomColor = this.generateColor(name);
     const existingGroup = this._ds.find('COLUMNS');
@@ -105,10 +104,6 @@ selectedPriority :any
       }      
       this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
         this.isUpdate = true;
-        // this.cdr.detectChanges()
-        setTimeout(() => {
-          this.applyFilter(this.keyValue);
-        }, 100);
         this.isLoading = false
       })
     });
@@ -157,7 +152,8 @@ selectedPriority :any
   getAllEmployeeList() {
     this.isLoading = true
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
-      this.employeeListArr = res
+      this.employeeListArr = res;
+      this.getAllTaskList()
       this.employeeList = res
       this.employeeProjectList = []
       res.forEach((element: any) => {
@@ -233,8 +229,6 @@ selectedPriority :any
         ];
         this.taskList = res.filter((id: any) => id.taskProjectId === this.selectProjectId);
       }
-      
-
       if(this.taskList.length > 0){ 
           const data = this.getProjectName?.split(' ')[0].split('');
           const findnumber = this.taskList.map((id:any) => id.taskNumber).sort()
@@ -247,36 +241,20 @@ selectedPriority :any
               this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + numeric_part              
             }
           })
-        } else { 
-          const data = this.getProjectName?.split(' ')[0].split('');
-          this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + 1
-        }
-        
-
+      } else { 
+        const data = this.getProjectName?.split(' ')[0].split('');
+        this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + 1
+      }
       this.taskList.forEach((ele: any) => {
         let index = this.groups.findIndex(id => id.name === ele.taskStatus);
         itemsIds = this.groups[index].items.map((id: any) => id.id);
         if (index > -1 && !itemsIds.includes(ele.id)) {
           this.groups[index]?.items.push(ele);
           const data = ele?.employeeId?.map((element: any) => {
-            return this.employeeListArr?.find((id: any) => id.id === element).emaployeeName
+            return this.employeeListArr?.find((id: any) => id.id === element).avatarName
           })
           ele['employeeName'] = data
         }
-      })
-
-      this.groups.forEach(ele => {
-        ele.items?.forEach((element: any) => {
-          if (JSON.stringify(element) != '{}' && element?.employeeName?.length > 0) {
-            element.avatarName = []
-            element?.employeeName.forEach((ele: any) => {
-              const data = ele.split(' ').map((ele: any) => ele?.charAt(0));
-              if (data != undefined) {
-                element.avatarName.push([]?.concat(...data).join().replace(',', ''))
-              }
-            })
-          }
-        })
       })
 
       this.taskListLength = this.taskList.length
@@ -286,6 +264,10 @@ selectedPriority :any
       this.taskListDoneLength = this.taskList.filter((id: any) => id.taskStatus === "Done").length
       this.isLoading = false
     })
+  }
+
+  createAvatarName(name:string) {
+     return name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0);
   }
 
   selectProject(event: any, id?: any) {
@@ -370,23 +352,13 @@ selectedPriority :any
     this.isLoading = true
     if (!this.taskEditId) {
       this.firebaseService.addTaskList(payload).then(res => {
-        this.messageService.add({
-          severity: msgType.success,
-          summary: 'Sucess',
-          detail: 'Data Add Successfully..',
-          life: 1500,
-        });
+        this.apiSuccessMsg(msgType.success , 'Sucess', 'Data Add Successfully..')
         this.getAllTaskList()
         this.isLoading = false
       })
     } else {
       this.firebaseService.updateTaskList(this.taskEditId, payload).then(res => {
-        this.messageService.add({
-          severity: msgType.success,
-          summary: 'Sucess',
-          detail: 'Data UpDate Successfully..',
-          life: 1500,
-        });
+        this.apiSuccessMsg(msgType.success , 'Sucess', 'Data UpDate Successfully..')
         this.getAllTaskList()
         this.isLoading = false
       })
@@ -399,105 +371,6 @@ selectedPriority :any
     this.isSelectProjectFilter = true
     this.getAllTaskList()
     this.getEmployeesByProject(this.selectProjectId)
-  }
-
-  applyFilter(filterValue: any) {
-    // if(filterValue?.target?.value || filterValue?.target?.value == ''){
-    //   this.keyValue = filterValue.target.value
-    // }else{
-    //   this.keyValue = filterValue
-    // }
-    // this.mainArry = this.taskList
-
-    // this.filterInfluencerList = []
-    // this.filterInfluencerList = this.mainArry.filter((element: any) => {
-    //   return Object.keys(element).some((key) => {
-    //     if (element[key] != null && key !== 'id' && key !=='taskProjectId')
-    //       return element[key].toString().toLowerCase().includes(this.keyValue.toLowerCase());
-    //   });
-    // });
-    // let itemsIds
-    // if(!this.isSelectProjectFilter){
-    //   this.groups = [
-    //     {
-    //       name: 'Task Ready',
-    //       items: [
-    //         {taskStatus: "Task Ready"}
-    //       ]
-    //     },
-    //     {
-    //       name: 'In Progress',
-    //       items: [
-    //         {taskStatus: "In Progress"}
-    //       ]
-    //     },
-    //     {
-    //       name: 'Testing',
-    //       items: [
-    //         {taskStatus: "Testing"}
-    //       ]
-    //     },
-    //     {
-    //       name: 'Done',
-    //       items: [
-    //         {taskStatus: "Done"}
-    //       ]
-    //     }
-    //   ];
-    //   this.filterInfluencerList = this.filterInfluencerList.filter((id:any) => id.taskProjectId === this.projectList[0].id);
-    // } else {
-    //   this.groups = [
-    //     {
-    //       name: 'Task Ready',
-    //       items: [
-    //         {taskStatus: "Task Ready"}
-    //       ]
-    //     },
-    //     {
-    //       name: 'In Progress',
-    //       items: [
-    //         {taskStatus: "In Progress"}
-    //       ]
-    //     },
-    //     {
-    //       name: 'Testing',
-    //       items: [
-    //         {taskStatus: "Testing"}
-    //       ]
-    //     },
-    //     {
-    //       name: 'Done',
-    //       items: [
-    //         {taskStatus: "Done"}
-    //       ]
-    //     }
-    //   ];
-    //   this.filterInfluencerList = this.filterInfluencerList.filter((id:any) => id.taskProjectId === this.selectProjectId);
-    // }      
-    // this.filterInfluencerList.forEach((ele:any) => {
-    //   let index = this.groups.findIndex(id => id.name === ele.taskStatus);
-    //   itemsIds = this.groups[index].items.map((id:any) => id.id);
-    //   if(index > -1 && !itemsIds.includes(ele.id)){
-    //     this.groups[index]?.items.push(ele);
-    //     const employeeName = ele.employeeList.map((element:any) => {
-    //         return element.emaployeeName
-    //     });
-    //     ele['employeeName'] = employeeName
-    //   }
-    // })
-    // this.groups.forEach(ele => {
-    //   ele.items?.forEach((element:any) => {
-    //     if(JSON.stringify(element) != '{}' && element?.employeeName?.length > 0 ) {
-    //       element.avatarName = []
-    //        element?.employeeName.forEach((ele:any)=>{
-    //           const data = ele.split(' ').map((ele:any) => ele?.charAt(0));
-    //           if(data != undefined) {
-    //             element.avatarName.push([]?.concat(...data).join().replace(',','')) 
-    //           }
-    //       })
-    //     }
-    //   })
-    // })
   }
 
   getEmployeesByProject(projectId: any) {
@@ -513,22 +386,17 @@ selectedPriority :any
           })
         });
         this.projectWiseEmployees = employees;
-        if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
-          const employeeAvatar = this.projectWiseEmployees.map((id: any) => id.emaployeeName.split(' ').map((ele: any) => ele?.charAt(0))).map((childEle: any) => childEle.join(''))
-          this.employeeAvtars = employeeAvatar
-        }
       }
       this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName      
       this.isLoading = false
     })
-
   }
 
   onAvatarChange(data: any, index: number) {
     this.selectedIndex = index;
     let value: any = []
     this.taskList.forEach((ele: any) => {
-      if (ele.avatarName.find((id: any) => id == data)) {
+      if (ele.employeeId.find((id: any) => id == data)) {
         value.push(ele);
       }
     });
@@ -618,22 +486,24 @@ selectedPriority :any
       accept: async () => {
         this.isLoading = true
         this.firebaseService.deleteTaskList(payload).then((res: any) => {
-          this.messageService.add({
-            severity: msgType.success,
-            summary: 'Sucess',
-            detail: 'Data Delete Successfully..',
-            life: 1500,
-          });
+          this.apiSuccessMsg(msgType.success , 'Sucess', 'Data Delete Successfully..')
         })
         this.isLoading = false
       }
     })
-
-
   }
 
   viewData(data:any) {
+      this.taskViewList = data;
+  }
 
-      this.taskViewList = data
+
+  apiSuccessMsg(msgType:any, flag:any , message:any){
+    this.messageService.add({
+      severity: msgType,
+      summary: flag,
+      detail: message,
+      life: 1500,
+    });
   }
 }
