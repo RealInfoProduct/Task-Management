@@ -262,7 +262,7 @@
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
                       <ng-container *ngFor="let data of taskViewList?.employeeName let i = index">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(createAvatarName(data))}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{createAvatarName(data)}}</p-avatar>
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}" [class.active]="selectedIndex == i">{{data}}</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
                 </div>
