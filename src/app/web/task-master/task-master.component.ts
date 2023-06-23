@@ -529,4 +529,13 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
     });
   }
 
+  hoursMinValidation(event :any) {
+    if (event.data) {
+      const two_chars_no_colons_regex = /([^:]{2}(?!:))/g;
+      event.target.value = event.target.value.replace(two_chars_no_colons_regex, '$1:')
+      if(event.target.value.length > 4){
+        event.target.value = event.target.value.replace(two_chars_no_colons_regex, '$1:').slice(0,-1)
+      }
+    }
+  }
 }
