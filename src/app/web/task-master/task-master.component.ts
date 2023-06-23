@@ -107,6 +107,8 @@ selectedPriority :any
         taskNumber: args.item.taskNumber,
         taskEndDate : args.item.taskEndDate,
         taskPriority : args.item.taskPriority,
+        taskHours : args.item.taskHours,
+        taskTime : args.item.taskTime
       }      
       this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
         this.isUpdate = true;
@@ -290,7 +292,8 @@ selectedPriority :any
       taskEmployee: [''],
       taskDate: [moment().format('YYYY-MM-DD')],
       taskEndDate: [moment().format('YYYY-MM-DD')],
-      taskPriority : ['']
+      taskPriority : [''],
+      taskHours : ['']
     })
   }
 
@@ -341,20 +344,26 @@ selectedPriority :any
   }
 
   submit() {
+const currentDate = moment().format();;
+const hoursToAdd = Number(this.taskForm.value.taskHours.split(":")[0]);
+const minutesToAdd = Number(this.taskForm.value.taskHours.split(":")[1]);
+var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
+    
     const payload: TaskList = {
       id: this.taskEditId ? this.taskEditId : "",
       taskDesc: this.taskForm.value.taskDescription,
       employeeId: this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null ,
       taskTitle: this.taskForm.value.taskName,
-      taskType: this.taskForm.value.taskType.taskName,
-      taskProjectId: this.taskForm.value.taskProject.id,
+      taskType: this.taskForm.value.taskType?.taskName,
+      taskProjectId: this.taskForm.value.taskProject?.id,
       taskStatus: this.taskEditId ? this.taskStatus : "Task Ready",
       taskDate: moment(this.taskForm.value.taskDate).format("D-MMM-YYY") + "," + moment().format('LTS'),
       taskNumber : this.projectNameTaskNumber,
       taskEndDate : moment(this.taskForm.value.taskEndDate).format("D-MMM-YYYY"),
       taskPriority : this.taskForm.value.taskPriority,
-    }
-
+      taskHours : this.taskForm.value.taskHours,
+      taskTime : moment(newDate).format()
+    }    
     this.isLoading = true
     if (!this.taskEditId) {
       this.firebaseService.addTaskList(payload).then(res => {
@@ -478,6 +487,7 @@ selectedPriority :any
     this.taskForm.controls['taskEndDate'].setValue(new Date(data.taskEndDate));
     this.taskForm.controls['taskPriority'].setValue(data.taskPriority);
     this.projectNameTaskNumber = data.taskNumber
+    this.taskForm.controls['taskHours'].setValue(data.taskHours);
   }
 
   deleteData(data: any) {
@@ -492,8 +502,10 @@ selectedPriority :any
       taskProjectId: data.taskProjectId,
       taskDate: data.taskDate,
       taskNumber : data.taskNumber,
-      taskEndDate : "",
-      taskPriority : "",
+      taskEndDate : data.taskEndDate,
+      taskPriority : data.taskPriority,
+      taskHours : data.taskHours,
+      taskTime: data.taskTime
     }
 
     this.confirmationService.confirm({
