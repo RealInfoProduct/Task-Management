@@ -357,7 +357,7 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       taskType: this.taskForm.value.taskType?.taskName,
       taskProjectId: this.taskForm.value.taskProject?.id,
       taskStatus: this.taskEditId ? this.taskStatus : "Task Ready",
-      taskDate: moment(this.taskForm.value.taskDate).format("D-MMM-YYY") + "," + moment().format('LTS'),
+      taskDate: moment(this.taskForm.value.taskDate).format(),
       taskNumber : this.projectNameTaskNumber,
       taskEndDate : moment(this.taskForm.value.taskEndDate).format("D-MMM-YYYY"),
       taskPriority : this.taskForm.value.taskPriority,
@@ -365,6 +365,7 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       taskTime : moment(newDate).format()
     }    
     this.isLoading = true
+    
     if (!this.taskEditId) {
       this.firebaseService.addTaskList(payload).then(res => {
         this.apiSuccessMsg(msgType.success , 'Sucess', 'Data Add Successfully..')
@@ -483,6 +484,7 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       }
     })
     this.taskForm.controls['taskEmployee'].setValue(employeeListArr)
+    debugger
     this.taskForm.controls['taskDate'].setValue(new Date(data.taskDate));
     this.taskForm.controls['taskEndDate'].setValue(new Date(data.taskEndDate));
     this.taskForm.controls['taskPriority'].setValue(data.taskPriority);
