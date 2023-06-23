@@ -73,6 +73,9 @@ export class TaskMasterComponent implements OnInit {
     { name: 'Trivial', img: '../../../assets/task-img/Trivial.png' }
 ];
 selectedPriority :any
+projectNameTaskNumberEdit :any
+
+
   constructor(private _ds: DragulaService,
     private formbuilder: FormBuilder,
     private firebaseService: FirebaseService,
@@ -358,13 +361,14 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       taskProjectId: this.taskForm.value.taskProject?.id,
       taskStatus: this.taskEditId ? this.taskStatus : "Task Ready",
       taskDate: moment(this.taskForm.value.taskDate).format(),
-      taskNumber : this.projectNameTaskNumber,
+      taskNumber : this.taskEditId ? this.projectNameTaskNumberEdit : this.projectNameTaskNumber,
       taskEndDate : moment(this.taskForm.value.taskEndDate).format("D-MMM-YYYY"),
       taskPriority : this.taskForm.value.taskPriority,
       taskHours : this.taskForm.value.taskHours,
       taskTime : moment(newDate).format()
     }    
     this.isLoading = true
+    console.log(payload ,"payload-------------");
     
     if (!this.taskEditId) {
       this.firebaseService.addTaskList(payload).then(res => {
@@ -484,11 +488,10 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       }
     })
     this.taskForm.controls['taskEmployee'].setValue(employeeListArr)
-    debugger
     this.taskForm.controls['taskDate'].setValue(new Date(data.taskDate));
     this.taskForm.controls['taskEndDate'].setValue(new Date(data.taskEndDate));
     this.taskForm.controls['taskPriority'].setValue(data.taskPriority);
-    this.projectNameTaskNumber = data.taskNumber
+    this.projectNameTaskNumberEdit = data.taskNumber    
     this.taskForm.controls['taskHours'].setValue(data.taskHours);
   }
 
