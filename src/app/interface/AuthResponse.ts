@@ -75,4 +75,6 @@ export interface TaskList {
     taskEndDate :any
     taskPriority :any
     taskNumber:any
+    taskHours :any
+    taskTime :any
 }

@@ -140,7 +140,7 @@
                      </div>
                      <div class="form-group m-2">
                        <label for="text">Description</label>
-                       <textarea name="Description" class="form-control" rows="8" formControlName="taskDescription"></textarea>
+                       <textarea name="Description" class="form-control" rows="15" formControlName="taskDescription"></textarea>
                      </div>
                    </div>
                    <div class="col-6">
@@ -206,9 +206,11 @@
                           </ng-template>
                       </p-dropdown>
                        </div>
-                     </div>
-                    
-                     
+                     </div>        
+                      <div class="form-group m-2">
+                        <label for="text">Select Hours</label>
+                        <input type="text" class="form-control" maxlength="5" (input)="hoursMinValidation($event)" formControlName="taskHours" placeholder="00:00">
+                      </div>
                   </div>
                  </div>
                </form>
@@ -282,7 +284,7 @@
               </span>
             </div>
             <div class='task-view-card'>
-              <h4>Time Taking</h4>
+              <h4>End Date</h4>
               <span>{{taskViewList?.taskEndDate}}</span>
             </div>
             <div class='task-view-card'>
@@ -293,10 +295,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div> -->
     </div>
   </div>
 </div>
