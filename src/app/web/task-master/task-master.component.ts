@@ -14,6 +14,11 @@ import { msgType } from 'src/assets/constant/message';
 })
 export class TaskMasterComponent implements OnInit {
 
+  selectedDate!: Date;
+  countdown: any;
+  hours : any;
+  minutes: any;
+  seconds: any;
   isEdit: boolean = false
   isLoading: boolean = false
   taskForm!: FormGroup
@@ -54,6 +59,7 @@ export class TaskMasterComponent implements OnInit {
   taskStatus: any
   projectNameTaskNumber:any
   taskViewList :any
+  progrssBarPersantage:any;
   priority = [
     { name: 'Blocker', img: '../../../assets/task-img/Blocker.png' },
     { name: 'Critical', img: '../../../assets/task-img/Critical.png' },
@@ -504,7 +510,8 @@ selectedPriority :any
   }
 
   viewData(data:any) {
-      this.taskViewList = data;
+    this.taskViewList = data;
+    this.startCountdown(new Date(data.taskTime));
   }
 
   apiSuccessMsg(msgType:any, flag:any , message:any){
@@ -516,4 +523,39 @@ selectedPriority :any
     });
   }
 
+  startCountdown(hours:any) {
+    this.countdown = setInterval(() => {
+      const currentTime = new Date().getTime();
+      const timeDifference = hours.getTime() - currentTime;
+
+      if (timeDifference > 0) {
+        let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+        this.hours = hours;
+        this.minutes = minutes;
+        this.seconds = seconds;
+      } else {
+        clearInterval(this.countdown);
+      }
+      this.timeGapForProgressbar(hours);
+    }, 1000);
+  }
+
+  timeGapForProgressbar(hours:any){
+    const startTime = moment().format('HH:mm');
+    const endTime = moment(hours).format('HH:mm');
+    const currentTime = moment();
+
+    const totalDuration = moment.duration(moment(endTime, 'HH:mm').diff(moment(startTime, 'HH:mm')));
+    const remainingDuration = moment.duration(moment(endTime, 'HH:mm').diff(currentTime));
+    const percentage = (remainingDuration.asMilliseconds() / totalDuration.asMilliseconds()) * 100;
+    this.progrssBarPersantage = percentage.toFixed(2) + '%';
+
+  }
+
+  closePopup() {
+    clearInterval(this.countdown);
+  }
 }
