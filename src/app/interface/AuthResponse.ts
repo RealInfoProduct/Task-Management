@@ -1,28 +1,28 @@
 export interface AuthResponse {
-    idToken:string,
-    email:string,
-    refreshToken:string,
-    expiresIn:string,
-    localId:string
-    registerd?:boolean
+    idToken: string,
+    email: string,
+    refreshToken: string,
+    expiresIn: string,
+    localId: string
+    registerd?: boolean
 }
 
-export interface companyList { 
+export interface companyList {
     id: string,
     companyName: string,
     companyLogo: any,
-    email:string,
-    password:string,
-    mobileNumber : number,
+    email: string,
+    password: string,
+    mobileNumber: number,
     status: string,
     endDate: string,
     userRole: string,
 }
 
-export interface UserList { 
+export interface UserList {
     id: string,
-    email:string,
-    password:string,
+    email: string,
+    password: string,
     mobileNumber: number,
     companyName: string,
     companyLogo: string,
@@ -31,50 +31,61 @@ export interface UserList {
     userRole: string,
 }
 
-export interface TechnologyList { 
-    id:string,
-    technologyName:string
+export interface TechnologyList {
+    id: string,
+    technologyName: string
 }
 
-export interface ProjectRoleList { 
-    id:string,
-    ProjectRoleName:string
+export interface ProjectRoleList {
+    id: string,
+    ProjectRoleName: string
 }
 
-export interface ProjectList { 
-    id:string,
-    projectName:string
-    pointOfContact:string
-    selectedTechnology:string
+export interface ProjectList {
+    id: string,
+    projectName: string
+    pointOfContact: string
+    selectedTechnology: string
 }
 
-export interface EmaployeeList{
-    id:string
-    emaployeeName:any
-    emaployeeMobile:any
-    emaployeeEmail:any
-    emaployeeUserName:any
-    emaployeePassword:any
-    selectEmployeeRole:any
-    selectEmployeeTechnology:any
-    selectEmployeeStatus:any
-    selectProject:any
-    selectProjectRole:any
-    avatarName:any
+export interface EmaployeeList {
+    id: string
+    emaployeeName: any
+    emaployeeMobile: any
+    emaployeeEmail: any
+    emaployeeUserName: any
+    emaployeePassword: any
+    selectEmployeeRole: any
+    selectEmployeeTechnology: any
+    selectEmployeeStatus: any
+    selectProject: any
+    selectProjectRole: any
+    avatarName: any
 }
 
 export interface TaskList {
     id: string
-    taskDesc :any
-    employeeId :any
-    taskTitle :any
-    taskType :any
-    taskStatus :any
-    taskProjectId : any;
-    taskDate :any
-    taskEndDate :any
-    taskPriority :any
-    taskNumber:any
-    taskHours :any
-    taskTime :any
+    taskDesc: any
+    employeeId: any
+    taskTitle: any
+    taskType: any
+    taskStatus: any
+    taskProjectId: any;
+    taskDate: any
+    taskEndDate: any
+    taskPriority: any
+    taskNumber: any
+    taskHours: any
+    taskTime: any
+    taskReporter: any
+    taskHistory: {
+        taskCurrontStatus: any
+        taskDate: any
+        taskReporter: any
+        taskNextStatus: any
+        assign: {
+            curront: any
+            next: any
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DragulaService } from 'ng2-dragula';
 import { FirebaseService } from 'src/app/service/firebase.service';
@@ -16,7 +16,7 @@ export class TaskMasterComponent implements OnInit {
 
   selectedDate!: Date;
   countdown: any;
-  hours : any;
+  hours: any;
   minutes: any;
   seconds: any;
   isEdit: boolean = false
@@ -46,7 +46,8 @@ export class TaskMasterComponent implements OnInit {
   selectProjectItem: any
   selectProjectId: any
   isSelectProjectFilter: boolean = false
-  mainArry: any = []
+  mainArry: any = [];
+  taskHistroyArr: any = [];
   keyValue: any
   taskListLength: number = 0
   taskListTaskReadyLength: number = 0
@@ -57,9 +58,9 @@ export class TaskMasterComponent implements OnInit {
   employeeListArr: any
   taskEditId: any
   taskStatus: any
-  projectNameTaskNumber:any
-  taskViewList :any
-  progrssBarPersantage:any;
+  projectNameTaskNumber: any
+  taskViewList: any
+  progrssBarPersantage: any;
   priority = [
     { name: 'Blocker', img: '../../../assets/task-img/Blocker.png' },
     { name: 'Critical', img: '../../../assets/task-img/Critical.png' },
@@ -71,9 +72,18 @@ export class TaskMasterComponent implements OnInit {
     { name: 'Lowest', img: '../../../assets/task-img/Lowest.png' },
     { name: 'Minor', img: '../../../assets/task-img/Minor.png' },
     { name: 'Trivial', img: '../../../assets/task-img/Trivial.png' }
-];
-selectedPriority :any
-projectNameTaskNumberEdit :any
+  ];
+  selectedPriority: any
+  projectNameTaskNumberEdit: any
+  startTime: any;
+  endTime: any;
+  totalDuration: any;
+  progressPercentage: number = 0;
+  remainingSeconds: number = 0;
+  startDate!: Date;
+  taskTimeDate: any
+  viewReporter: any
+  editData: any
 
 
   constructor(private _ds: DragulaService,
@@ -85,8 +95,15 @@ projectNameTaskNumberEdit :any
   }
 
   ngOnInit(): void {
-    const name = 'MS';
-    const randomColor = this.generateColor(name);
+
+    const companyId = localStorage.getItem('companyId')
+    if (companyId) {
+      this.firebaseService.getAllCompanyList().subscribe((res: any) => {
+        const filterdata = res.find((id: any) => id.id == companyId)
+        this.viewReporter = filterdata.companyName.split(' ')[0].charAt(0).toUpperCase() + filterdata.companyName.split(' ')[1].charAt(0).toUpperCase()
+      })
+    }
+
     const existingGroup = this._ds.find('COLUMNS');
     if (!existingGroup) {
       this._ds.createGroup("COLUMNS", {
@@ -108,11 +125,22 @@ projectNameTaskNumberEdit :any
         taskProjectId: args.item.taskProjectId,
         taskDate: args.item.taskDate,
         taskNumber: args.item.taskNumber,
-        taskEndDate : args.item.taskEndDate,
-        taskPriority : args.item.taskPriority,
-        taskHours : args.item.taskHours,
-        taskTime : args.item.taskTime
-      }      
+        taskEndDate: args.item.taskEndDate,
+        taskPriority: args.item.taskPriority,
+        taskHours: args.item.taskHours,
+        taskTime: args.item.taskTime,
+        taskReporter: args.item.taskReporter,
+        taskHistory: {
+          taskCurrontStatus: args.sourceModel[0].taskStatus,
+          taskDate: moment().format(),
+          taskReporter: args.item.taskReporter,
+          taskNextStatus: data[0].taskStatus,
+          assign: {
+            curront: args.item.taskHistory.assign.curront,
+            next: args.item.taskHistory.assign.next
+          }
+        }
+      }
       this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
         this.isUpdate = true;
         this.isLoading = false
@@ -240,19 +268,19 @@ projectNameTaskNumberEdit :any
         ];
         this.taskList = res.filter((id: any) => id.taskProjectId === this.selectProjectId);
       }
-      if(this.taskList.length > 0){ 
-          const data = this.getProjectName?.split(' ')[0].split('');
-          const findnumber = this.taskList.map((id:any) => id.taskNumber).sort()
-          const lastIndex = findnumber.length - 1;
-          const lastElement = Number(findnumber[lastIndex].split("-")[1]);
-          findnumber.forEach((ele :any) => {
-            const element = Number(ele.split("-")[1])+ 1
-            if(lastElement < element ) {
-              const numeric_part = Number(ele.split("-")[1])+ 1
-              this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + numeric_part              
-            }
-          })
-      } else { 
+      if (this.taskList.length > 0) {
+        const data = this.getProjectName?.split(' ')[0].split('');
+        const findnumber = this.taskList.map((id: any) => id.taskNumber).sort()
+        const lastIndex = findnumber.length - 1;
+        const lastElement = Number(findnumber[lastIndex].split("-")[1]);
+        findnumber.forEach((ele: any) => {
+          const element = Number(ele.split("-")[1]) + 1
+          if (lastElement < element) {
+            const numeric_part = Number(ele.split("-")[1]) + 1
+            this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + numeric_part
+          }
+        })
+      } else {
         const data = this.getProjectName?.split(' ')[0].split('');
         this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + 1
       }
@@ -277,8 +305,8 @@ projectNameTaskNumberEdit :any
     })
   }
 
-  createAvatarName(name:string) {
-     return name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0);
+  createAvatarName(name: string) {
+    return name.split(' ')[0].charAt(0) + name.split(' ')[1].charAt(0);
   }
 
   selectProject(event: any, id?: any) {
@@ -293,10 +321,10 @@ projectNameTaskNumberEdit :any
       taskType: [''],
       taskProject: [''],
       taskEmployee: [''],
-      taskDate: [moment().format('YYYY-MM-DD')],
+      taskDate: [],
       taskEndDate: [moment().format('YYYY-MM-DD')],
-      taskPriority : [''],
-      taskHours : ['']
+      taskPriority: [''],
+      taskHours: ['']
     })
   }
 
@@ -347,42 +375,58 @@ projectNameTaskNumberEdit :any
   }
 
   submit() {
-const currentDate = moment().format();;
-const hoursToAdd = Number(this.taskForm.value.taskHours.split(":")[0]);
-const minutesToAdd = Number(this.taskForm.value.taskHours.split(":")[1]);
-var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
-    
+    const currentDate = moment().format();
+    const hoursToAdd = Number(this.taskForm.value.taskHours.split(":")[0]);
+    const minutesToAdd = Number(this.taskForm.value.taskHours.split(":")[1]);
+    this.taskTimeDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
+
     const payload: TaskList = {
       id: this.taskEditId ? this.taskEditId : "",
       taskDesc: this.taskForm.value.taskDescription,
-      employeeId: this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null ,
+      employeeId: this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
       taskTitle: this.taskForm.value.taskName,
       taskType: this.taskForm.value.taskType?.taskName,
       taskProjectId: this.taskForm.value.taskProject?.id,
       taskStatus: this.taskEditId ? this.taskStatus : "Task Ready",
-      taskDate: moment(this.taskForm.value.taskDate).format(),
-      taskNumber : this.taskEditId ? this.projectNameTaskNumberEdit : this.projectNameTaskNumber,
-      taskEndDate : moment(this.taskForm.value.taskEndDate).format("D-MMM-YYYY"),
-      taskPriority : this.taskForm.value.taskPriority,
-      taskHours : this.taskForm.value.taskHours,
-      taskTime : moment(newDate).format()
-    }    
+      taskDate: currentDate,
+      taskNumber: this.taskEditId ? this.projectNameTaskNumberEdit : this.projectNameTaskNumber,
+      taskEndDate: moment(this.taskForm.value.taskEndDate).format("D-MMM-YYYY"),
+      taskPriority: this.taskForm.value.taskPriority,
+      taskHours: this.taskForm.value.taskHours,
+      taskTime: moment(this.taskTimeDate).format(),
+      taskReporter: this.viewReporter,
+      taskHistory: {
+        taskCurrontStatus: 'Task Ready',
+        taskDate: currentDate,
+        taskReporter: this.viewReporter,
+        taskNextStatus: this.taskEditId ? this.taskStatus : "Task Ready",
+        assign: {
+          curront: this.taskEditId ? this.editData.taskHistory.assign.curront : this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
+          next: this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
+        }
+      }
+    }
+
     this.isLoading = true
-    console.log(payload ,"payload-------------");
-    
+
     if (!this.taskEditId) {
       this.firebaseService.addTaskList(payload).then(res => {
-        this.apiSuccessMsg(msgType.success , 'Sucess', 'Data Add Successfully..')
+        this.apiSuccessMsg(msgType.success, 'Sucess', 'Data Add Successfully..')
         this.getAllTaskList()
         this.isLoading = false
       })
     } else {
       this.firebaseService.updateTaskList(this.taskEditId, payload).then(res => {
-        this.apiSuccessMsg(msgType.success , 'Sucess', 'Data UpDate Successfully..')
+        this.apiSuccessMsg(msgType.success, 'Sucess', 'Data UpDate Successfully..')
         this.getAllTaskList()
         this.isLoading = false
       })
     }
+  }
+
+  taskHistoryData(item: any) {
+    console.log(item ,"item-------------");
+    this.taskHistroyArr.push(item.taskHistory);
   }
 
   selectProjectFilter(event: any) {
@@ -406,7 +450,7 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
           })
         });
         this.projectWiseEmployees = employees;
-        
+
         if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
           this.employeeAvtars = this.projectWiseEmployees
         } else {
@@ -414,7 +458,7 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
         }
       }
       this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName
-      this.getAllTaskList() 
+      this.getAllTaskList()
       this.isLoading = false
     })
   }
@@ -426,7 +470,7 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
     this.taskList.forEach((ele: any) => {
       if (ele.employeeId.find((id: any) => id == data)) {
         value.push(ele);
-      } else if(data == "ALL") {
+      } else if (data == "ALL") {
         value = this.taskList;
       }
     });
@@ -469,8 +513,9 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
     this.taskEditId = ''
   }
 
-  editData(data: any) {
+  taskEditData(data: any) {
     this.isEdit = true
+    this.editData = data
     this.taskEditId = data.id
     this.taskStatus = data.taskStatus
     this.taskForm.controls['taskName'].setValue(data.taskTitle)
@@ -491,8 +536,9 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
     this.taskForm.controls['taskDate'].setValue(new Date(data.taskDate));
     this.taskForm.controls['taskEndDate'].setValue(new Date(data.taskEndDate));
     this.taskForm.controls['taskPriority'].setValue(data.taskPriority);
-    this.projectNameTaskNumberEdit = data.taskNumber    
+    this.projectNameTaskNumberEdit = data.taskNumber
     this.taskForm.controls['taskHours'].setValue(data.taskHours);
+    this.viewReporter = data.taskReporter
   }
 
   deleteData(data: any) {
@@ -506,11 +552,22 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       taskStatus: data.taskStatus,
       taskProjectId: data.taskProjectId,
       taskDate: data.taskDate,
-      taskNumber : data.taskNumber,
-      taskEndDate : data.taskEndDate,
-      taskPriority : data.taskPriority,
-      taskHours : data.taskHours,
-      taskTime: data.taskTime
+      taskNumber: data.taskNumber,
+      taskEndDate: data.taskEndDate,
+      taskPriority: data.taskPriority,
+      taskHours: data.taskHours,
+      taskTime: data.taskTime,
+      taskReporter: data.taskReporter,
+      taskHistory: {
+        taskCurrontStatus: data.taskReporter.taskCurrontStatus,
+        taskDate: data.taskHistory.taskDate,
+        taskReporter: data.taskHistory.taskReporter,
+        taskNextStatus: data.taskReporter.taskNextStatus,
+        assign: {
+          curront: data.taskHistory.assign.curront,
+          next: data.taskHistory.assign.next
+        }
+      }
     }
 
     this.confirmationService.confirm({
@@ -519,19 +576,20 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       accept: async () => {
         this.isLoading = true
         this.firebaseService.deleteTaskList(payload).then((res: any) => {
-          this.apiSuccessMsg(msgType.success , 'Sucess', 'Data Delete Successfully..')
+          this.apiSuccessMsg(msgType.success, 'Sucess', 'Data Delete Successfully..')
         })
         this.isLoading = false
       }
     })
   }
 
-  viewData(data:any) {
+  viewData(data: any) {
     this.taskViewList = data;
-    this.startCountdown(new Date(data.taskTime));
+    this.startCountdown(data);
+    this.timeGapForProgressbar(data);
   }
 
-  apiSuccessMsg(msgType:any, flag:any , message:any){
+  apiSuccessMsg(msgType: any, flag: any, message: any) {
     this.messageService.add({
       severity: msgType,
       summary: flag,
@@ -540,10 +598,10 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
     });
   }
 
-  startCountdown(hours:any) {
+  startCountdown(hours: any) {
     this.countdown = setInterval(() => {
       const currentTime = new Date().getTime();
-      const timeDifference = hours.getTime() - currentTime;
+      const timeDifference = new Date(hours.taskTime).getTime() - currentTime;
 
       if (timeDifference > 0) {
         let hours = Math.floor(timeDifference / (1000 * 60 * 60));
@@ -556,34 +614,76 @@ var newDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'mi
       } else {
         clearInterval(this.countdown);
       }
-      this.timeGapForProgressbar(hours);
     }, 1000);
   }
 
-  timeGapForProgressbar(hours:any){
-    const startTime = moment().format('HH:mm');
-    const endTime = moment(hours).format('HH:mm');
-    const currentTime = moment();
+  timeGapForProgressbar(hours: any) {
+    this.startTime = moment(moment(hours.taskDate).format());;
+    this.endTime = moment(moment(hours.taskTime).format());;
 
-    const totalDuration = moment.duration(moment(endTime, 'HH:mm').diff(moment(startTime, 'HH:mm')));
-    const remainingDuration = moment.duration(moment(endTime, 'HH:mm').diff(currentTime));
-    const percentage = (remainingDuration.asMilliseconds() / totalDuration.asMilliseconds()) * 100;
-    this.progrssBarPersantage = percentage.toFixed(2) + '%';
+    this.totalDuration = this.endTime.diff(this.startTime);
 
+    const currentTime: any = moment();
+    const elapsedDuration = currentTime.diff(this.startTime);
+    this.progressPercentage = (elapsedDuration / this.totalDuration) * 100;
+    this.remainingSeconds = Math.floor((this.endTime.valueOf() - currentTime.valueOf()) / 1000);
+
+    if (this.progressPercentage >= 100) {
+      this.progressPercentage = 100;
+      this.remainingSeconds = 0;
+    } else {
+      setTimeout(() => {
+        this.timeGapForProgressbar(hours);
+      }, 1000);
+    }
   }
 
   closePopup() {
     clearInterval(this.countdown);
   }
 
-  hoursMinValidation(event :any) {
+  hoursMinValidation(event: any) {
     if (event.data) {
       const two_chars_no_colons_regex = /([^:]{2}(?!:))/g;
       event.target.value = event.target.value.replace(two_chars_no_colons_regex, '$1:')
-      if(event.target.value.length > 4){
-        event.target.value = event.target.value.replace(two_chars_no_colons_regex, '$1:').slice(0,-1)
+      if (event.target.value.length > 4) {
+        event.target.value = event.target.value.replace(two_chars_no_colons_regex, '$1:').slice(0, -1)
       }
     }
   }
-  
+
+  // @ViewChild('pasteTarget', { static: false })
+  // pasteTarget!: ElementRef;
+
+
+  // onPaste(event: ClipboardEvent) {
+  //   const items = event.clipboardData?.items;
+  //   if (items) {
+  //     for (let i = 0; i < items.length; i++) {
+  //       const item = items[i];
+  //       if (item.type.indexOf('image') !== -1) {
+  //         const file: any = item.getAsFile();
+  //         this.handlePastedImage(file);
+  //         event.preventDefault();
+  //         break; // Only handle the first image found
+  //       }
+  //     }
+  //   }
+  // }
+
+  // handlePastedImage(imageFile: File) {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     const imageSrc = reader.result as string;
+  //     const pasteTarget = this.pasteTarget.nativeElement;
+  //     pasteTarget.innerHTML += `<img src="${imageSrc}" alt="Pasted Image" style="width: 100%; border-radius: 8px; border: 1px solid #ced4da;" />`;
+  //   };
+  //   reader.readAsDataURL(imageFile);
+
+  // }
+
+  getDescendingProgress() {
+    const percentage = 100 - this.progressPercentage;
+    return percentage.toFixed(2) + '%';
+  }
 }

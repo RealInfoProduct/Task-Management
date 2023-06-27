@@ -28,7 +28,8 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <li (click)="viewData(item)"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
-                      <li (click)="editData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
+                      <li (click)="taskHistoryData(item)"><a class="dropdown-item"><i class="ri-file-list-2-line"></i>History</a></li>
+                      <li (click)="taskEditData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
                       <li (click)="deleteData(item)"><a class="dropdown-item"><i class="ri-delete-bin-line"></i>Delete</a></li>
                     </ul>
                   </div>
@@ -125,7 +126,7 @@
    <div class="modal-dialog">
        <div class="modal-content">
            <div class="modal-header">
-               <h5 class="modal-title" id="staticBackdropLabel" *ngIf="!isEdit">Add Task</h5>
+               <h5 class="modal-title" id="staticBackdropLabel" *ngIf="!isEdit">New Task</h5>
                <h5 class="modal-title" id="staticBackdropLabel" *ngIf="isEdit">Edit Task</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
            </div>
@@ -142,6 +143,11 @@
                        <label for="text">Description</label>
                        <textarea name="Description" class="form-control" rows="15" formControlName="taskDescription"></textarea>
                      </div>
+                     <!-- <div class="form-group m-2">
+                      <label for="text">Attachment</label>
+                      <div #pasteTarget class="form-control" style="height: 50vh; overflow: scroll;"  contenteditable="true" (paste)="onPaste($event)"></div>
+                     </div> -->
+                     
                    </div>
                    <div class="col-6">
                      <div class="form-group m-2">
@@ -169,14 +175,14 @@
                          optionLabel="emaployeeName"></p-multiSelect>
                        </div>
                      </div>
-                     <div class="form-group m-2">
+                     <!-- <div class="form-group m-2">
                        <div class="title_Name">
                          <label for="text">Start Date</label>
                        </div>
                        <div class="dropdwon">
-                         <p-calendar [style]="{'width':'100%'}" [showIcon]="true" formControlName="taskDate"></p-calendar>
+                         <p-calendar [style]="{'width':'100%'}" [showIcon]="true" [(ngModel)]="startDate" formControlName="taskDate"></p-calendar>
                        </div>
-                     </div>
+                     </div> -->
                      <div class="form-group m-2">
                        <div class="title_Name">
                          <label for="text">End Date</label>
@@ -194,8 +200,9 @@
                         <p-dropdown [options]="priority" formControlName="taskPriority" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Task priority">
                           <ng-template pTemplate="selectedItem">
                               <div class="flex align-items-center gap-2" *ngIf="taskForm?.value?.taskPriority?.name">
-                                  <img [src]="taskForm?.value.taskPriority?.img"  style="width: 18px"/>
-                                  <div>{{ taskForm?.value?.taskPriority?.name }}</div>
+                                  <!-- <img [src]="taskForm?.value.taskPriority?.img"  style="width: 18px"/> -->
+                                  <img [src]="taskForm.controls['taskPriority'].value.img"  style="width: 18px"/>
+                                  <div>{{taskForm.controls['taskPriority'].value.name }}</div>
                               </div>
                           </ng-template>
                           <ng-template let-priority pTemplate="item" class="p-0">
@@ -208,7 +215,7 @@
                        </div>
                      </div>        
                       <div class="form-group m-2">
-                        <label for="text">Select Hours</label>
+                        <label for="text">Estimated Hours</label>
                         <input type="text" class="form-control" maxlength="5" (input)="hoursMinValidation($event)" formControlName="taskHours" placeholder="00:00">
                       </div>
                   </div>
@@ -277,7 +284,7 @@
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
                       <ng-container >
-                        <p-avatar size="small" shape="circle">RI</p-avatar>
+                        <p-avatar size="small" shape="circle">{{taskViewList?.taskReporter}}</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
                 </div>
@@ -291,7 +298,7 @@
               <h4>Estimated Hours</h4>
               <span>{{ hours }}:{{ minutes }}:{{ seconds }}</span>
               <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar text-bg-warning" style="width: {{progrssBarPersantage}}">{{progrssBarPersantage}}</div>
+                <div class="progress-bar text-bg-warning"  [style.width]="getDescendingProgress()">{{getDescendingProgress()}}</div>
               </div>
             </div>
             <div class='task-view-card'>
