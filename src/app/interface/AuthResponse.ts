@@ -61,6 +61,7 @@ export interface EmaployeeList {
     selectProject: any
     selectProjectRole: any
     avatarName: any
+    isActive :any
 }
 
 export interface TaskList {
@@ -78,14 +79,17 @@ export interface TaskList {
     taskHours: any
     taskTime: any
     taskReporter: any
-    taskHistory: {
-        taskCurrontStatus: any
-        taskDate: any
-        taskReporter: any
-        taskNextStatus: any
-        assign: {
-            curront: any
-            next: any
+    taskHistory: [
+
+        {
+            taskCurrentStatus: any
+            taskDate: any
+            taskReporter: any
+            taskNextStatus: any
+            assign: {
+                current: any
+                next: any
+            }
         }
-    }
+    ]
 }

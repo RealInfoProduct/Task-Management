@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import * as moment from 'moment';
 import { msgType } from 'src/assets/constant/message';
 import { FirebaseService } from 'src/app/service/firebase.service';
+import { EmaployeeList } from 'src/app/interface/AuthResponse';
 
 
 @Component({
@@ -40,19 +41,7 @@ export class LoginComponent implements OnInit {
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
       this.employeeList = res
     })
-    
-    // this.isLoading = true
-    // this.firebaseService.getAllCompanyList().subscribe(res => {
-    //   this.isLoading = true
-    //   res?.forEach((element:any) => {
-    //     this.firebaseService.getEmaployeeLoginList(element.id).subscribe((emaployeeRes => {
-    //     if(emaployeeRes.length > 0){
-    //       this.allCompanyEmployees.push(emaployeeRes)
-    //       this.isLoading = false
-    //      }
-    //    }))
-    //   })
-    // })
+
   }
 
   buildForm():void{
@@ -65,11 +54,30 @@ export class LoginComponent implements OnInit {
 
   submit() { 
     this.isLoading = true
-
     if(this.employeeList.length > 0){
         this.employeeList.forEach((element:any) => {
-          if(element.emaployeeUserName === this.loginForm.value.email && element.emaployeePassword === this.loginForm.value.password && element.selectEmployeeStatus.status === "active" ) {
+  
+          if(element.emaployeeUserName === this.loginForm.value.email && element.emaployeePassword === this.loginForm.value.password && element.selectEmployeeStatus === "active" ) {
             this.allCompanyEmployees.push(element)
+            const payload: EmaployeeList = {
+              id: element.id,
+              emaployeeName: element.emaployeeName,
+              emaployeeMobile: element.emaployeeMobile,
+              emaployeeEmail: element.emaployeeEmail,
+              emaployeeUserName: element.emaployeeUserName,
+              emaployeePassword: element.emaployeePassword,
+              selectEmployeeRole: element.selectEmployeeRole,
+              selectEmployeeTechnology: element.selectEmployeeRole,
+              selectEmployeeStatus: element.selectEmployeeStatus,
+              selectProject: element.selectProject,
+              selectProjectRole: element.selectEmployeeRole,
+              avatarName : element.avatarName,
+              isActive : 'online'
+            }    
+        
+            this.firebaseService.updateEmaployeeList(element.id, payload).then((res: any) => {
+        
+            })
             localStorage.setItem('employeeId' ,element.id)
             this.router.navigate(['web/employee-admin'])
             this.CompanyLogin = true

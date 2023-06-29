@@ -84,6 +84,7 @@ export class TaskMasterComponent implements OnInit {
   taskTimeDate: any
   viewReporter: any
   editData: any
+  taskAllHistory:any = []
 
 
   constructor(private _ds: DragulaService,
@@ -112,39 +113,55 @@ export class TaskMasterComponent implements OnInit {
       });
     }
 
+   
+
     this._ds.dropModel().subscribe(async (args: any) => {
       this.isLoading = true
       let data = args.targetModel.filter((el: any) => Object.keys(el).length);
-      const payload: TaskList = {
-        id: args.item.id,
-        taskDesc: args.item.taskDesc,
-        employeeId: args.item.employeeId,
-        taskTitle: args.item.taskTitle,
-        taskType: args.item.taskType,
-        taskStatus: data[0].taskStatus,
-        taskProjectId: args.item.taskProjectId,
-        taskDate: args.item.taskDate,
-        taskNumber: args.item.taskNumber,
-        taskEndDate: args.item.taskEndDate,
-        taskPriority: args.item.taskPriority,
-        taskHours: args.item.taskHours,
-        taskTime: args.item.taskTime,
-        taskReporter: args.item.taskReporter,
-        taskHistory: {
-          taskCurrontStatus: args.sourceModel[0].taskStatus,
+      let taskHistoryArr: any = []
+      this.firebaseService.getTaskList().subscribe((res: any) => {
+      taskHistoryArr = res.find((id: any) => id.id == args.item.id).taskHistory
+        res.forEach((element: any) => {
+          element.taskHistory.sort((a: any, b: any) => a.taskDate - b.taskDate);
+        })
+        const obj = {
+          taskCurrentStatus: args.sourceModel[0].taskStatus,
           taskDate: moment().format(),
-          taskReporter: args.item.taskReporter,
+          taskReporter: this.viewReporter,
           taskNextStatus: data[0].taskStatus,
           assign: {
-            curront: args.item.taskHistory.assign.curront,
-            next: args.item.taskHistory.assign.next
+            current: args.item.taskHistory[0].assign?.current,
+            next: args.item.taskHistory[0].assign?.next
           }
-        }
-      }
-      this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
-        this.isUpdate = true;
-        this.isLoading = false
+        };
+        taskHistoryArr.push(obj);
       })
+      setTimeout(() => {
+        this.taskAllHistory = taskHistoryArr
+        const payload: TaskList = {
+          id: args.item.id,
+          taskDesc: args.item.taskDesc,
+          employeeId: args.item.employeeId,
+          taskTitle: args.item.taskTitle,
+          taskType: args.item.taskType,
+          taskStatus: data[0].taskStatus,
+          taskProjectId: args.item.taskProjectId,
+          taskDate: args.item.taskDate,
+          taskNumber: args.item.taskNumber,
+          taskEndDate: args.item.taskEndDate,
+          taskPriority: args.item.taskPriority,
+          taskHours: args.item.taskHours,
+          taskTime: args.item.taskTime,
+          taskReporter: args.item.taskReporter,
+          taskHistory: taskHistoryArr
+        }
+        
+        this.firebaseService.updateTaskList(args.item.id, payload).then(res => {
+          this.isUpdate = true;
+          this.isLoading = false
+        })
+      }, 1000);
+
     });
 
     this.buildForm()
@@ -161,7 +178,7 @@ export class TaskMasterComponent implements OnInit {
   generateColor(name: string): string {
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      hash = name?.charCodeAt(i) + ((hash << 5) - hash);
     }
 
     const minLightness = 80;
@@ -269,17 +286,19 @@ export class TaskMasterComponent implements OnInit {
         this.taskList = res.filter((id: any) => id.taskProjectId === this.selectProjectId);
       }
       if (this.taskList.length > 0) {
-        const data = this.getProjectName?.split(' ')[0].split('');
-        const findnumber = this.taskList.map((id: any) => id.taskNumber).sort()
-        const lastIndex = findnumber.length - 1;
-        const lastElement = Number(findnumber[lastIndex].split("-")[1]);
-        findnumber.forEach((ele: any) => {
-          const element = Number(ele.split("-")[1]) + 1
-          if (lastElement < element) {
-            const numeric_part = Number(ele.split("-")[1]) + 1
-            this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + numeric_part
-          }
-        })
+        setTimeout(() => {
+          const data = this.getProjectName?.split(' ')[0].split('');
+          const findnumber = this.taskList.map((id: any) => id.taskNumber).sort()
+          const lastIndex = findnumber.length - 1;
+          const lastElement = Number(findnumber[lastIndex].split("-")[1]);
+          findnumber.forEach((ele: any) => {
+            const element = Number(ele.split("-")[1]) + 1
+            if (lastElement < element) {
+              const numeric_part = Number(ele.split("-")[1]) + 1
+              this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + numeric_part
+            }
+          })
+        }, 1000);
       } else {
         const data = this.getProjectName?.split(' ')[0].split('');
         this.projectNameTaskNumber = [...data[0], ...data[1]].join('').toUpperCase() + "-" + 1
@@ -379,6 +398,19 @@ export class TaskMasterComponent implements OnInit {
     const hoursToAdd = Number(this.taskForm.value.taskHours.split(":")[0]);
     const minutesToAdd = Number(this.taskForm.value.taskHours.split(":")[1]);
     this.taskTimeDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
+ 
+    const dataRecord:any = this.editData.taskHistory[this.editData.taskHistory.length - 1]
+    const Obj = {
+      taskCurrentStatus: 'Task Ready',
+      taskDate: currentDate,
+      taskReporter: this.viewReporter,
+      taskNextStatus: this.taskEditId ? this.taskStatus : "Task Ready",
+      assign: {
+        current: this.taskEditId ? dataRecord.assign.current : this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
+        next: this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
+      }
+    }
+    this.taskAllHistory.push(Obj);
 
     const payload: TaskList = {
       id: this.taskEditId ? this.taskEditId : "",
@@ -395,18 +427,8 @@ export class TaskMasterComponent implements OnInit {
       taskHours: this.taskForm.value.taskHours,
       taskTime: moment(this.taskTimeDate).format(),
       taskReporter: this.viewReporter,
-      taskHistory: {
-        taskCurrontStatus: 'Task Ready',
-        taskDate: currentDate,
-        taskReporter: this.viewReporter,
-        taskNextStatus: this.taskEditId ? this.taskStatus : "Task Ready",
-        assign: {
-          curront: this.taskEditId ? this.editData.taskHistory.assign.curront : this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
-          next: this.taskForm.value.taskEmployee?.map((id: any) => id.id) ? this.taskForm.value.taskEmployee?.map((id: any) => id.id) : null,
-        }
-      }
+      taskHistory: this.taskAllHistory
     }
-
     this.isLoading = true
 
     if (!this.taskEditId) {
@@ -425,8 +447,7 @@ export class TaskMasterComponent implements OnInit {
   }
 
   taskHistoryData(item: any) {
-    console.log(item ,"item-------------");
-    this.taskHistroyArr.push(item.taskHistory);
+    this.taskAllHistory = item.taskHistory
   }
 
   selectProjectFilter(event: any) {
@@ -456,7 +477,7 @@ export class TaskMasterComponent implements OnInit {
         } else {
           this.employeeAvtars = []
         }
-      }
+      }      
       this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName
       this.getAllTaskList()
       this.isLoading = false
@@ -558,16 +579,18 @@ export class TaskMasterComponent implements OnInit {
       taskHours: data.taskHours,
       taskTime: data.taskTime,
       taskReporter: data.taskReporter,
-      taskHistory: {
-        taskCurrontStatus: data.taskReporter.taskCurrontStatus,
-        taskDate: data.taskHistory.taskDate,
-        taskReporter: data.taskHistory.taskReporter,
-        taskNextStatus: data.taskReporter.taskNextStatus,
-        assign: {
-          curront: data.taskHistory.assign.curront,
-          next: data.taskHistory.assign.next
+      taskHistory: [
+        {
+          taskCurrentStatus: data.taskReporter.taskCurrentStatus,
+          taskDate: data.taskHistory.taskDate,
+          taskReporter: data.taskHistory.taskReporter,
+          taskNextStatus: data.taskReporter.taskNextStatus,
+          assign: {
+            current: data.taskHistory.assign.current,
+            next: data.taskHistory.assign.next
+          }
         }
-      }
+      ]
     }
 
     this.confirmationService.confirm({
@@ -685,5 +708,13 @@ export class TaskMasterComponent implements OnInit {
   getDescendingProgress() {
     const percentage = 100 - this.progressPercentage;
     return percentage.toFixed(2) + '%';
+  }
+
+
+  getHistoryAvatar(data:any){
+     return this.employeeListArr.find((id:any) => id.id == data.assign.current.map((id:any) => id)).avatarName
+  }
+  getHistoryNextAvatar(data:any){
+     return this.employeeListArr.find((id:any) => id.id == data.assign.next.map((id:any) => id)).avatarName
   }
 }

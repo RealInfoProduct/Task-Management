@@ -308,16 +308,24 @@
       font-size:16px;
       margin-bottom:1rem;
     }
-    
+
+    ul{
+      padding: 0;
+    }
+
     li {
       list-style:none;
-      margin:1rem 0;
-      padding:0rem 1rem 1rem 3rem;
-      position:relative;
-    }
-    time {
-      display:block;
-      color:var(--light-grey);
+      padding: 10px 0;
+
+      label {
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        position: relative;
+        right: 11px;
+        top: 11px;
+      }
     }
   }
   
@@ -617,4 +625,18 @@
     box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
     background: #fff;
   }
+}
+
+.taskReporterName{
+  display: flex;
+  align-items: center;
+}
+.avatarGroup{
+  padding-right: 5%;
+}
+.allHistoryAvatar{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: baseline;
 }

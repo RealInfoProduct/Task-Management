@@ -28,7 +28,7 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <li (click)="viewData(item)"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
-                      <li (click)="taskHistoryData(item)"><a class="dropdown-item"><i class="ri-file-list-2-line"></i>History</a></li>
+                      <li (click)="taskHistoryData(item)"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#TaskHistory"><i class="ri-file-list-2-line"></i>History</a></li>
                       <li (click)="taskEditData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
                       <li (click)="deleteData(item)"><a class="dropdown-item"><i class="ri-delete-bin-line"></i>Delete</a></li>
                     </ul>
@@ -87,36 +87,16 @@
         <progress class="progress progress--illustration" [max]="taskListLength" [value]="taskListDoneLength"></progress>
       </div>
     </div>
-    <!-- <div class='task-activity'>
+    <div class='task-activity'>
       <h2>Recent Activity</h2>
       <ul>
-        <li>
-          <span class='task-icon task-icon--attachment'><i class="fas fa-paperclip"></i></span>
-          <b>Andrea </b>uploaded 3 documents
-          <time datetime="2021-11-24T20:00:00">Aug 10</time>
-        </li>
-          <li>
-              <span class='task-icon task-icon--comment'><i class="fas fa-comment"></i></span>
-          <b>Karen </b> left a comment
-          <time datetime="2021-11-24T20:00:00">Aug 10</time>
-        </li>
-         <li>
-             <span class='task-icon task-icon--edit'><i class="fas fa-pencil-alt"></i></span>
-          <b>Karen </b>uploaded 3 documents
-          <time datetime="2021-11-24T20:00:00">Aug 11</time>
-        </li>
-          <li>
-              <span class='task-icon task-icon--attachment'><i class="fas fa-paperclip"></i></span>
-          <b>Andrea </b>uploaded 3 documents
-          <time datetime="2021-11-24T20:00:00">Aug 11</time>
-        </li>
-         <li>
-             <span class='task-icon task-icon--comment'><i class="fas fa-comment"></i></span>
-          <b>Karen </b> left a comment
-          <time datetime="2021-11-24T20:00:00">Aug 12</time>
+        <li  *ngFor="let data of employeeAvtars; let i = index">
+            <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data.avatarName)}" >{{data.avatarName}}</p-avatar>
+            <label  [ngStyle]="{'background-color': data.isActive === 'offline' ? '#b3b3b3' :  '#2daa6e' }" class="dot"></label>
+            <span>{{data.emaployeeName}} </span>
         </li>
       </ul>
-    </div> -->
+    </div>
   </aside>
 </div>
 
@@ -237,7 +217,7 @@
    </div>
   </div>
 
-<!-- Modal -->
+<!-- Modal ViewModal -->
 <div class="modal fade" id="viewTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -284,7 +264,7 @@
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
                       <ng-container >
-                        <p-avatar size="small" shape="circle">{{taskViewList?.taskReporter}}</p-avatar>
+                        <p-avatar size="small" shape="circle" >{{taskViewList?.taskReporter}}</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
                 </div>
@@ -309,6 +289,46 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal TaskHistory  -->
+<div class="modal fade" id="TaskHistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">View History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            <div class="taskReporterName" *ngFor="let items of taskAllHistory; let i = index">
+              <div class="avatarGroup">
+                <p-avatarGroup>
+                  <ng-container>
+                    <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(items)}">{{items?.taskReporter}}</p-avatar>
+                  </ng-container>
+                </p-avatarGroup>
+              </div>
+              <div class="taskCurrontStatusDate">
+                <div class="taskCurrontStatus">
+                  <span>{{items.taskCurrentStatus}} <span>------- {{items?.taskNextStatus}}</span></span>
+                </div>
+                <div class="taskUpDate">
+                  <label>Updated Date: {{items.taskDate | date: 'dd/MM/YYYY h:mm:ss'}}</label>  
+                </div>
+                <div class="allHistoryAvatar">
+                  <p-avatarGroup>
+                      <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryAvatar(items))}" >{{getHistoryAvatar(items)}}</p-avatar>
+                </p-avatarGroup>
+                <span>-------</span>
+                  <p-avatarGroup>
+                      <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryNextAvatar(items))}" >{{getHistoryNextAvatar(items)}}</p-avatar>
+                </p-avatarGroup>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
   </div>
 </div>

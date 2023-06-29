@@ -57,7 +57,6 @@ export class RegistrationComponent implements OnInit {
 
 
   submit() { 
-    console.log(this.registrationForm.value,"this.registrationForm.value");
     this.authService.signUp(this.registrationForm.value.email, this.registrationForm.value.password).subscribe(
       (res) => {
           this.storageInImageStore()

@@ -92,7 +92,8 @@ export class EmployeeMasterComponent implements OnInit {
       selectEmployeeStatus: this.emaployeeForm.value.selectEmployeeStatus.status,
       selectProject: this.emaployeeForm.value.selectProject,
       selectProjectRole: this.emaployeeForm.value.selectProjectRole,
-      avatarName :  this.emaployeeForm.value.emaployeeName.split(' ')[0].charAt(0).toUpperCase() + this.emaployeeForm.value.emaployeeName.split(' ')[1].charAt(0).toUpperCase()
+      avatarName :  this.emaployeeForm.value.emaployeeName.split(' ')[0].charAt(0).toUpperCase() + this.emaployeeForm.value.emaployeeName.split(' ')[1].charAt(0).toUpperCase(),
+      isActive : "offline"
     }
 
     if (!this.employeeId) {
@@ -155,7 +156,8 @@ export class EmployeeMasterComponent implements OnInit {
       selectEmployeeStatus: item.selectEmployeeStatus,
       selectProject: item.selectProject,
       selectProjectRole: item.selectProjectRoleEle,
-      avatarName : item.avatarName
+      avatarName : item.avatarName,
+      isActive : 'offline'
     }    
     this.confirmationService.confirm({
       message: 'Do you want to delete this record ?',

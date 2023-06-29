@@ -1,7 +1,10 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { EmaployeeList } from 'src/app/interface/AuthResponse';
 import { CommonService } from 'src/app/service/common.service';
+import { FirebaseService } from 'src/app/service/firebase.service';
 
 
 @Component({
@@ -9,7 +12,7 @@ import { CommonService } from 'src/app/service/common.service';
   templateUrl: './thm-menubar.component.html',
   styleUrls: ['./thm-menubar.component.scss']
 })
-export class ThmMenubarComponent implements OnInit {
+export class ThmMenubarComponent implements OnInit, OnDestroy {
   
   menuList:any = [
     {
@@ -178,6 +181,7 @@ export class ThmMenubarComponent implements OnInit {
     }
   ];
 
+  subscription: any = []
   menuIconList:any = []
   subMenuList:any = []
 
@@ -187,7 +191,7 @@ export class ThmMenubarComponent implements OnInit {
   iconActiveIndex:number = 0
   isStatus : boolean  = true
   employeeId :any
-  constructor( private service: CommonService ,private router: Router) {}
+  constructor( private service: CommonService ,private router: Router , private firebaseService:FirebaseService) {}
   
   ngOnInit(): void {
         this.service.iconActiveIconIndex$.subscribe((res) =>{
@@ -255,10 +259,50 @@ export class ThmMenubarComponent implements OnInit {
   }
 
   logout(item:any){
-    if(item.name === "Logout"){
-      localStorage.clear()
-      this.router.navigate(['/login'])
+    const companyId = localStorage.getItem('companyId')
+    if(companyId){
+        if(item.name === "Logout"){
+        localStorage.clear()
+        this.router.navigate(['/login'])
+      }
+    } else {
+      const employeeId = localStorage.getItem('employeeId')
+      this.subscription.push(
+        this.firebaseService.getEmaployeeList().subscribe((res:any) => {
+          const employeeIdFind = res.find((id:any) => id.id == employeeId)
+          const payload: EmaployeeList = {
+            id: employeeIdFind.id,
+            emaployeeName: employeeIdFind.emaployeeName,
+            emaployeeMobile: employeeIdFind.emaployeeMobile,
+            emaployeeEmail: employeeIdFind.emaployeeEmail,
+            emaployeeUserName: employeeIdFind.emaployeeUserName,
+            emaployeePassword: employeeIdFind.emaployeePassword,
+            selectEmployeeRole: employeeIdFind.selectEmployeeRole,
+            selectEmployeeTechnology: employeeIdFind.selectEmployeeRole,
+            selectEmployeeStatus: employeeIdFind.selectEmployeeStatus,
+            selectProject: employeeIdFind.selectProject,
+            selectProjectRole: employeeIdFind.selectEmployeeRole,
+            avatarName : employeeIdFind.avatarName,
+            isActive : 'offline'
+          }    
+      
+          this.firebaseService.updateEmaployeeList(employeeIdFind.id, payload).then((res: any) => {
+      
+          })
+          if(item.name === "Logout"){
+            localStorage.clear()
+            this.router.navigate(['/login'])
+          }
+        })
+      )
     }
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach((element:Subscription) => {
+      element.unsubscribe()
+    });
   }
 
   }
