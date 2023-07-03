@@ -67,10 +67,10 @@ export class LoginComponent implements OnInit {
               emaployeeUserName: element.emaployeeUserName,
               emaployeePassword: element.emaployeePassword,
               selectEmployeeRole: element.selectEmployeeRole,
-              selectEmployeeTechnology: element.selectEmployeeRole,
+              selectEmployeeTechnology: element.selectEmployeeTechnology,
               selectEmployeeStatus: element.selectEmployeeStatus,
               selectProject: element.selectProject,
-              selectProjectRole: element.selectEmployeeRole,
+              selectProjectRole: element.selectProjectRole,
               avatarName : element.avatarName,
               isActive : 'online'
             }    

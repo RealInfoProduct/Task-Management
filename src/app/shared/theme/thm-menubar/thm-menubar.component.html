@@ -4,7 +4,7 @@
             <img src="../../../../assets/logo.png" alt="">
         </div>
         <ul class="nav-icon-content" >
-            <li  class="nav-list-icon"  *ngFor="let item of menuIconList; let i=index" (click)="logout(item)">
+            <li  class="nav-list-icon"  *ngFor="let item of menuIconList; let i=index">
                 <div title="{{item.name}}" class="icon" routerLink="{{item.url}}" [ngClass]="{'icon-active' : i === iconActiveIndex}" (click)="iconActive(i,item.name)">
                     <!-- <img src="{{item.icon}}" alt=""> -->
                     <i class="{{item.icon}} icon-content"></i>

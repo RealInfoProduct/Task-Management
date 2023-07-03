@@ -198,7 +198,7 @@ export class EmployeeMasterComponent implements OnInit {
       this.employeeList = res
       this.employeeList.forEach((element: any) => {
         element['selectProjectRoleEle'] = element.selectProjectRole.ProjectRoleName
-        element['selectEmployeeTechnologyEle'] = element.selectEmployeeTechnology.map((id: any) => id.technologyName).join(", ")
+        element['selectEmployeeTechnologyEle'] = element?.selectEmployeeTechnology.map((id: any) => id.technologyName).join(", ")
         element['selectProjectEle'] = element.selectProject.map((id: any) => id.projectName).join(", ")
 
       });

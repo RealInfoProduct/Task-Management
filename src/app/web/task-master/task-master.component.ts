@@ -124,14 +124,16 @@ export class TaskMasterComponent implements OnInit {
         res.forEach((element: any) => {
           element.taskHistory.sort((a: any, b: any) => a.taskDate - b.taskDate);
         })
+        
+        const dataRecord:any = args.item.taskHistory[args.item.taskHistory.length - 1]
         const obj = {
           taskCurrentStatus: args.sourceModel[0].taskStatus,
           taskDate: moment().format(),
           taskReporter: this.viewReporter,
           taskNextStatus: data[0].taskStatus,
           assign: {
-            current: args.item.taskHistory[0].assign?.current,
-            next: args.item.taskHistory[0].assign?.next
+            current: dataRecord.assign?.current,
+            next: dataRecord.assign?.next
           }
         };
         taskHistoryArr.push(obj);
@@ -170,7 +172,7 @@ export class TaskMasterComponent implements OnInit {
 
     setTimeout(() => {
       if (!this.isUpdate) {
-        this.getAllTaskList()
+        // this.getAllTaskList()
       }
     }, 2000);
   }
@@ -209,7 +211,7 @@ export class TaskMasterComponent implements OnInit {
     this.isLoading = true
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
       this.employeeListArr = res;
-      this.getAllTaskList()
+      // this.getAllTaskList()
       this.employeeList = res
       this.employeeProjectList = []
       res.forEach((element: any) => {
@@ -225,6 +227,8 @@ export class TaskMasterComponent implements OnInit {
   }
 
   getAllTaskList() {
+    console.log('getAllTaskList');
+    
     this.isLoading = true
     let itemsIds
     this.firebaseService.getTaskList().subscribe((res: any) => {
@@ -399,7 +403,9 @@ export class TaskMasterComponent implements OnInit {
     const minutesToAdd = Number(this.taskForm.value.taskHours.split(":")[1]);
     this.taskTimeDate = moment(currentDate).add(hoursToAdd, 'hours').add(minutesToAdd, 'minutes');
  
-    const dataRecord:any = this.editData.taskHistory[this.editData.taskHistory.length - 1]
+    if(this.taskEditId){
+      var dataRecord:any = this.editData.taskHistory[this.editData.taskHistory.length - 1]
+    }
     const Obj = {
       taskCurrentStatus: 'Task Ready',
       taskDate: currentDate,
@@ -479,7 +485,7 @@ export class TaskMasterComponent implements OnInit {
         }
       }      
       this.getProjectName = this.projectList.find((id: any) => id.id === projectId).projectName
-      this.getAllTaskList()
+      // this.getAllTaskList()
       this.isLoading = false
     })
   }
@@ -579,18 +585,7 @@ export class TaskMasterComponent implements OnInit {
       taskHours: data.taskHours,
       taskTime: data.taskTime,
       taskReporter: data.taskReporter,
-      taskHistory: [
-        {
-          taskCurrentStatus: data.taskReporter.taskCurrentStatus,
-          taskDate: data.taskHistory.taskDate,
-          taskReporter: data.taskHistory.taskReporter,
-          taskNextStatus: data.taskReporter.taskNextStatus,
-          assign: {
-            current: data.taskHistory.assign.current,
-            next: data.taskHistory.assign.next
-          }
-        }
-      ]
+      taskHistory: data.taskHistory
     }
 
     this.confirmationService.confirm({
@@ -714,6 +709,7 @@ export class TaskMasterComponent implements OnInit {
   getHistoryAvatar(data:any){
      return this.employeeListArr.find((id:any) => id.id == data.assign.current.map((id:any) => id)).avatarName
   }
+
   getHistoryNextAvatar(data:any){
      return this.employeeListArr.find((id:any) => id.id == data.assign.next.map((id:any) => id)).avatarName
   }

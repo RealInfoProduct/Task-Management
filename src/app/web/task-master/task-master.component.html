@@ -264,7 +264,7 @@
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
                       <ng-container >
-                        <p-avatar size="small" shape="circle" >{{taskViewList?.taskReporter}}</p-avatar>
+                        <p-avatar size="small" shape="circle">{{taskViewList?.taskReporter}}</p-avatar>
                       </ng-container>
                   </p-avatarGroup>
                 </div>
@@ -302,32 +302,34 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-            <div class="taskReporterName" *ngFor="let items of taskAllHistory; let i = index">
-              <div class="avatarGroup">
-                <p-avatarGroup>
-                  <ng-container>
-                    <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(items)}">{{items?.taskReporter}}</p-avatar>
-                  </ng-container>
-                </p-avatarGroup>
+        <div class="task_History">
+          <div class="taskReporterName" *ngFor="let items of taskAllHistory; let i = index">
+            <div class="avatarGroup">
+              <p-avatarGroup>
+                <ng-container>
+                  <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(items)}">{{items?.taskReporter}}</p-avatar>
+                </ng-container>
+              </p-avatarGroup>
+            </div>
+            <div class="taskCurrontStatusDate">
+              <div class="taskCurrontStatus">
+                <span>{{items.taskCurrentStatus}} <span>------- {{items?.taskNextStatus}}</span></span>
               </div>
-              <div class="taskCurrontStatusDate">
-                <div class="taskCurrontStatus">
-                  <span>{{items.taskCurrentStatus}} <span>------- {{items?.taskNextStatus}}</span></span>
-                </div>
-                <div class="taskUpDate">
-                  <label>Updated Date: {{items.taskDate | date: 'dd/MM/YYYY h:mm:ss'}}</label>  
-                </div>
-                <div class="allHistoryAvatar">
-                  <p-avatarGroup>
-                      <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryAvatar(items))}" >{{getHistoryAvatar(items)}}</p-avatar>
-                </p-avatarGroup>
-                <span>-------</span>
-                  <p-avatarGroup>
-                      <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryNextAvatar(items))}" >{{getHistoryNextAvatar(items)}}</p-avatar>
-                </p-avatarGroup>
-                </div>
+              <div class="taskUpDate">
+                <label>Updated Date: {{items.taskDate | date: 'dd/MM/YYYY h:mm:ss'}}</label>  
+              </div>
+              <div class="allHistoryAvatar">
+                <p-avatarGroup>
+                    <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryAvatar(items))}" >{{getHistoryAvatar(items)}}</p-avatar>
+              </p-avatarGroup>
+              <span>-------</span>
+                <p-avatarGroup>
+                    <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryNextAvatar(items))}" >{{getHistoryNextAvatar(items)}}</p-avatar>
+              </p-avatarGroup>
               </div>
             </div>
+          </div>
+        </div>
         </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit,Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -12,78 +12,78 @@ import { FirebaseService } from 'src/app/service/firebase.service';
   templateUrl: './thm-menubar.component.html',
   styleUrls: ['./thm-menubar.component.scss']
 })
-export class ThmMenubarComponent implements OnInit, OnDestroy {
-  
-  menuList:any = [
+export class ThmMenubarComponent implements OnInit {
+
+  menuList: any = [
     {
       // icon:'../../../../assets/menubarIcon/home.svg',
-      icon:'ri-home-5-line ri-lg',
-      name:'Dashboard',
-      url:'/web/dashboard',
-      children : [
+      icon: 'ri-home-5-line ri-lg',
+      name: 'Dashboard',
+      url: '/web/dashboard',
+      children: [
         {
-          name:'Dashboard',
-          url:'/web/dashboard',
+          name: 'Dashboard',
+          url: '/web/dashboard',
         },
       ],
     },
     {
       // icon:'../../../../assets/menubarIcon/book.svg',
-      icon:'ri-cpu-line ri-lg',
-      name:'Technology',
-      url:'/web/technology',
-      children : [
+      icon: 'ri-cpu-line ri-lg',
+      name: 'Technology',
+      url: '/web/technology',
+      children: [
         {
-          name:'Technology',
-          url:'/web/technology',
+          name: 'Technology',
+          url: '/web/technology',
         },
       ],
     },
     {
       // icon:'../../../../assets/menubarIcon/book.svg',
-      icon:'ri-file-copy-2-line ri-lg',
-      name:'Project Master',
-      url:'/web/project-Master',
-      children : [
+      icon: 'ri-file-copy-2-line ri-lg',
+      name: 'Project Master',
+      url: '/web/project-Master',
+      children: [
         {
-          name:'Project Master',
-          url:'/web/project-Master'
+          name: 'Project Master',
+          url: '/web/project-Master'
         },
       ],
     },
     {
       // icon:'../../../../assets/menubarIcon/users.svg',
-      icon:'ri-user-add-line ri-lg',
-      name:'Employee Master',
-      url:'/web/employee-Master',
-      children : [
+      icon: 'ri-user-add-line ri-lg',
+      name: 'Employee Master',
+      url: '/web/employee-Master',
+      children: [
         {
-          name:'Employee Master',
-          url:'/web/employee-Master'
+          name: 'Employee Master',
+          url: '/web/employee-Master'
         },
       ],
     },
     {
       // icon:'../../../../assets/menubarIcon/command.svg',
-      icon:'ri-stack-line ri-lg',
-      name:'Role',
-      url:'/web/role-master',
-      children : [
+      icon: 'ri-stack-line ri-lg',
+      name: 'Role',
+      url: '/web/role-master',
+      children: [
         {
-          name:'Role Master',
-          url:'/web/role-master'
+          name: 'Role Master',
+          url: '/web/role-master'
         },
       ],
     },
     {
       // icon:'../../../../assets/menubarIcon/package.svg',
-      icon:'ri-profile-line ri-lg',
-      name:'Task Master',
-      url:'/web/task-master',
-      children : [
+      icon: 'ri-profile-line ri-lg',
+      name: 'Task Master',
+      url: '/web/task-master',
+      children: [
         {
-          name:'Task Master',
-          url:'/web/task-master'
+          name: 'Task Master',
+          url: '/web/task-master'
         },
       ],
     },
@@ -165,145 +165,133 @@ export class ThmMenubarComponent implements OnInit, OnDestroy {
     // },
     {
       // icon:'../../../../assets/menubarIcon/share-2.svg',
-      icon:'ri-logout-box-r-line ri-lg',
-      name:'Logout',
-      url:'#',
-      children : [
-        // {
-        //   name:'Change Password',
-        //   url:'#'
-        // },
-        {
-          name:'Logout',
-          url:'/login'
-        },
-      ],
+      icon: 'ri-logout-box-r-line ri-lg',
+      name: 'Logout',
+      url: '/login',
     }
   ];
 
   subscription: any = []
-  menuIconList:any = []
-  subMenuList:any = []
+  menuIconList: any = []
+  subMenuList: any = []
 
-  menuListArr:any = []
-  newMenuList:any = []
-  activeLinkIndex:number = 0
-  iconActiveIndex:number = 0
-  isStatus : boolean  = true
-  employeeId :any
-  constructor( private service: CommonService ,private router: Router , private firebaseService:FirebaseService) {}
-  
+  menuListArr: any = []
+  newMenuList: any = []
+  activeLinkIndex: number = 0
+  iconActiveIndex: number = 0
+  isStatus: boolean = true
+  employeeId: any
+  employeeIdFind : any;
+
+  constructor(private service: CommonService, private router: Router, private firebaseService: FirebaseService) { }
+
   ngOnInit(): void {
-        this.service.iconActiveIconIndex$.subscribe((res) =>{
-          const index = res?.index
-          const name = res?.name
-          this.isStatus = true
-          this.iconActive(index,name)
-        })
-        this.service.language.subscribe((res)=>{
-          if(res){
-            // this.translateLan()
-          }
-        })
-        this.employeeId = localStorage.getItem('employeeId');
-          
-        if(this.employeeId) {
-          this.menuIconList.push(
-            {
-            icon:'ri-file-user-line ri-lg',
-            name:'Employee Admin',
-            url:'/web/employee-admin',
-            children : [
-              {
-                name:'Employee Admin',
-                url:'/web/employee-admin'
-              },
-            ],
-          },
-          {
-            // icon:'../../../../assets/menubarIcon/share-2.svg',
-            icon:'ri-logout-box-r-line ri-lg',
-            name:'Logout',
-            url:'#',
-            children : [
-              // {
-              //   name:'Change Password',
-              //   url:'#'
-              // },
-              {
-                name:'Logout',
-                url:'/login'
-              },
-            ],
-          },    
-          )
-        } else {
-          this.menuIconList = this.menuList;
-        }
-  }
- 
+    this.service.iconActiveIconIndex$.subscribe((res) => {
+      const index = res?.index
+      const name = res?.name
+      this.isStatus = true
+      this.iconActive(index, name)
+    })
+    this.service.language.subscribe((res) => {
+      if (res) {
+        // this.translateLan()
+      }
+    })
+    this.employeeId = localStorage.getItem('employeeId');
 
-  iconActive(index:any,item:any){
+    if (this.employeeId) {
+      this.menuIconList.push(
+        {
+          icon: 'ri-file-user-line ri-lg',
+          name: 'Employee Admin',
+          url: '/web/employee-admin',
+          children: [
+            {
+              name: 'Employee Admin',
+              url: '/web/employee-admin'
+            },
+          ],
+        },
+        {
+          // icon:'../../../../assets/menubarIcon/package.svg',
+          icon: 'ri-profile-line ri-lg',
+          name: 'Task Master',
+          url: '/web/task-master',
+          children: [
+            {
+              name: 'Task Master',
+              url: '/web/task-master'
+            },
+          ],
+        },
+        {
+          // icon:'../../../../assets/menubarIcon/share-2.svg',
+          icon: 'ri-logout-box-r-line ri-lg',
+          name: 'Logout',
+          url: '/login',
+        },
+      )
+    } else {
+      this.menuIconList = this.menuList;
+    }
+  }
+
+
+  iconActive(index: any, item: any) {
     this.iconActiveIndex = index
-    const subMenu = this.menuIconList.find((id:any)=>id.name == item)
+    const subMenu = this.menuIconList.find((id: any) => id.name == item)
     this.subMenuList = subMenu?.children
-    localStorage.setItem('iconActiveIndex' , JSON.stringify({index:this.iconActiveIndex , name:item}))
-    if(this.isStatus){
-      const menuStatusList:any = localStorage.getItem("menuStatus")
-      const menuStatus  = JSON.parse(menuStatusList)
+    localStorage.setItem('iconActiveIndex', JSON.stringify({ index: this.iconActiveIndex, name: item }))
+    if (this.isStatus) {
+      const menuStatusList: any = localStorage.getItem("menuStatus")
+      const menuStatus = JSON.parse(menuStatusList)
       this.service.setValue(menuStatus)
       this.isStatus = false
-    }else{  
-      this.service.setValue({status:false})
-    }
-  }
-
-  logout(item:any){
-    const companyId = localStorage.getItem('companyId')
-    if(companyId){
-        if(item.name === "Logout"){
-        localStorage.clear()
-        this.router.navigate(['/login'])
-      }
     } else {
-      const employeeId = localStorage.getItem('employeeId')
-      this.subscription.push(
-        this.firebaseService.getEmaployeeList().subscribe((res:any) => {
-          const employeeIdFind = res.find((id:any) => id.id == employeeId)
-          const payload: EmaployeeList = {
-            id: employeeIdFind.id,
-            emaployeeName: employeeIdFind.emaployeeName,
-            emaployeeMobile: employeeIdFind.emaployeeMobile,
-            emaployeeEmail: employeeIdFind.emaployeeEmail,
-            emaployeeUserName: employeeIdFind.emaployeeUserName,
-            emaployeePassword: employeeIdFind.emaployeePassword,
-            selectEmployeeRole: employeeIdFind.selectEmployeeRole,
-            selectEmployeeTechnology: employeeIdFind.selectEmployeeRole,
-            selectEmployeeStatus: employeeIdFind.selectEmployeeStatus,
-            selectProject: employeeIdFind.selectProject,
-            selectProjectRole: employeeIdFind.selectEmployeeRole,
-            avatarName : employeeIdFind.avatarName,
-            isActive : 'offline'
-          }    
-      
-          this.firebaseService.updateEmaployeeList(employeeIdFind.id, payload).then((res: any) => {
-      
-          })
-          if(item.name === "Logout"){
-            localStorage.clear()
-            this.router.navigate(['/login'])
-          }
-        })
-      )
+      this.service.setValue({ status: false })
     }
 
+    if (item === "Logout") {
+      const employeeId = localStorage.getItem('employeeId')
+      if (employeeId) {
+
+        this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+          this.employeeIdFind = res.find((id: any) => id.id == employeeId)
+        })
+        if (this.employeeIdFind) {
+          this.logOutClicked(this.employeeIdFind)
+        }
+      } else {
+        localStorage.clear()
+         
+      }
+    }
+
+
   }
 
-  ngOnDestroy(): void {
-    this.subscription.forEach((element:Subscription) => {
-      element.unsubscribe()
-    });
+  logOutClicked(employeeDetails : any ) {
+    const payload: EmaployeeList = {
+      id: employeeDetails.id,
+      emaployeeName: employeeDetails.emaployeeName,
+      emaployeeMobile: employeeDetails.emaployeeMobile,
+      emaployeeEmail: employeeDetails.emaployeeEmail,
+      emaployeeUserName: employeeDetails.emaployeeUserName,
+      emaployeePassword: employeeDetails.emaployeePassword,
+      selectEmployeeRole: employeeDetails.selectEmployeeRole,
+      selectEmployeeTechnology: employeeDetails.selectEmployeeTechnology,
+      selectEmployeeStatus: employeeDetails.selectEmployeeStatus,
+      selectProject: employeeDetails.selectProject,
+      selectProjectRole: employeeDetails.selectProjectRole,
+      avatarName: employeeDetails.avatarName,
+      isActive: 'offline'
+    }
+    this.firebaseService.updateEmaployeeList(employeeDetails.id, payload).then((res: any) => {
+    })    
+    setTimeout(() => {
+      localStorage.clear()
+    
+    }, 600);
   }
-
-  }
+}
 
