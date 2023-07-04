@@ -87,7 +87,7 @@
         <progress class="progress progress--illustration" [max]="taskListLength" [value]="taskListDoneLength"></progress>
       </div>
     </div>
-    <div class='task-activity'>
+    <div class='task-activity' *ngIf="isLoggedUser()">
       <h2>Recent Activity</h2>
       <ul>
         <li  *ngFor="let data of employeeAvtars; let i = index">

@@ -10,6 +10,12 @@
                     <i class="{{item.icon}} icon-content"></i>
                 </div>
             </li>
+            <li  class="nav-list-icon">
+                <div title="Logout" class="icon" (click)="iconActive( 0,'Logout')">
+                    <!-- <img src="{{item.icon}}" alt=""> -->
+                    <i class="ri-logout-box-r-line ri-lg icon-content"></i>
+                </div>
+            </li>
         </ul>    
     </div>
     
@@ -31,5 +37,4 @@
     </div>
 </div>
 
-
-
+<app-spinner *ngIf="isLoading"></app-spinner>

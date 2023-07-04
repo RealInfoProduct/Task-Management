@@ -167,14 +167,16 @@ export class TaskMasterComponent implements OnInit {
     });
 
     this.buildForm()
-    this.getAllProjectList();
     this.getAllEmployeeList();
+    this.getAllProjectList();
 
     setTimeout(() => {
       if (!this.isUpdate) {
         // this.getAllTaskList()
       }
     }, 2000);
+
+
   }
 
   generateColor(name: string): string {
@@ -198,6 +200,7 @@ export class TaskMasterComponent implements OnInit {
     this.isLoading = true
     this.firebaseService.getProjectList().subscribe((res: any) => {
       this.projectList = res;
+      this.employeeWiseProjects()
       setTimeout(() => {
         this.selectProjectItem = this.projectList[0]
         this.getEmployeesByProject(this.projectList[0].id)
@@ -210,6 +213,7 @@ export class TaskMasterComponent implements OnInit {
   getAllEmployeeList() {
     this.isLoading = true
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+      debugger
       this.employeeListArr = res;
       // this.getAllTaskList()
       this.employeeList = res
@@ -226,9 +230,7 @@ export class TaskMasterComponent implements OnInit {
     })
   }
 
-  getAllTaskList() {
-    console.log('getAllTaskList');
-    
+  getAllTaskList() {    
     this.isLoading = true
     let itemsIds
     this.firebaseService.getTaskList().subscribe((res: any) => {
@@ -466,6 +468,7 @@ export class TaskMasterComponent implements OnInit {
 
   getEmployeesByProject(projectId: any) {
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+      debugger
       if (res) {
         this.isLoading = true
         const employees: any = []
@@ -477,7 +480,8 @@ export class TaskMasterComponent implements OnInit {
           })
         });
         this.projectWiseEmployees = employees;
-
+        debugger
+        
         if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
           this.employeeAvtars = this.projectWiseEmployees
         } else {
@@ -712,5 +716,19 @@ export class TaskMasterComponent implements OnInit {
 
   getHistoryNextAvatar(data:any){
      return this.employeeListArr.find((id:any) => id.id == data.assign.next.map((id:any) => id)).avatarName
+  }
+
+  employeeWiseProjects(){
+    const loggedUserType = localStorage.getItem('companyId') ? 'Company' : 'Employee';
+    const companyId = localStorage.getItem('companyId')
+    const employeeId = localStorage.getItem('employeeId')
+    if (employeeId) {
+      const employeeDetails = this.employeeListArr?.find((id : any) => id.id === employeeId)
+      this.projectList = employeeDetails?.selectProject
+    }
+  }
+
+  isLoggedUser() : boolean {
+    return localStorage.getItem('companyId') ? true : false
   }
 }

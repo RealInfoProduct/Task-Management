@@ -20,6 +20,7 @@ export class ThmMenubarComponent implements OnInit {
       icon: 'ri-home-5-line ri-lg',
       name: 'Dashboard',
       url: '/web/dashboard',
+      index: 1,
       children: [
         {
           name: 'Dashboard',
@@ -32,6 +33,7 @@ export class ThmMenubarComponent implements OnInit {
       icon: 'ri-cpu-line ri-lg',
       name: 'Technology',
       url: '/web/technology',
+      index: 2,
       children: [
         {
           name: 'Technology',
@@ -44,6 +46,7 @@ export class ThmMenubarComponent implements OnInit {
       icon: 'ri-file-copy-2-line ri-lg',
       name: 'Project Master',
       url: '/web/project-Master',
+      index: 3,
       children: [
         {
           name: 'Project Master',
@@ -56,6 +59,7 @@ export class ThmMenubarComponent implements OnInit {
       icon: 'ri-user-add-line ri-lg',
       name: 'Employee Master',
       url: '/web/employee-Master',
+      index: 4,
       children: [
         {
           name: 'Employee Master',
@@ -68,6 +72,7 @@ export class ThmMenubarComponent implements OnInit {
       icon: 'ri-stack-line ri-lg',
       name: 'Role',
       url: '/web/role-master',
+      index: 5,
       children: [
         {
           name: 'Role Master',
@@ -80,95 +85,20 @@ export class ThmMenubarComponent implements OnInit {
       icon: 'ri-profile-line ri-lg',
       name: 'Task Master',
       url: '/web/task-master',
+      index: 6,
       children: [
         {
           name: 'Task Master',
           url: '/web/task-master'
         },
       ],
-    },
-    // {
-    //   // icon:'../../../../assets/menubarIcon/layers.svg',
-    //   icon:'ri-file-copy-2-line ri-lg',
-    //   name:'Invoice',
-    //   url:'/web/invoice-master',
-    //   children : [
-    //     {
-    //       name:'Invoice',
-    //       url:'/web/invoice-master'
-    //     },
-    //     {
-    //       name:'Invoice List',
-    //       url:'/web/invoice-list'
-    //     },
-    //   ],
-    // },
-    // {
-    //   // icon:'../../../../assets/menubarIcon/copy.svg',
-    //   icon:'ri-user-add-line ri-lg',
-    //   name:'Attendance',
-    //   url:'/web/add-employee',
-    //   children : [
-    //     {
-    //       name:'Add Employee',
-    //       url:'/web/add-employee'
-    //     },
-    //     {
-    //       name:'Bonus & Attendance List',
-    //       url:'/web/bonus-attendance'
-    //     },
-    //     {
-    //       name:'Report',
-    //       url:'/web/report'
-    //     },
-    //   ],
-    // },
-    // {
-    //   // icon:'../../../../assets/menubarIcon/file-text.svg',
-    //   icon:'ri-bank-line ri-lg',
-    //   name:'Account',
-    //   url:'/web/company-account',
-    //   children : [
-    //     {
-    //       name:'Company Account',
-    //       url:'/web/company-account'
-    //     },
-    //     {
-    //       name:'Expenses List',
-    //       url:'/web/expenses-list'
-    //     },
-    //     {
-    //       name:'Income List',
-    //       url:'/web/income-list'
-    //     },
-    //     {
-    //       name:'Passbook',
-    //       url:'/web/passbook-list'
-    //     },
-    //   ],
-    // },
-    // {
-    //   // icon:'../../../../assets/menubarIcon/map-pin.svg',
-    //   icon:'ri-calculator-line ri-lg',
-    //   name:'Daman Costing',
-    //   url:'/web/daman-costing',
-    //   children : [
-    //     {
-    //       name:'Daman Costing',
-    //       url:'/web/daman-costing'
-    //     },
-    //     {
-    //       name:'Maintenance Masters',
-    //       url:'/web/maintenance-master'
-    //     },
-    //   ],
-    // },
-    {
-      // icon:'../../../../assets/menubarIcon/share-2.svg',
-      icon: 'ri-logout-box-r-line ri-lg',
-      name: 'Logout',
-      url: '/login',
     }
+    // {
+    //   // icon:'../../../../assets/menubarIcon/share-2.svg',
+    //   icon: 'ri-logout-box-r-line ri-lg',
+    //   name: 'Logout',
+    //   url: '/login',
+    // }
   ];
 
   subscription: any = []
@@ -182,7 +112,7 @@ export class ThmMenubarComponent implements OnInit {
   isStatus: boolean = true
   employeeId: any
   employeeIdFind : any;
-
+  isLoading : boolean = false
   constructor(private service: CommonService, private router: Router, private firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
@@ -205,6 +135,7 @@ export class ThmMenubarComponent implements OnInit {
           icon: 'ri-file-user-line ri-lg',
           name: 'Employee Admin',
           url: '/web/employee-admin',
+          index : 1,
           children: [
             {
               name: 'Employee Admin',
@@ -217,19 +148,14 @@ export class ThmMenubarComponent implements OnInit {
           icon: 'ri-profile-line ri-lg',
           name: 'Task Master',
           url: '/web/task-master',
+          index: 6,
           children: [
             {
               name: 'Task Master',
               url: '/web/task-master'
             },
           ],
-        },
-        {
-          // icon:'../../../../assets/menubarIcon/share-2.svg',
-          icon: 'ri-logout-box-r-line ri-lg',
-          name: 'Logout',
-          url: '/login',
-        },
+        }
       )
     } else {
       this.menuIconList = this.menuList;
@@ -251,18 +177,22 @@ export class ThmMenubarComponent implements OnInit {
       this.service.setValue({ status: false })
     }
 
-    if (item === "Logout") {
+    if (item === "Logout" && index == 0) {
       const employeeId = localStorage.getItem('employeeId')
       if (employeeId) {
-
         this.firebaseService.getEmaployeeList().subscribe((res: any) => {
-          this.employeeIdFind = res.find((id: any) => id.id == employeeId)
+          if (res && res.length > 0) {
+            this.employeeIdFind = res.find((id: any) => id.id == employeeId)
+          }
         })
-        if (this.employeeIdFind) {
-          this.logOutClicked(this.employeeIdFind)
-        }
+        setTimeout(() => {
+          if (this.employeeIdFind) {
+            this.logOutClicked(this.employeeIdFind)
+          }
+        }, 100);
       } else {
         localStorage.clear()
+        this.router.navigate(['/'])
          
       }
     }
@@ -270,7 +200,8 @@ export class ThmMenubarComponent implements OnInit {
 
   }
 
-  logOutClicked(employeeDetails : any ) {
+  logOutClicked(employeeDetails: any) {
+    this.isLoading = true
     const payload: EmaployeeList = {
       id: employeeDetails.id,
       emaployeeName: employeeDetails.emaployeeName,
@@ -287,11 +218,10 @@ export class ThmMenubarComponent implements OnInit {
       isActive: 'offline'
     }
     this.firebaseService.updateEmaployeeList(employeeDetails.id, payload).then((res: any) => {
-    })    
-    setTimeout(() => {
-      localStorage.clear()
-    
-    }, 600);
+    })
+    localStorage.clear()
+    this.isLoading = false
+    this.router.navigate(['/'])
   }
 }
 
