@@ -96,15 +96,6 @@ export class TaskMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    const companyId = localStorage.getItem('companyId')
-    if (companyId) {
-      this.firebaseService.getAllCompanyList().subscribe((res: any) => {
-        const filterdata = res.find((id: any) => id.id == companyId)
-        this.viewReporter = filterdata.companyName.split(' ')[0].charAt(0).toUpperCase() + filterdata.companyName.split(' ')[1].charAt(0).toUpperCase()
-      })
-    }
-
     const existingGroup = this._ds.find('COLUMNS');
     if (!existingGroup) {
       this._ds.createGroup("COLUMNS", {
@@ -112,9 +103,6 @@ export class TaskMasterComponent implements OnInit {
         moves: (el, source, handle: any) => handle.className === "group-handle"
       });
     }
-
-   
-
     this._ds.dropModel().subscribe(async (args: any) => {
       this.isLoading = true
       let data = args.targetModel.filter((el: any) => Object.keys(el).length);
@@ -213,8 +201,23 @@ export class TaskMasterComponent implements OnInit {
   getAllEmployeeList() {
     this.isLoading = true
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
-      debugger
       this.employeeListArr = res;
+
+      const companyId = localStorage.getItem('companyId')
+      
+      if (companyId) {
+        this.firebaseService.getAllCompanyList().subscribe((res: any) => {
+          const filterdata = res.find((id: any) => id.id == companyId)
+          this.viewReporter = filterdata.companyName.split(' ')[0].charAt(0).toUpperCase() + filterdata.companyName.split(' ')[1].charAt(0).toUpperCase()
+        })
+      }else {
+        const  employeeId = localStorage.getItem('employeeId')
+        const employeeListFilter = this.employeeListArr.find((id:any) => id.id === employeeId )
+        this.viewReporter = employeeListFilter?.avatarName
+
+        
+      }
+
       // this.getAllTaskList()
       this.employeeList = res
       this.employeeProjectList = []
@@ -468,7 +471,6 @@ export class TaskMasterComponent implements OnInit {
 
   getEmployeesByProject(projectId: any) {
     this.firebaseService.getEmaployeeList().subscribe((res: any) => {
-      debugger
       if (res) {
         this.isLoading = true
         const employees: any = []
@@ -480,7 +482,6 @@ export class TaskMasterComponent implements OnInit {
           })
         });
         this.projectWiseEmployees = employees;
-        debugger
         
         if (this.projectWiseEmployees && this.projectWiseEmployees.length > 0) {
           this.employeeAvtars = this.projectWiseEmployees
