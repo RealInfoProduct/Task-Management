@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonService } from './service/common.service';
 
 @Component({
@@ -25,5 +25,10 @@ export class AppComponent {
     const iconActiveIndex:any = localStorage.getItem("iconActiveIndex")
     const iconactiveLinkIndex  = JSON.parse(iconActiveIndex)
     this.service.seticonActiveIndex(iconactiveLinkIndex)
+     }
+
+     @HostListener('window:beforeunload', ['$event'])
+     handleBeforeUnload(event: Event) {
+       localStorage.clear(); 
      }
 }

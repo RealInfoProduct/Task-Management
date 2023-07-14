@@ -20,6 +20,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment.prod';
 import { AdminPanelComponent } from './pages/admin-panel/admin-panel.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -43,6 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,  
+    ConfirmDialogModule,
     provideFirebaseApp(()=>initializeApp(environment.firebaseConfig)),
     provideFirestore(()=> getFirestore()),
     provideAuth(() => getAuth()),

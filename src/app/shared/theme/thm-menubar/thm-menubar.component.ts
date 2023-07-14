@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { EmaployeeList } from 'src/app/interface/AuthResponse';
 import { CommonService } from 'src/app/service/common.service';
@@ -113,7 +114,7 @@ export class ThmMenubarComponent implements OnInit {
   employeeId: any
   employeeIdFind : any;
   isLoading : boolean = false
-  constructor(private service: CommonService, private router: Router, private firebaseService: FirebaseService) { }
+  constructor(private service: CommonService, private router: Router, private firebaseService: FirebaseService, private confirmationService: ConfirmationService) { }
 
   ngOnInit(): void {
     this.service.iconActiveIconIndex$.subscribe((res) => {
@@ -178,26 +179,30 @@ export class ThmMenubarComponent implements OnInit {
     }
 
     if (item === "Logout" && index == 0) {
-      const employeeId = localStorage.getItem('employeeId')
-      if (employeeId) {
-        this.firebaseService.getEmaployeeList().subscribe((res: any) => {
-          if (res && res.length > 0) {
-            this.employeeIdFind = res.find((id: any) => id.id == employeeId)
+      this.confirmationService.confirm({
+        message: 'Are you sure, you want to logout..?',
+        header: 'Logout!!',
+        accept: async () => {
+          this.isLoading = true
+          const employeeId = localStorage.getItem('employeeId')
+          if (employeeId) {
+            this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+              if (res && res.length > 0) {
+                this.employeeIdFind = res.find((id: any) => id.id == employeeId)
+              }
+            })
+            setTimeout(() => {
+              if (this.employeeIdFind) {
+                this.logOutClicked(this.employeeIdFind)
+              }
+            }, 100);
+          } else {
+            localStorage.clear()
+            this.router.navigate(['/'])
           }
-        })
-        setTimeout(() => {
-          if (this.employeeIdFind) {
-            this.logOutClicked(this.employeeIdFind)
-          }
-        }, 100);
-      } else {
-        localStorage.clear()
-        this.router.navigate(['/'])
-         
-      }
+        }
+      })
     }
-
-
   }
 
   logOutClicked(employeeDetails: any) {

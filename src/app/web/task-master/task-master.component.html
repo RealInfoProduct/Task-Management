@@ -1,50 +1,66 @@
 <div class="wrapper" dragula="COLUMNS" [(dragulaModel)]="groups">
   <div class="project">
-  <div class="project-info"><h1>{{getProjectName}}</h1><div class="project-participants"><button class="project-participants__add" data-bs-toggle="modal"
-    data-bs-target="#TaskModal" (click)="addTask()">Add Participant</button></div></div>
+    <div class="project-info">
+      <h1>{{getProjectName}}</h1>
+      <div class="project-participants"><button class="project-participants__add" data-bs-toggle="modal"
+          data-bs-target="#TaskModal" (click)="addTask()">Add Participant</button></div>
+    </div>
     <div class="justify-content-center">
       <p-avatarGroup styleClass="mb-3">
-          <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor('ALL'), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == 'index'" (click)="onAvatarChange('ALL','index')">ALL</p-avatar>
-          <ng-container *ngFor="let data of employeeAvtars; let i = index">
-            <!-- <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar> -->
-            <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data?.avatarName), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data?.id,i)">{{data?.avatarName?.toUpperCase()}}</p-avatar>
-          </ng-container>
+        <p-avatar size="large" shape="circle"
+          [style]="{'background-color': generateColor('ALL'), 'font-weight' : 700, 'cursor' : 'pointer'}"
+          [class.active]="selectedIndex == 'index'" (click)="onAvatarChange('ALL','index')">ALL</p-avatar>
+        <ng-container *ngFor="let data of employeeAvtars; let i = index">
+          <!-- <p-avatar size="large" shape="circle" [style]="{'background-color': generateColor(data), 'font-weight' : 700, 'cursor' : 'pointer'}" [class.active]="selectedIndex == i"  (click)="onAvatarChange(data,i)">{{data?.toUpperCase()}}</p-avatar> -->
+          <p-avatar size="large" shape="circle"
+            [style]="{'background-color': generateColor(data?.avatarName), 'font-weight' : 700, 'cursor' : 'pointer'}"
+            [class.active]="selectedIndex == i"
+            (click)="onAvatarChange(data?.id,i)">{{data?.avatarName?.toUpperCase()}}</p-avatar>
+        </ng-container>
       </p-avatarGroup>
     </div>
     <div class="project-tasks">
       <div class="project-column" *ngFor="let group of groups">
         <div class='project-column-heading' [ngStyle]="taskBorder(group?.name)">
-          <h2 class='project-column-heading__title'>{{group?.name}}</h2><button class='project-column-heading__options'><i class="ri-more-fill"></i></button>
+          <h2 class='project-column-heading__title'>{{group?.name}}</h2><button
+            class='project-column-heading__options'><i class="ri-more-fill"></i></button>
         </div>
 
         <div dragula="ITEMS" [(dragulaModel)]="group.items">
           <ng-container *ngIf="group.items.length > 0; else elseBlock">
             <div *ngFor="let item of group.items">
               <div [ngClass]="item?.taskDesc ? 'task' : 'removeEmptyCard'">
-                <div class="task__tags"><span class="show-taskNumber"><img [src]="item?.taskPriority?.img" width="10%" style="padding-right: 10px;" alt="">{{item.taskNumber}}</span>
+                <div class="task__tags"><span class="show-taskNumber"><img [src]="item?.taskPriority?.img" width="10%"
+                      style="padding-right: 10px;" alt="">{{item.taskNumber}}</span>
                   <div class="dropdown">
-                    <button class="task__options" id="dropdownMenuButton1" data-bs-toggle="dropdown" >
+                    <button class="task__options" id="dropdownMenuButton1" data-bs-toggle="dropdown">
                       <i class="ri-more-fill"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <li (click)="viewData(item)"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
-                      <li (click)="taskHistoryData(item)"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#TaskHistory"><i class="ri-file-list-2-line"></i>History</a></li>
-                      <li (click)="taskEditData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
-                      <li (click)="deleteData(item)"><a class="dropdown-item"><i class="ri-delete-bin-line"></i>Delete</a></li>
+                      <li (click)="viewData(item)"><a class="dropdown-item" data-bs-toggle="modal"
+                          data-bs-target="#viewTask"><i class="ri-eye-line"></i>View</a></li>
+                      <li (click)="taskHistoryData(item)"><a class="dropdown-item" data-bs-toggle="modal"
+                          data-bs-target="#TaskHistory"><i class="ri-file-list-2-line"></i>History</a></li>
+                      <li (click)="taskEditData(item)" data-bs-toggle="modal" data-bs-target="#TaskModal"><a
+                          class="dropdown-item"><i class="ri-edit-box-line"></i>Edit</a></li>
+                      <li (click)="deleteData(item)"><a class="dropdown-item"><i
+                            class="ri-delete-bin-line"></i>Delete</a></li>
                     </ul>
                   </div>
                 </div>
-                    <label class="taskTitle"><b>{{item?.taskTitle}}</b></label>
+                <label class="taskTitle"><b>{{item?.taskTitle}}</b></label>
                 <p style="margin-top: 8px;" class="taskDesc">{{item?.taskDesc}}</p>
                 <div class="task__stats"><span>
                     <!-- <time class="d-flex"><i class="ri-calendar-2-line ri-1x icon-padding"></i>{{item?.taskDate}}</time> -->
-                    <span class="task__tag task__tag--copyright" [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span>
+                    <span class="task__tag task__tag--copyright"
+                      [ngStyle]="taskTypes(item?.taskType)">{{item?.taskType}}</span>
                   </span>
-                    <p-avatarGroup styleClass="mb-3">
-                      <ng-container *ngFor="let data of item?.employeeName">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data?.toUpperCase())}">{{data}}</p-avatar>
-                      </ng-container>
-                    </p-avatarGroup>
+                  <p-avatarGroup styleClass="mb-3">
+                    <ng-container *ngFor="let data of item?.employeeName">
+                      <p-avatar size="small" shape="circle"
+                        [style]="{'background-color': generateColor(data?.toUpperCase())}">{{data}}</p-avatar>
+                    </ng-container>
+                  </p-avatarGroup>
                 </div>
                 <div class="endDate">
                   <span>End Date : {{item.taskEndDate === 'Invalid date' ? '---' : item.taskEndDate}}</span>
@@ -56,7 +72,7 @@
             <div class="emptyCard"></div>
           </ng-template>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -66,96 +82,106 @@
       <div class="title_Name">
         <label for="text">Select Project</label>
       </div>
-        <p-dropdown [options]="projectList" [(ngModel)]="selectProjectItem" (onChange)="selectProjectFilter($event)" placeholder="Select Task Project" optionLabel="projectName"></p-dropdown>
+      <p-dropdown [options]="projectList" [(ngModel)]="selectProjectItem" (onChange)="selectProjectFilter($event)"
+        placeholder="Select Task Project" optionLabel="projectName"></p-dropdown>
     </div>
     <div class='tag-progress'>
       <h2>Task Progress</h2>
       <div class='tag-progress'>
         <p>Task Ready<span>{{taskListTaskReadyLength}}/{{taskListLength}}</span></p>
-        <progress class="progress progress--taskReady" [max]="taskListLength" [value]="taskListTaskReadyLength"></progress>
+        <progress class="progress progress--taskReady" [max]="taskListLength"
+          [value]="taskListTaskReadyLength"></progress>
       </div>
       <div class='tag-progress'>
         <p>In Progress<span>{{taskListInProgressLength}}/{{taskListLength}}</span></p>
-        <progress class="progress progress--design" [max]="taskListLength" [value]="taskListInProgressLength"></progress>
+        <progress class="progress progress--design" [max]="taskListLength"
+          [value]="taskListInProgressLength"></progress>
       </div>
       <div class='tag-progress'>
         <p>Testing <span>{{taskListTestingLength}}/{{taskListLength}}</span></p>
-        <progress class="progress progress--copyright" [max]="taskListLength" [value]="taskListTestingLength"></progress>
+        <progress class="progress progress--copyright" [max]="taskListLength"
+          [value]="taskListTestingLength"></progress>
       </div>
       <div class='tag-progress'>
         <p>Done <span>{{taskListDoneLength}}/{{taskListLength}}</span></p>
-        <progress class="progress progress--illustration" [max]="taskListLength" [value]="taskListDoneLength"></progress>
+        <progress class="progress progress--illustration" [max]="taskListLength"
+          [value]="taskListDoneLength"></progress>
       </div>
     </div>
     <div class='task-activity' *ngIf="isLoggedUser()">
       <h2>Recent Activity</h2>
       <ul>
-        <li  *ngFor="let data of employeeAvtars; let i = index">
-            <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data.avatarName)}" >{{data.avatarName}}</p-avatar>
-            <label  [ngStyle]="{'background-color': data.isActive === 'offline' ? '#b3b3b3' :  '#2daa6e' }" class="dot"></label>
-            <span>{{data.emaployeeName}} </span>
+        <li *ngFor="let data of employeeAvtars; let i = index">
+          <p-avatar size="small" shape="circle"
+            [style]="{'background-color': generateColor(data.avatarName)}">{{data.avatarName}}</p-avatar>
+          <label [ngStyle]="{'background-color': data.isActive === 'offline' ? '#b3b3b3' :  '#2daa6e' }"
+            class="dot"></label>
+          <span>{{data.emaployeeName}} </span>
         </li>
       </ul>
     </div>
   </aside>
 </div>
 
-   <!-- Modal TaskModal -->
-   <div class="modal fade" id="TaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-   aria-labelledby="staticBackdropLabel" aria-hidden="true">
-   <div class="modal-dialog">
-       <div class="modal-content">
-           <div class="modal-header">
-               <h5 class="modal-title" id="staticBackdropLabel" *ngIf="!isEdit">New Task</h5>
-               <h5 class="modal-title" id="staticBackdropLabel" *ngIf="isEdit">Edit Task</h5>
-               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-           </div>
-           <div class="modal-body p-0">
-               <!-- ... add code ..  -->
-               <form [formGroup]="taskForm">
-                 <div class="row m-2">
-                   <div class="col-6">
-                     <div class="form-group m-2">
-                       <label for="text">Task Name</label>
-                       <input type="text" class="form-control" placeholder="Enter Task Name" formControlName="taskName">
-                     </div>
-                     <div class="form-group m-2">
-                       <label for="text">Description</label>
-                       <textarea name="Description" class="form-control" rows="15" formControlName="taskDescription"></textarea>
-                     </div>
-                     <!-- <div class="form-group m-2">
+<!-- Modal TaskModal -->
+<div class="modal fade" id="TaskModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="!isEdit">New Task</h5>
+        <h5 class="modal-title" id="staticBackdropLabel" *ngIf="isEdit">Edit Task</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <!-- ... add code ..  -->
+        <form [formGroup]="taskForm">
+          <div class="row m-2">
+            <div class="col-6">
+              <div class="form-group m-2">
+                <label for="text">Task Name</label>
+                <input type="text" class="form-control" placeholder="Enter Task Name" formControlName="taskName">
+              </div>
+              <div class="form-group m-2">
+                <label for="text">Description</label>
+                <textarea name="Description" class="form-control" rows="15"
+                  formControlName="taskDescription"></textarea>
+              </div>
+              <!-- <div class="form-group m-2">
                       <label for="text">Attachment</label>
                       <div #pasteTarget class="form-control" style="height: 50vh; overflow: scroll;"  contenteditable="true" (paste)="onPaste($event)"></div>
                      </div> -->
-                     
-                   </div>
-                   <div class="col-6">
-                     <div class="form-group m-2">
-                       <div class="title_Name">
-                         <label for="text">Type</label>
-                       </div>
-                       <div class="dropdwon">
-                         <p-dropdown placeholder="Select Type"  [options]="taskTypeList" optionLabel="taskName" formControlName="taskType"></p-dropdown>
-                       </div>
-                     </div>
-                     <div class="form-group m-2">
-                       <div class="title_Name">
-                         <label for="text">Project</label>
-                       </div>
-                       <div class="dropdwon">
-                         <p-dropdown [options]="projectList" (onChange)="selectProject($event)" placeholder="Select Project" optionLabel="projectName" formControlName="taskProject"></p-dropdown>
-                       </div>
-                     </div>
-                     <div class="form-group m-2">
-                       <div class="title_Name">
-                         <label for="text">Assignee</label>
-                       </div>
-                       <div class="dropdwon">
-                         <p-multiSelect [options]="employeeList" placeholder="Select Employee" formControlName="taskEmployee"
-                         optionLabel="emaployeeName"></p-multiSelect>
-                       </div>
-                     </div>
-                     <!-- <div class="form-group m-2">
+
+            </div>
+            <div class="col-6">
+              <div class="form-group m-2">
+                <div class="title_Name">
+                  <label for="text">Type</label>
+                </div>
+                <div class="dropdwon">
+                  <p-dropdown placeholder="Select Type" [options]="taskTypeList" optionLabel="taskName"
+                    formControlName="taskType"></p-dropdown>
+                </div>
+              </div>
+              <div class="form-group m-2">
+                <div class="title_Name">
+                  <label for="text">Project</label>
+                </div>
+                <div class="dropdwon">
+                  <p-dropdown [options]="projectList" (onChange)="selectProject($event)" placeholder="Select Project"
+                    optionLabel="projectName" formControlName="taskProject"></p-dropdown>
+                </div>
+              </div>
+              <div class="form-group m-2">
+                <div class="title_Name">
+                  <label for="text">Assignee</label>
+                </div>
+                <div class="dropdwon">
+                  <p-multiSelect [options]="employeeList" placeholder="Select Employee" formControlName="taskEmployee"
+                    optionLabel="emaployeeName"></p-multiSelect>
+                </div>
+              </div>
+              <!-- <div class="form-group m-2">
                        <div class="title_Name">
                          <label for="text">Start Date</label>
                        </div>
@@ -163,59 +189,61 @@
                          <p-calendar [style]="{'width':'100%'}" [showIcon]="true" [(ngModel)]="startDate" formControlName="taskDate"></p-calendar>
                        </div>
                      </div> -->
-                     <div class="form-group m-2">
-                       <div class="title_Name">
-                         <label for="text">End Date</label>
-                       </div>
-                       <div class="dropdwon">
-                         <p-calendar [style]="{'width':'100%'}" [showIcon]="true" formControlName="taskEndDate"></p-calendar>
-                       </div>
-                     </div>
+              <div class="form-group m-2">
+                <div class="title_Name">
+                  <label for="text">End Date</label>
+                </div>
+                <div class="dropdwon">
+                  <p-calendar [style]="{'width':'100%'}" [showIcon]="true" formControlName="taskEndDate"></p-calendar>
+                </div>
+              </div>
 
-                     <div class="form-group m-2">
-                       <div class="title_Name">
-                         <label for="text">Select Priority</label>
-                       </div>
-                       <div class="dropdwon">
-                        <p-dropdown [options]="priority" formControlName="taskPriority" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Task priority">
-                          <ng-template pTemplate="selectedItem">
-                              <div class="flex align-items-center gap-2" *ngIf="taskForm?.value?.taskPriority?.name">
-                                  <!-- <img [src]="taskForm?.value.taskPriority?.img"  style="width: 18px"/> -->
-                                  <img [src]="taskForm.controls['taskPriority'].value.img"  style="width: 18px"/>
-                                  <div>{{taskForm.controls['taskPriority'].value.name }}</div>
-                              </div>
-                          </ng-template>
-                          <ng-template let-priority pTemplate="item" class="p-0">
-                              <div class="flex align-items-center gap-2">
-                                  <img [src]="priority.img" style="width: 18px"/>
-                                  <div>{{ priority.name }}</div>
-                              </div>
-                          </ng-template>
-                      </p-dropdown>
-                       </div>
-                     </div>        
-                      <div class="form-group m-2">
-                        <label for="text">Estimated Hours</label>
-                        <input type="text" class="form-control" maxlength="5" (input)="hoursMinValidation($event)" formControlName="taskHours" placeholder="00:00">
+              <div class="form-group m-2">
+                <div class="title_Name">
+                  <label for="text">Select Priority</label>
+                </div>
+                <div class="dropdwon">
+                  <p-dropdown [options]="priority" formControlName="taskPriority" optionLabel="name" [filter]="true"
+                    filterBy="name" [showClear]="true" placeholder="Select a Task priority">
+                    <ng-template pTemplate="selectedItem">
+                      <div class="flex align-items-center gap-2" *ngIf="taskForm?.value?.taskPriority?.name">
+                        <!-- <img [src]="taskForm?.value.taskPriority?.img"  style="width: 18px"/> -->
+                        <img [src]="taskForm.controls['taskPriority'].value.img" style="width: 18px" />
+                        <div>{{taskForm.controls['taskPriority'].value.name }}</div>
                       </div>
-                  </div>
-                 </div>
-               </form>
-                   <div class="modal-footer">                        
-                           <ng-container *ngIf="!isEdit">
-                               <button data-bs-dismiss="modal" aria-label="Close"  
-                                   type="submit" (click)="submit()" class="btn btn-secondary submit">Submit</button>
-                           </ng-container>
-                           <ng-container *ngIf="isEdit">
-                               <button data-bs-dismiss="modal" aria-label="Close"
-                                   type="submit" (click)="submit()" class="btn btn-secondary submit">Update</button>
-                           </ng-container>
-                   </div>
-               <!-- ... add code ..  -->
-           </div>
-       </div>
-   </div>
+                    </ng-template>
+                    <ng-template let-priority pTemplate="item" class="p-0">
+                      <div class="flex align-items-center gap-2">
+                        <img [src]="priority.img" style="width: 18px" />
+                        <div>{{ priority.name }}</div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+              <div class="form-group m-2">
+                <label for="text">Estimated Hours</label>
+                <input type="text" class="form-control" maxlength="5" (input)="hoursMinValidation($event)"
+                  formControlName="taskHours" placeholder="00:00">
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <ng-container *ngIf="!isEdit">
+            <button data-bs-dismiss="modal" aria-label="Close" type="submit" (click)="submit()"
+              class="btn btn-secondary submit">Submit</button>
+          </ng-container>
+          <ng-container *ngIf="isEdit">
+            <button data-bs-dismiss="modal" aria-label="Close" type="submit" (click)="submit()"
+              class="btn btn-secondary submit">Update</button>
+          </ng-container>
+        </div>
+        <!-- ... add code ..  -->
+      </div>
+    </div>
   </div>
+</div>
 
 <!-- Modal ViewModal -->
 <div class="modal fade" id="viewTask" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -224,7 +252,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Task View</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="closePopup()"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closePopup()"></button>
       </div>
       <div class="modal-body">
         <div class="row modal-des">
@@ -251,9 +280,10 @@
               <span style="display: flex;">
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
-                      <ng-container *ngFor="let data of taskViewList?.employeeName let i = index">
-                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}" [class.active]="selectedIndex == i">{{data}}</p-avatar>
-                      </ng-container>
+                    <ng-container *ngFor="let data of taskViewList?.employeeName let i = index">
+                      <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(data)}"
+                        [class.active]="selectedIndex == i">{{data}}</p-avatar>
+                    </ng-container>
                   </p-avatarGroup>
                 </div>
               </span>
@@ -263,9 +293,9 @@
               <span style="display: flex;">
                 <div class="justify-content-center">
                   <p-avatarGroup styleClass="mb-0">
-                      <ng-container >
-                        <p-avatar size="small" shape="circle">{{taskViewList?.taskReporter}}</p-avatar>
-                      </ng-container>
+                    <ng-container>
+                      <p-avatar size="small" shape="circle">{{taskViewList?.taskReporter}}</p-avatar>
+                    </ng-container>
                   </p-avatarGroup>
                 </div>
               </span>
@@ -277,8 +307,10 @@
             <div class='task-view-card'>
               <h4>Estimated Hours</h4>
               <span>{{ hours }}:{{ minutes }}:{{ seconds }}</span>
-              <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar text-bg-warning"  [style.width]="getDescendingProgress()">{{getDescendingProgress()}}</div>
+              <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="75" aria-valuemin="0"
+                aria-valuemax="100">
+                <div class="progress-bar text-bg-warning" [style.width]="getDescendingProgress()">
+                  {{getDescendingProgress()}}</div>
               </div>
             </div>
             <div class='task-view-card'>
@@ -294,7 +326,8 @@
 </div>
 
 <!-- Modal TaskHistory  -->
-<div class="modal fade" id="TaskHistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="TaskHistory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -302,36 +335,75 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="task_History">
-          <div class="taskReporterName" *ngFor="let items of taskAllHistory; let i = index">
-            <div class="avatarGroup">
-              <p-avatarGroup>
-                <ng-container>
-                  <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(items?.taskReporter)}">{{items?.taskReporter}}</p-avatar>
-                </ng-container>
-              </p-avatarGroup>
-            </div>
-            <div class="taskCurrontStatusDate">
-              <div class="taskCurrontStatus">
-                <span>{{items.taskCurrentStatus}} <span>------- {{items?.taskNextStatus}}</span></span>
+
+        <div class="row">
+          <div class="column" *ngFor="let items of taskAllHistory; let i = index">
+              <div class="taskReporterName" style="padding: 10px;">
+                <div class="avatarGroup">
+                  <p-avatarGroup>
+                    <ng-container>
+                      <p-avatar size="small" shape="circle"
+                        [style]="{'background-color': generateColor(items?.taskReporter)}">{{items?.taskReporter}}</p-avatar>
+                    </ng-container>
+                  </p-avatarGroup>
+                </div>
+                <div class="taskCurrontStatusDate">
+                  <div class="taskCurrontStatus">
+                    <span>{{items.taskCurrentStatus}} <span>------- {{items?.taskNextStatus}}</span></span>
+                  </div>
+                  <div class="taskUpDate">
+                    <label>Updated Date: {{items.taskDate | date: 'dd/MM/YYYY h:mm:ss'}}</label>
+                  </div>
+                  <div class="allHistoryAvatar">
+                    <p-avatarGroup>
+                      <p-avatar size="small" shape="circle"
+                        [style]="{'background-color': generateColor(getHistoryAvatar(items))}">{{getHistoryAvatar(items)}}</p-avatar>
+                    </p-avatarGroup>
+                    <span>-------</span>
+                    <p-avatarGroup>
+                      <p-avatar size="small" shape="circle"
+                        [style]="{'background-color': generateColor(getHistoryNextAvatar(items))}">{{getHistoryNextAvatar(items)}}</p-avatar>
+                    </p-avatarGroup>
+                  </div>
+                </div>
               </div>
-              <div class="taskUpDate">
-                <label>Updated Date: {{items.taskDate | date: 'dd/MM/YYYY h:mm:ss'}}</label>  
+          </div>
+        </div>
+        <!-- <div class="all-card">
+        <div class=" card" style="width: 45%;" *ngFor="let items of taskAllHistory; let i = index">
+            <div class="taskReporterName" style="padding: 10px;">
+              <div class="avatarGroup">
+                <p-avatarGroup>
+                  <ng-container>
+                    <p-avatar size="small" shape="circle"
+                      [style]="{'background-color': generateColor(items?.taskReporter)}">{{items?.taskReporter}}</p-avatar>
+                  </ng-container>
+                </p-avatarGroup>
               </div>
-              <div class="allHistoryAvatar">
-                <p-avatarGroup>
-                    <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryAvatar(items))}" >{{getHistoryAvatar(items)}}</p-avatar>
-              </p-avatarGroup>
-              <span>-------</span>
-                <p-avatarGroup>
-                    <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(getHistoryNextAvatar(items))}" >{{getHistoryNextAvatar(items)}}</p-avatar>
-              </p-avatarGroup>
+              <div class="taskCurrontStatusDate">
+                <div class="taskCurrontStatus">
+                  <span>{{items.taskCurrentStatus}} <span>------- {{items?.taskNextStatus}}</span></span>
+                </div>
+                <div class="taskUpDate">
+                  <label>Updated Date: {{items.taskDate | date: 'dd/MM/YYYY h:mm:ss'}}</label>
+                </div>
+                <div class="allHistoryAvatar">
+                  <p-avatarGroup>
+                    <p-avatar size="small" shape="circle"
+                      [style]="{'background-color': generateColor(getHistoryAvatar(items))}">{{getHistoryAvatar(items)}}</p-avatar>
+                  </p-avatarGroup>
+                  <span>-------</span>
+                  <p-avatarGroup>
+                    <p-avatar size="small" shape="circle"
+                      [style]="{'background-color': generateColor(getHistoryNextAvatar(items))}">{{getHistoryNextAvatar(items)}}</p-avatar>
+                  </p-avatarGroup>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        </div>
+        </div> -->
+      </div>
     </div>
   </div>
 </div>
-  <p-confirmDialog header="Confirmation" ></p-confirmDialog>
+<p-confirmDialog header="Confirmation"></p-confirmDialog>

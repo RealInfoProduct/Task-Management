@@ -100,21 +100,21 @@ export class ThmHeaderComponent implements OnInit {
     this.service.setLanguage(event.attributes.value.value)
   }
 
-  generateColor(name: string): string {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name?.charCodeAt(i) + ((hash << 5) - hash);
-    }
+  // generateColor(name: string): string {
+  //   let hash = 0;
+  //   for (let i = 0; i < name.length; i++) {
+  //     hash = name?.charCodeAt(i) + ((hash << 5) - hash);
+  //   }
 
-    const minLightness = 80;
-    const maxLightness = 90;
+  //   const minLightness = 80;
+  //   const maxLightness = 90;
 
-    const hue = Math.floor(Math.sin(hash++) * 360);
-    const saturation = Math.floor(Math.sin(hash++) * 101);
-    const lightness = Math.floor(Math.sin(hash++) * (maxLightness - minLightness + 1) + minLightness);
+  //   const hue = Math.floor(Math.sin(hash++) * 360);
+  //   const saturation = Math.floor(Math.sin(hash++) * 101);
+  //   const lightness = Math.floor(Math.sin(hash++) * (maxLightness - minLightness + 1) + minLightness);
 
-    const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-    return color;
-  }
+  //   const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  //   return color;
+  // }
 
 }
