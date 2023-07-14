@@ -67,10 +67,17 @@
         align-items: center;
         background: #f3f3f9;
         margin-right: 30px;
+        padding: 5px 10px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+        border-radius: 10px;
         img{
-            width: 20%;
-            border-radius: 50%;
-            padding: 4%;
+            // width: 10%;
+            // border-radius: 50%;
+            // padding: 4%;
+            width: 12%;
+    border-radius: 50%;
+    /* padding: 4%; */
+    padding-right: 10px;
         }
         .logout_text{
             display: flex;
@@ -79,13 +86,21 @@
     
             .name_text{
                 font-weight: 500;
-                font-size: 15px
+                font-size: 15px;
+                font-weight: 600;
             }
             .orther_text{
                 font-size: 12px;
+                font-weight: 400;
             }
         }
     }
+}
+.avatar {
+    
+    padding-right: 10px;
+    
+
 }
 .dropdown-menu{
     margin: 5px !important;

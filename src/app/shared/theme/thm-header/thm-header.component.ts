@@ -24,6 +24,7 @@ export class ThmHeaderComponent implements OnInit {
   companyData:any
   companyAndEmployeeName:any
   companyAndEmployeeEmail:any
+  avatarName : any
   employeeList :any
 
   constructor(private router:Router,
@@ -48,8 +49,10 @@ export class ThmHeaderComponent implements OnInit {
     const companyId = localStorage.getItem('companyId')
     if (companyId) {
       this.firebaseService.getAllCompanyList().subscribe((res: any) => {
-        this.companyAndEmployeeName = res.find((id: any) => id.id === localStorage.getItem('companyId')).companyName
-        this.companyAndEmployeeEmail = res.find((id: any) => id.id === localStorage.getItem('companyId')).email
+         const dataFilter = res.find((id: any) => id.id === localStorage.getItem('companyId'))
+        this.companyAndEmployeeName = dataFilter.companyName
+        this.companyAndEmployeeEmail = dataFilter.email
+        this.avatarName = dataFilter.companyName.split(' ')[0].charAt(0).toUpperCase() + dataFilter.companyName.split(' ')[1].charAt(0).toUpperCase()
         this.isLoading = false
       })
     } else {
@@ -59,6 +62,7 @@ export class ThmHeaderComponent implements OnInit {
           if(element.id === localStorage.getItem("employeeId") ) {
             this.companyAndEmployeeName = element.emaployeeUserName
             this.companyAndEmployeeEmail= element.emaployeeEmail
+            this.avatarName = ''
           }
           this.isLoading = false
           
@@ -94,6 +98,23 @@ export class ThmHeaderComponent implements OnInit {
   languageChange(event:any){
     this.translate.use(event.attributes.value.value)
     this.service.setLanguage(event.attributes.value.value)
+  }
+
+  generateColor(name: string): string {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name?.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const minLightness = 80;
+    const maxLightness = 90;
+
+    const hue = Math.floor(Math.sin(hash++) * 360);
+    const saturation = Math.floor(Math.sin(hash++) * 101);
+    const lightness = Math.floor(Math.sin(hash++) * (maxLightness - minLightness + 1) + minLightness);
+
+    const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    return color;
   }
 
 }

@@ -27,19 +27,25 @@
                 </div>
             </div> -->
             <div class="logout_language_content">   
-                <div class="profile" id="navbarproDropdownMenuLink" data-bs-toggle="dropdown"> 
+                <!-- <div class="profile" id="navbarproDropdownMenuLink" data-bs-toggle="dropdown"> 
                 <ul class="dropdown-menu" aria-labelledby="navbarproDropdownMenuLink">
                     <li><a class="dropdown-item">{{'HEADER.Dashboard' | translate}}</a></li>
                     <li><a class="dropdown-item">{{'HEADER.View_Profile' | translate}}</a></li>
                     <li><a class="dropdown-item" >{{'HEADER.Change_Password' | translate}}</a></li>
                     <li><a class="dropdown-item">{{'HEADER.Logout' | translate}}</a></li>
                 </ul>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUQlw2FJiWn_OmJ7YmnBtVLBDKZQUF1EU0WGgZgDCldlYuJFCOcai2QQkRyOjt-4cS7XY&usqp=CAU" alt="">
-                    <div class="logout_text">
-                        <span class="name_text">{{companyAndEmployeeName}}</span>
-                        <span class="orther_text">{{companyAndEmployeeEmail}}</span>
+                  
+                </div> -->
+                <div class="profile">
+                      <!-- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUQlw2FJiWn_OmJ7YmnBtVLBDKZQUF1EU0WGgZgDCldlYuJFCOcai2QQkRyOjt-4cS7XY&usqp=CAU" alt=""> -->
+                    <div class="avatar">
+                        <p-avatar size="small" shape="circle" [style]="{'background-color': generateColor(avatarName)}">{{avatarName}}</p-avatar>
                     </div>
-                </div>
+                      <div class="logout_text">
+                          <span class="name_text">{{companyAndEmployeeName}}</span>
+                          <span class="orther_text">{{companyAndEmployeeEmail}}</span>
+                      </div>
+                  </div>
             </div>
         </div>
     </div>
