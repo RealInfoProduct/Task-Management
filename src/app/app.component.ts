@@ -27,8 +27,8 @@ export class AppComponent {
     this.service.seticonActiveIndex(iconactiveLinkIndex)
      }
 
-     @HostListener('window:beforeunload', ['$event'])
-     handleBeforeUnload(event: Event) {
-       localStorage.clear(); 
-     }
+    //  @HostListener('window:beforeunload', ['$event'])
+    //  handleBeforeUnload(event: Event) {
+    //    localStorage.clear(); 
+    //  }
 }
