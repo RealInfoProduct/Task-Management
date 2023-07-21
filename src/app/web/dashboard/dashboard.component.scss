@@ -1,29 +1,74 @@
-
-button{
-    clip-path: polygon(85% 0, 100% 31%, 100% 100%, 84% 100%, 84% 93%, 66% 93%, 66% 100%, 13% 100%, 0 71%, 0 0);
-    width: 150px;
-    height: 52px;
-    background: #f8ef00;
+.card{
+    height: 145%;
+    border-radius: 4px;
     border: none;
-    font-size: 16px;
-    font-weight: 700;
+    position: relative;
+    
+    &:hover {
+        transition: all none .4s;
+        transform: translate(.4s);
+        box-shadow:rgba(100, 100, 100, .15) 0px 0px 20px 0px;
+        top: -10px;
+        // border: 1px solid #cccccc;
+        background-color: white;
+        
+        
+        
+      }
+
 }
+ h6{
+    margin: 10px;
+    font-size: 14px;
+    margin-top: 10px;
+    padding: 4px;
+    color: #878a99;
+ }
+ h4{
+    margin: 10px;
+    font-size: 22px;
+    margin-top: 10px;
+    padding: 4px;
+    color: #495057;
+ }
 
-
-.folder {
-    // clip-path: polygon(44% 11%, 51% 20%, 94% 20%, 94% 87%, 70% 87%, 34% 87%, 7% 87%, 7% 11%);
-    background-color: red;
-    height: 150px;
-    width: 200px;
-    // -webkit-clip-path: inset(10px round 80px 20px 30px 10px);
-    // clip-path: inset(11px round 10px 20px 20px 30px);
-    // box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
-    // box-shadow: rgba(240, 46, 170, 0.4) 5px 5px;
-     
+ i{
+    float: right;
+    font-size: 20px;
+    margin-right: 30px;
+    color: black;
+    position:absolute;
+    left: 88.5%;
+ }
+.iconbox{
+    float: right;
+    height: 21%;
+    width: 10%;
+    background-color: #e9f9ec;
+    margin-left: 86%;
+    
 }
-
-
-
-
-
-
+.iconboxPro{
+    float: right;
+    height: 21%;
+    width: 10%;
+    background-color: #E6F7FC;
+    margin-left: 86%;
+}
+.iconboxEmp{
+    float: right;
+    height: 21%;
+    width: 10%;
+    background-color: #fef4e4;
+    margin-left: 86%;
+    
+}
+.ri-code-s-slash-line{
+    color: #6ada7d;
+}
+.ri-article-line{
+    color: #58caea;
+}
+.ri-user-2-line{
+    color: #f7b84b;
+}
