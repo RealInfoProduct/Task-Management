@@ -128,9 +128,12 @@
     align-items: center;
     height: 72px;
 
-    img{
-        height: 20px;
-        width: 115px;
+    span{
+        color: black;
+        font-size: 25px;
+        font-weight: 900;
+        font-family: revert;
+        letter-spacing: 2px;
     }
 }
 
@@ -173,6 +176,12 @@
         
     }
 }
+.employee-name{
+    text-align: center;
+    margin-top: 10px;
+    height: 60px;
+    width: 100%;
+}
 
 // .submenuContent:hover{
 //     // overflow-y: scroll;
@@ -183,3 +192,10 @@
 //     margin-left: 4px;
 //     overflow-y: hidden;
 // }
+::ng-deep .p-avatar {
+    // background-color: #b9cfff;
+    border: 2px solid #fff;
+    box-shadow: rgb(136 136 136 / 30%) 0px 1px 4px;
+    font-weight: 600;
+    font-size: 13px !important;
+  }

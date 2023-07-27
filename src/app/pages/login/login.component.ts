@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
   employeeList:any;
   allCompanyEmployees  : any = [];
   matchedEmployee : any;
-  CompanyLogin : boolean = false
 
   constructor(private formBuilder: FormBuilder,
               private router:Router,
@@ -53,75 +52,76 @@ export class LoginComponent implements OnInit {
 
 
   submit() {
-    this.isLoading = true
-    if (this.employeeList.length > 0) {
-      this.employeeList.forEach((element: any) => {
 
-        if (element.emaployeeUserName === this.loginForm.value.email && element.emaployeePassword === this.loginForm.value.password && element.selectEmployeeStatus === "active") {
-          this.allCompanyEmployees.push(element)
+    if (this.employeeList.length > 0) {
+      const employeeFind = this.employeeList.find((id:any) => id.emaployeeUserName === this.loginForm.value.email)
+      this.isLoading = true
+       if(employeeFind){
+        if (employeeFind.emaployeeUserName === this.loginForm.value.email && employeeFind.emaployeePassword === this.loginForm.value.password && employeeFind.selectEmployeeStatus === "active") {
+          this.allCompanyEmployees.push(employeeFind)
           const payload: EmaployeeList = {
-            id: element.id,
-            emaployeeName: element.emaployeeName,
-            emaployeeMobile: element.emaployeeMobile,
-            emaployeeEmail: element.emaployeeEmail,
-            emaployeeUserName: element.emaployeeUserName,
-            emaployeePassword: element.emaployeePassword,
-            selectEmployeeRole: element.selectEmployeeRole,
-            selectEmployeeTechnology: element.selectEmployeeTechnology,
-            selectEmployeeStatus: element.selectEmployeeStatus,
-            selectProject: element.selectProject,
-            selectProjectRole: element.selectProjectRole,
-            avatarName: element.avatarName,
+            id: employeeFind.id,
+            emaployeeName: employeeFind.emaployeeName,
+            emaployeeMobile: employeeFind.emaployeeMobile,
+            emaployeeEmail: employeeFind.emaployeeEmail,
+            emaployeeUserName: employeeFind.emaployeeUserName,
+            emaployeePassword: employeeFind.emaployeePassword,
+            selectEmployeeRole: employeeFind.selectEmployeeRole,
+            selectEmployeeTechnology: employeeFind.selectEmployeeTechnology,
+            selectEmployeeStatus: employeeFind.selectEmployeeStatus,
+            selectProject: employeeFind.selectProject,
+            selectProjectRole: employeeFind.selectProjectRole,
+            avatarName: employeeFind.avatarName,
             isActive: 'online'
           }
 
-          this.firebaseService.updateEmaployeeList(element.id, payload).then((res: any) => {
+          this.firebaseService.updateEmaployeeList(employeeFind.id, payload).then((res: any) => {
 
           })
-          localStorage.setItem('employeeId', element.id)
+          localStorage.setItem('employeeId', employeeFind.id)
           this.router.navigate(['web/employee-admin'])
-          this.CompanyLogin = true
-        } else if (element.emaployeeUserName === this.loginForm.value.email && element.emaployeePassword === this.loginForm.value.password && element.selectEmployeeStatus === "inactive") {
+        }  
+        else if (employeeFind.emaployeeUserName === this.loginForm.value.email && employeeFind.emaployeePassword === this.loginForm.value.password && employeeFind.selectEmployeeStatus === "inactive") {
           this.messageService.add({
             severity: msgType.error,
             summary: 'Error',
             detail: 'Account not activetd',
             life: 1500,
           });
-        } else {
-          this.authService.signIn(this.loginForm.value.email, this.loginForm.value.password).subscribe((res) => {
-            if (res) {
-              const setItem = this.userList.find((id: any) => id.email === this.loginForm.value.email)
-              const date1 = moment(setItem.endDate);
-              const date2 = moment();
-              if (date2.isBefore(date1) && setItem.status === 'active' && setItem.userRole === 'user') {
-                localStorage.setItem('companyId', setItem.id)
-                this.router.navigate(['web/dashboard'])
-              }
-              else {
-                this.messageService.add({
-                  severity: msgType.error,
-                  summary: 'Error',
-                  detail: 'Account not activetd',
-                  life: 1500,
-                });
-              }
-              this.isLoading = false
+        } 
+       } else {
+        this.authService.signIn(this.loginForm.value.email, this.loginForm.value.password).subscribe((res) => {
+          if (res) {
+            const setItem = this.userList.find((id: any) => id.email === this.loginForm.value.email)
+            const date1 = moment(setItem.endDate);
+            const date2 = moment();
+            if (date2.isBefore(date1) && setItem.status === 'active' && setItem.userRole === 'user') {
+              localStorage.setItem('companyId', setItem.id)
+              this.router.navigate(['web/dashboard'])
             }
-          }, (error) => {
-            this.messageService.add({
-              severity: msgType.error,
-              summary: 'Error',
-              detail: error.error.error.message,
-              life: 1500,
-            });
+            else {
+              this.messageService.add({
+                severity: msgType.error,
+                summary: 'Error',
+                detail: 'Account not activetd',
+                life: 1500,
+              });
+            }
             this.isLoading = false
-          })
-        }
-      })
+          }
+        }, (error) => {
+          this.messageService.add({
+            severity: msgType.error,
+            summary: 'Error',
+            detail: error.error.error.message,
+            life: 1500,
+          });
+          this.isLoading = false
+        })
+       }
+       this.isLoading = false
     }
 
-    this.isLoading = false
   }
 
 }

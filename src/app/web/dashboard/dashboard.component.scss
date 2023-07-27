@@ -1,74 +1,70 @@
-.card{
+.card {
     height: 145%;
-    border-radius: 4px;
+    border-radius: 5px;
     border: none;
-    position: relative;
-    
-    &:hover {
-        transition: all none .4s;
-        transform: translate(.4s);
-        box-shadow:rgba(100, 100, 100, .15) 0px 0px 20px 0px;
-        top: -10px;
-        // border: 1px solid #cccccc;
-        background-color: white;
-        
-        
-        
-      }
-
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
- h6{
+
+h6 {
     margin: 10px;
-    font-size: 14px;
+    font-size: 18px;
     margin-top: 10px;
     padding: 4px;
     color: #878a99;
- }
- h4{
+}
+
+h4 {
     margin: 10px;
-    font-size: 22px;
+    font-size: 26px;
     margin-top: 10px;
     padding: 4px;
-    color: #495057;
- }
+    color: #8f939f;
+}
 
- i{
+i {
     float: right;
     font-size: 20px;
     margin-right: 30px;
     color: black;
-    position:absolute;
-    left: 88.5%;
- }
-.iconbox{
+    position: absolute;
+    left: 89.5%;
+    bottom: 18%;
+}
+
+.iconbox {
     float: right;
     height: 21%;
     width: 10%;
     background-color: #e9f9ec;
     margin-left: 86%;
-    
+
 }
-.iconboxPro{
+
+.iconboxPro {
     float: right;
     height: 21%;
     width: 10%;
     background-color: #E6F7FC;
     margin-left: 86%;
 }
-.iconboxEmp{
+
+.iconboxEmp {
     float: right;
     height: 21%;
     width: 10%;
     background-color: #fef4e4;
     margin-left: 86%;
-    
+
 }
-.ri-code-s-slash-line{
+
+.ri-code-s-slash-line {
     color: #6ada7d;
 }
-.ri-article-line{
+
+.ri-article-line {
     color: #58caea;
 }
-.ri-user-2-line{
+
+.ri-user-2-line {
     color: #f7b84b;
 }

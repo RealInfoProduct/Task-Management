@@ -114,6 +114,10 @@ export class ThmMenubarComponent implements OnInit {
   employeeId: any
   employeeIdFind : any;
   isLoading : boolean = false
+  companyName :any
+  companyLogo :any
+
+
   constructor(private service: CommonService, private router: Router, private firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
@@ -129,8 +133,13 @@ export class ThmMenubarComponent implements OnInit {
       }
     })
     this.employeeId = localStorage.getItem('employeeId');
-
+    this.isLoading = true
     if (this.employeeId) {
+        const employeeDataFind = this.firebaseService.getEmaployeeList().subscribe((res:any) => {
+          const findData = res.find((id:any) => id.id == this.employeeId)
+          this.companyName = findData.emaployeeName.split(' ')[0]
+          this.companyLogo = findData.avatarName
+        })
       this.menuIconList.push(
         {
           icon: 'ri-file-user-line ri-lg',
@@ -159,8 +168,19 @@ export class ThmMenubarComponent implements OnInit {
         }
       )
     } else {
+      const companyDataFind = this.firebaseService.getAllCompanyList().subscribe((res:any) => {
+        this.isLoading = true
+      const findData = res.find((id:any) => id.id == localStorage.getItem('companyId') )
+      this.companyName = findData.companyName.split(' ')[0]
+      this.companyLogo = findData.companyLogo
+      this.isLoading = false
+
+      })
       this.menuIconList = this.menuList;
     }
+    this.isLoading = false
+
+
   }
 
 

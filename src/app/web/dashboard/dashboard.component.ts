@@ -14,6 +14,7 @@ import {
 } from "ng-apexcharts";
 import { MessageService } from 'primeng/api';
 import { from, mergeMap, of } from 'rxjs';
+import { FirebaseService } from 'src/app/service/firebase.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,7 +24,7 @@ export type ChartOptions = {
   title: ApexTitleSubtitle;
   responsive: ApexResponsive[];
   labels: any;
-  plotOptions:ApexPlotOptions
+  plotOptions: ApexPlotOptions
 };
 
 export type ChartOptionPie = {
@@ -32,7 +33,7 @@ export type ChartOptionPie = {
   title: ApexTitleSubtitle;
   responsive: ApexResponsive[];
   labels: any;
-  fill:ApexFill
+  fill: ApexFill
 };
 export type ChartOptionCandle = {
   series: ApexNonAxisChartSeries;
@@ -51,40 +52,31 @@ export class DashboardComponent implements OnInit {
   public chartOptions: Partial<ChartOptions> | any;
   public ChartOptionPie: Partial<ChartOptionPie> | any;
   public ChartOptionCandle: Partial<ChartOptionCandle> | any;
-  data:any = ['ab' ,'cd' , 'ef'];
+  data: any = ['ab', 'cd', 'ef'];
+  emaployeeList: any
+  projectList: any
+  technologyList: any
 
-  constructor(private router:Router, 
-              private messageService: MessageService,)  {}
+  constructor(private router: Router,
+    private messageService: MessageService, private firebaseService: FirebaseService) { }
 
   ngOnInit(): void {
-    // const arr = from([
-    //   {
-    //     name: 'Manish',
-    //     Age: 24
-    //   },
-    //   {
-    //     name: 'Sahil',
-    //     Age: 23
-    //   },
-    //   {
-    //     name: 'keval',
-    //     Age: 50
-    //   }
-    // ])
 
-    // arr.pipe(
-    //   mergeMap((res,index) => this.getAllData(res,index))
-    // ).subscribe(response => {
-    //   console.log('sds----',response);
-    // });
+    this.firebaseService.getTechnologyList().subscribe((res: any) => {
+      this.technologyList = res.length
+    })
+
+    this.firebaseService.getProjectList().subscribe((res: any) => {
+      this.projectList = res.length
+    })
+
+    this.firebaseService.getEmaployeeList().subscribe((res: any) => {
+      this.emaployeeList = res.length
+    })
+
+
   }
-
-  getAllData(res:any,index:number){
-    // return of({...res , surname : 'Savaliya', dummy: this.data[index]})
-  }
-
 }
 
 
 
- 
