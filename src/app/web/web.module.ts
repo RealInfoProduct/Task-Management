@@ -11,6 +11,7 @@ import { EmployeeMasterComponent } from './employee-master/employee-master.compo
 import { EmployeeAdminComponent } from './employee-admin/employee-admin.component';
 import { RoleMasterComponent } from './role-master/role-master.component';
 import { TaskMasterComponent } from './task-master/task-master.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { TaskMasterComponent } from './task-master/task-master.component';
     EmployeeAdminComponent,
     RoleMasterComponent,
     TaskMasterComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,

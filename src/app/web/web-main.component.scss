@@ -1,8 +1,8 @@
 app-thm-header {
     position: fixed;
-    width: calc(100% - 72px);
+    width: calc(100% - 0px);
     top: 0;
-    left: 72px;
+    left: 0px;
     height: 4rem;
     z-index: 12;
     background: #fff;
@@ -12,8 +12,8 @@ app-thm-header {
 }
 
 .theam-header-open{
-    width: calc(100% - 300px);
-    left: 300px;
+    width: calc(100% - 270px);
+    left: 270px;
 }
 
 .theam-header-close{
@@ -30,7 +30,7 @@ app-thm-menubar {
     position: fixed;
     left: 0rem;
     height: 100vh;
-    background: #f6f8fa;
+    background: #FFF;
     overflow-x: hidden;
     white-space: nowrap;
     transition: width 450ms linear;
@@ -39,17 +39,17 @@ app-thm-menubar {
 .display-area {
     overflow-y:auto ;
     position: relative;
-    left: 72px;
+    left: 0px;
     top: 4rem;
-    width: calc(100% - 72px);
+    width: calc(100% - 0px);
     transition: left 450ms linear, width 450ms linear;
     background-color: #fff;
     height: calc(100vh - 4rem);
 }
 
 .display-area-shrink {
-    width: calc(100% - 300px);
-    left: 300px;
+    width: calc(100% - 270px);
+    left: 270px;
     // border-left: 1px solid #d9d9e2;
 }
 
